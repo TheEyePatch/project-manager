@@ -3,8 +3,8 @@ development: &development
   encoding: unicode
   database: pj_manager_development
   pool: 5
-  username: leif
-  password: 123456
+  username: username
+  password: password
 
 test:
   <<: *development
