@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2022_08_04_142244) do
     t.text "description"
     t.bigint "board_id"
     t.bigint "project_id"
+    t.bigint "user_id"
+    t.bigint "sprint_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
