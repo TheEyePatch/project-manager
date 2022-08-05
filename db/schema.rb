@@ -16,9 +16,9 @@ ActiveRecord::Schema.define(version: 2022_08_04_145235) do
   enable_extension "plpgsql"
 
   create_table "boards", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.string "description"
-    t.bigint "project_id"
+    t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -42,10 +42,10 @@ ActiveRecord::Schema.define(version: 2022_08_04_145235) do
   end
 
   create_table "tasks", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.text "description"
     t.bigint "board_id"
-    t.bigint "project_id"
+    t.bigint "project_id", null: false
     t.bigint "user_id"
     t.bigint "sprint_id"
     t.datetime "created_at", precision: 6, null: false
