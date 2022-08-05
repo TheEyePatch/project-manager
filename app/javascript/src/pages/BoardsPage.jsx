@@ -1,9 +1,9 @@
 import React from "react";
 
 
-function Board() {
+function BoardsPage() {
   return <div>Board Page</div>
 }
 
 
-export default Board;
+export default BoardsPage;

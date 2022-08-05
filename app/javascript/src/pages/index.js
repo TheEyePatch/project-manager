@@ -1,1 +1,2 @@
-export { default as Board } from './Board'
+export { default as BoardsPage } from './BoardsPage'
+export { default as Home } from './Home'
