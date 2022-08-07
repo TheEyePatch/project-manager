@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2022_08_04_145235) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "description"
     t.bigint "owner_id"
     t.datetime "created_at", precision: 6, null: false
