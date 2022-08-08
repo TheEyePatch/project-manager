@@ -1,6 +1,7 @@
-class Api::V1::TasksController < ApplicationController
+class Api::V1::TasksController < ApiController
   def index
     @tasks = Task.all
+    render json: @tasks
   end
 
   def show

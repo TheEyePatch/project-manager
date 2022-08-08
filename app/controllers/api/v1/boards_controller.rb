@@ -1,4 +1,4 @@
-class Api::V1::BoardsController < ApplicationController
+class Api::V1::BoardsController < ApiController
   def index; end
 
   def show; end
