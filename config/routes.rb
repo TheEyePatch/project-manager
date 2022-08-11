@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :projects, only: %i[index show create update destroy]
       resources :boards, only: %i[index show create update destroy]
       resources :registrations, only: %i[create]
+      resources :sessions, only: %i[create destroy]
     end
   end
 end
