@@ -1,4 +1,4 @@
-module RegistrationHelper
+module Api::V1::RegistrationHelper
   ES256_ALGORITHM = 'prime256v1'
   def ecdsa_key
     @ecdsa_key ||=

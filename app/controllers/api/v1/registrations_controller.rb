@@ -1,5 +1,5 @@
 class Api::V1::RegistrationsController < Api::ApiController
-  include RegistrationHelper
+  include Api::V1::RegistrationHelper
 
   def create
     user = User.new(registrations_params)
