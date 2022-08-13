@@ -5,7 +5,7 @@ class Api::V1::RegistrationsController < Api::ApiController
 
     return unless user.save
 
-    token = create_session(user)
+    token = generate_token(user)
     render json: {
       message: 'Register Success',
       account: registrations_params[:account],
