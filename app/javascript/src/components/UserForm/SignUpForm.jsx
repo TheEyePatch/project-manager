@@ -1,24 +1,36 @@
 import React, { useState } from 'react'
 import { Paper, Grid, Avatar, TextField, Button } from '@mui/material'
+import { postUserRegistration } from'../../api/index'
 
 function SignUpForm(){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
-  const [input, setParams] = useState({
+  const [input, setInput] = useState({
     name: '',
     account: '',
     password: ''
   })
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(input)
-  }
 
   const handleInput = (e) => {
-    setParams(prevInput => ({
-      ...prevInput,
+    setInput(prevInput => {
+      return {
+        ...prevInput,
       [e.target.id] : e.target.value
-    }))
+      }
+    })
   }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setInput({
+      name: '',
+      account: '',
+      password: ''
+    })
+  
+    postUserRegistration(input)
+  }
+
   return (
     <Grid>
       <Paper variant='outlined' style={style}>
