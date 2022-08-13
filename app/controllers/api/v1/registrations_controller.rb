@@ -6,11 +6,12 @@ class Api::V1::RegistrationsController < Api::ApiController
 
     return unless user.save
     token = generate_token(user)
+    create_session(token)
+
     render json: {
       user_params: registrations_params,
       token: token,
     }, status: :ok
-    end
   end
 
   private
