@@ -1,4 +1,4 @@
-module Api::V1::RegistrationHelper
+module Api::V1::SessionHelper
 
   def session_key
     @session_key ||=
@@ -6,7 +6,11 @@ module Api::V1::RegistrationHelper
   end
 
   def generate_token(user)
-    return JWT.encode { user_account: user.account, user_id: user.id }, session_key,  'HS256'
+    payload = {
+      user_id: user.id,
+      account: user.account
+    }
+    return JWT.encode payload, session_key,  'HS256'
   end
 
   def decoded_token(token, key)
@@ -15,7 +19,9 @@ module Api::V1::RegistrationHelper
 
   def create_session(user)
     token = generate_token(user)
-    Rails.cache.write(token, secret_key)
+    Rails.cache.write(token, session_key)
+  
+    token
   end
 
   def read_session_token(token)

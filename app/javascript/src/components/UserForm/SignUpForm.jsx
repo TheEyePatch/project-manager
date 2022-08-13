@@ -28,7 +28,9 @@ function SignUpForm(){
       password: ''
     })
   
-    postUserRegistration(input)
+    postUserRegistration(input).then(res => {
+      sessionStorage.setItem('session_token', res.token);
+    })
   }
 
   return (

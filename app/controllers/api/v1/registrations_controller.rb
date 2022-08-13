@@ -1,15 +1,14 @@
 class Api::V1::RegistrationsController < Api::ApiController
-  include Api::V1::RegistrationHelper
 
   def create
     user = User.new(registrations_params)
 
     return unless user.save
-    token = generate_token(user)
-    create_session(token)
 
+    token = create_session(user)
     render json: {
-      user_params: registrations_params,
+      message: 'Register Success',
+      account: registrations_params[:account],
       token: token,
     }, status: :ok
   end
