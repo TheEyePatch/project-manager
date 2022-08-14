@@ -5,8 +5,13 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client';
 import App from '../src/App'
+import { AuthContextProvider } from '../src/store/AuthContext';
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = createRoot(document.body.appendChild(document.createElement('div')))
-  root.render(<App />);
+  root.render(
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
+  );
 })

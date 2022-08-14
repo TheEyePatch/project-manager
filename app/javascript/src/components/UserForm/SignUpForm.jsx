@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Paper, Grid, Avatar, TextField, Button } from '@mui/material'
 import { postUserRegistration } from'../../api/index'
+import AuthContext from '../../store/AuthContext'
 
 function SignUpForm(){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
@@ -8,7 +9,9 @@ function SignUpForm(){
     name: '',
     account: '',
     password: ''
-  })
+  });
+
+  const authContext = useContext(AuthContext)
 
   const handleInput = (e) => {
     setInput(prevInput => {
@@ -30,6 +33,7 @@ function SignUpForm(){
   
     postUserRegistration(input).then(res => {
       sessionStorage.setItem('session_token', res.token);
+      authContext.login(res.token)
     })
   }
 
