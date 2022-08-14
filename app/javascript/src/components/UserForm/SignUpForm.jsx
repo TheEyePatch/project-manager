@@ -6,6 +6,10 @@ import AuthContext from '../../store/AuthContext'
 function SignUpForm(){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
   const [isLoginForm, setisLoginForm] = useState(false)
+  const [formState, setFormState] = useState({
+    submit: 'Sign Up',
+    formFormat: 'Login Existing Account'
+  })
   const [input, setInput] = useState({
     name: '',
     account: '',
@@ -14,7 +18,19 @@ function SignUpForm(){
 
   const authContext = useContext(AuthContext)
   const renderFormState = () => {
-    isLoginForm ? setisLoginForm(false) : setisLoginForm(true)
+    if(isLoginForm){
+      setisLoginForm(false)
+      setFormState({
+        submit: 'Sign In',
+        formFormat: 'Create New Account'
+      })
+    }else if(!isLoginForm){
+      setisLoginForm(true)
+      setFormState({
+        submit: 'Sign Up',
+        formFormat: 'Login Existing Account'
+      })
+    }
   }
 
   const handleInput = (e) => {
@@ -39,11 +55,6 @@ function SignUpForm(){
       name: '',
       account: '',
       password: ''
-    })
-  
-    postUserRegistration(input).then(res => {
-      sessionStorage.setItem('session_token', res.token);
-      authContext.login(res.token)
     })
   }
 
@@ -91,11 +102,10 @@ function SignUpForm(){
               onChange={handleInput}
             />
 
-            <Button type='submit' variant="contained" color='primary'>Sign Up</Button>
+            <Button type='submit' variant="contained" color='primary'>{formState.submit}</Button>
           </form>
         </div>
-        { !isLoginForm && <Button onClick={renderFormState}>Sign In Account</Button>}
-        { isLoginForm && <Button onClick={renderFormState}>Sign Up</Button>}
+        <Button onClick={renderFormState}>{formState.formFormat}</Button>
       </ Paper>
     </Grid>
   )
