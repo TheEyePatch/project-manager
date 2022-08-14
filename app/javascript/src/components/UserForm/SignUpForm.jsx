@@ -5,6 +5,7 @@ import AuthContext from '../../store/AuthContext'
 
 function SignUpForm(){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
+  const [isLoginForm, setisLoginForm] = useState(false)
   const [input, setInput] = useState({
     name: '',
     account: '',
@@ -12,6 +13,9 @@ function SignUpForm(){
   });
 
   const authContext = useContext(AuthContext)
+  const renderFormState = () => {
+    isLoginForm ? setisLoginForm(false) : setisLoginForm(true)
+  }
 
   const handleInput = (e) => {
     setInput(prevInput => {
@@ -44,7 +48,7 @@ function SignUpForm(){
         <h1>Sign Up</h1>
         <div>
           <form onSubmit={handleSubmit}>
-          <TextField
+          { !isLoginForm && <TextField
               name='name'
               id="name"
               label="Name"
@@ -54,7 +58,7 @@ function SignUpForm(){
               variant="standard" 
               margin="dense"
               onChange={handleInput}
-            />
+            />}
 
             <TextField
               name='account'
@@ -84,6 +88,8 @@ function SignUpForm(){
             <Button type='submit' variant="contained" color='primary'>Sign Up</Button>
           </form>
         </div>
+        { !isLoginForm && <Button onClick={renderFormState}>Sign In Account</Button>}
+        { isLoginForm && <Button onClick={renderFormState}>Sign Up</Button>}
       </ Paper>
     </Grid>
   )

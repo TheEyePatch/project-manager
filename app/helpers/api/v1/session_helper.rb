@@ -13,7 +13,8 @@ module Api::V1::SessionHelper
     return JWT.decode token, SESSION_KEY, true, { algorithm:  'HS256' }
   end
 
-  def read_session_token(token)
-    decoded_token(token)
+  def current_user
+    @current_user ||=
+      User.find(decoded_token[:user_id])
   end
 end
