@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { BoardsPage, Home, SignUpPage } from '../pages';
-import { Button } from '@mui/material'
 import { destroyUserSession} from '../api/index'
 import AuthContext from '../store/AuthContext';
 
@@ -26,7 +25,7 @@ function AppRoutes(){
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Button onClick={logoutHandler}>Log Out</Button>
+                <Link to='/' onClick={logoutHandler}>Log Out</Link>
               </li>
             </>
           }
