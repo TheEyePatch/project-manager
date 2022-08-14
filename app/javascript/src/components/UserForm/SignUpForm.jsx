@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Paper, Grid, Avatar, TextField, Button } from '@mui/material'
-import { postUserRegistration, postUserSession } from'../../api/index'
+import { postUserRegistration, createUserSession } from'../../api/index'
 import AuthContext from '../../store/AuthContext'
 
 function SignUpForm(){
@@ -21,14 +21,14 @@ function SignUpForm(){
     if(isLoginForm){
       setisLoginForm(false)
       setFormState({
-        submit: 'Sign In',
-        formFormat: 'Create New Account'
+        submit: 'Sign Up',
+        formFormat: 'Login Existing Account'
       })
     }else if(!isLoginForm){
       setisLoginForm(true)
       setFormState({
-        submit: 'Sign Up',
-        formFormat: 'Login Existing Account'
+        submit: 'Sign In',
+        formFormat: 'Create New Account'
       })
     }
   }
@@ -45,7 +45,7 @@ function SignUpForm(){
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    const sendRequest = isLoginForm ? postUserSession : postUserRegistration
+    const sendRequest = isLoginForm ? createUserSession : postUserRegistration
     sendRequest(input).then(res => {
       sessionStorage.setItem('session_token', res.token);
       authContext.login(res.token)

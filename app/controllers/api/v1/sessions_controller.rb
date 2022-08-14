@@ -9,5 +9,9 @@ class Api::V1::SessionsController < Api::ApiController
     }, status: :ok
   end
 
-  def destroy; end
+  def destroy
+    render json: {
+      message: 'Logged out successfully!'
+    }
+  end
 end

@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       resources :projects, only: %i[index show create update destroy]
       resources :boards, only: %i[index show create update destroy]
       resources :registrations, only: %i[create]
-      resources :sessions, only: %i[create destroy]
+      constraints(token: /[^\/]+/) do
+        resources :sessions, only: %i[create destroy], param: :token
+      end
     end
   end
 end

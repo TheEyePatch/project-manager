@@ -11,13 +11,18 @@ export const postUserRegistration = async (params) => {
   }
 }
 
-export const postUserSession = async (params) => {
+export const createUserSession = async (params) => {
   try {
     const response = await axios.post('/api/v1/sessions', params);
     return response.data
   } catch{
     console.log(error)
   }
+}
+
+export const destroyUserSession = async (token) => {
+  const response = await axios.delete(`/api/v1/sessions/${token}`);
+  return response.data
 }
 
 // Tasks
