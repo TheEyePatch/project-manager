@@ -11,5 +11,14 @@ export const postUserRegistration = async (params) => {
   }
 }
 
+export const postUserSession = async (params) => {
+  try {
+    const response = await axios.post('/api/v1/sessions', params);
+    return response.data
+  } catch{
+    console.log(error)
+  }
+}
+
 // Tasks
 export const getIndexTasks = async () => axios.get('/api/v1/tasks');

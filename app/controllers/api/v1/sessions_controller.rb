@@ -4,7 +4,9 @@ class Api::V1::SessionsController < Api::ApiController
 
     return unless user.authenticate(params[:password])
 
-    render json: {}, status: :ok
+    render json: {
+      token: generate_token(user),
+    }, status: :ok
   end
 
   def destroy; end

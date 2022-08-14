@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Paper, Grid, Avatar, TextField, Button } from '@mui/material'
-import { postUserRegistration } from'../../api/index'
+import { postUserRegistration, postUserSession } from'../../api/index'
 import AuthContext from '../../store/AuthContext'
 
 function SignUpForm(){
@@ -28,7 +28,13 @@ function SignUpForm(){
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
+    const sendRequest = isLoginForm ? postUserSession : postUserRegistration
+    sendRequest(input).then(res => {
+      sessionStorage.setItem('session_token', res.token);
+      authContext.login(res.token)
+    })
+  
     setInput({
       name: '',
       account: '',
