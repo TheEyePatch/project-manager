@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Paper, Grid, Avatar, TextField, Button } from '@mui/material'
 import { postUserRegistration, createUserSession } from'../../api/index'
 import AuthContext from '../../store/AuthContext'
@@ -18,7 +17,6 @@ function SignUpForm(){
   });
 
   const authContext = useContext(AuthContext);
-  const navigate = useNavigate();
   const renderFormState = () => {
     if(isLoginForm){
       setisLoginForm(false)
@@ -49,10 +47,8 @@ function SignUpForm(){
   
     const sendRequest = isLoginForm ? createUserSession : postUserRegistration
     sendRequest(input).then(res => {
-      sessionStorage.setItem('session_token', res.token);
       authContext.login(res.token)
-      navigate('/')
-    }).catch(() => alert('Failed Successfully'))
+    }).catch((err) => alert(err))
   
     setInput({
       name: '',
