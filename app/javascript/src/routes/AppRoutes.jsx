@@ -9,7 +9,6 @@ function AppRoutes(){
   const authContext = useContext(AuthContext);
   const logoutHandler = () => {
     destroyUserSession(sessionStorage.getItem('session_token')).then(res => {
-      sessionStorage.removeItem('session_token')
       authContext.logout();
       alert(res.message)
     })
@@ -40,7 +39,8 @@ function AppRoutes(){
             </> )
           }
           { !authContext.loggedIn && <Route exact path="/registrations" element={ <SignUpPage/> }></Route> }
-          <Route path='*' element={<Navigate to="/registrations" replace />}></Route>
+          { !authContext.loggedIn && <Route path='*' element={<Navigate to="/registrations" replace />}></Route> }
+          { authContext.loggedIn && <Route path='*' element={<Navigate to="/" replace />}></Route>}
        </Routes>
        </div>
     </Router>
