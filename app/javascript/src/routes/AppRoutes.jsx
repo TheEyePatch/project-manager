@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { BoardsPage, Home, SignUpPage, ProjectsPage } from '../pages';
+import { Header } from '../components';
 import { destroyUserSession} from '../api/index'
 import AuthContext from '../store/AuthContext';
 
@@ -18,22 +19,10 @@ function AppRoutes(){
   return (
     <Router>
         <div className="App-header">
-         <ul className="App-nav">
-          { isLoggedIn && (
-            <>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/projects">Projects</Link>
-              </li>
-              <li>
-                <Link to='/' onClick={logoutHandler}>Log Out</Link>
-              </li> 
-            </>
-            )
-          }
-         </ul>
+         <Header
+          logoutHandler={logoutHandler}
+          isLoggedIn={isLoggedIn}
+          />
         <Routes>
           { authContext.loggedIn && (
             <>
