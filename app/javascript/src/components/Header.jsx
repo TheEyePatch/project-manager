@@ -26,7 +26,7 @@ const Header = ({ logoutHandler, isLoggedIn }) => {
 
   const handleCloseUserMenu = (event) => {
     setAnchorElUser(null);
-    if(event.target.slot == 'Logout') return logoutHandler()
+    if(event.target.slot == 'Logout') logoutHandler()
   };
 
   return (
