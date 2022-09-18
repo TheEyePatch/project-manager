@@ -24,7 +24,7 @@ export function AuthContextProvider(props) {
   }
 
   const AuthContextValue = {
-    token: token,
+    token: token || sessionStorage.getItem('session_token'),
     loggedIn: userLoggedIn,
     login: loginHandler,
     logout: logoutHandler

@@ -45,7 +45,8 @@ function SignUpForm(){
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    const sendRequest = isLoginForm ? createUserSession : postUserRegistration
+    const sendRequest = isLoginForm ? createUserSession : postUserRegistration;
+
     sendRequest(input).then(res => {
       authContext.login(res.token)
     }).catch((err) => alert(err))
@@ -61,7 +62,7 @@ function SignUpForm(){
     <Grid>
       <Paper variant='outlined' style={style}>
         <Avatar/>
-        <h1>Sign Up</h1>
+        <h1>{ isLoginForm ? 'Log In' : 'Sign Up' }</h1>
         <div>
           <form onSubmit={handleSubmit}>
           { !isLoginForm && <TextField

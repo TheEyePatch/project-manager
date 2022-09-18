@@ -12,14 +12,15 @@ module Api::V1::SessionHelper
   end
 
   def decoded_token(token)
-    return JWT.decode token, "#{generate_salt}#{SESSION_KEY}", true, { algorithm:  'HS256' }
+    return JWT.decode token, "#{cache_salt(token)}#{SESSION_KEY}", true, { algorithm:  'HS256' }
   end
 
   def generate_salt
-    @generate_salt ||= Digest::MD5.hexdigest(Time.now.to_s)
+    @generate_salt ||= Digest::MD5.hexdigest(Time.now.to_i.to_s)
   end
 
   def cache_salt(token)
+    binding.pry
     Rails.cache.fetch(token) do
       generate_salt
     end
