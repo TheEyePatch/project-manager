@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom'
 
-const pages = ['projects', 'home'];
+const pages = [ 'home','projects'];
 const settings = ['Profile','Dashboard','Logout'];
 
 const Header = ({ logoutHandler, isLoggedIn }) => {
@@ -100,7 +100,7 @@ const Header = ({ logoutHandler, isLoggedIn }) => {
                       </MenuItem>
                     ))}
                   </Menu>
-                </Box>`
+                </Box>
               </>
             )
           }
