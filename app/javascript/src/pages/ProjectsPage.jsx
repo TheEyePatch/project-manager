@@ -3,7 +3,7 @@ import { Projects } from './../components/index';
 
 function ProjectsPage() {
   
-  return <div><Projects/></div>
+  return <section><Projects/></section>
 }
 
 
