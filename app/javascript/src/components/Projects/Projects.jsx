@@ -3,6 +3,7 @@ import AuthContext from '../../store/AuthContext';
 import { getProjects } from '../../api/index';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { Container } from '@mui/material'
 
 const projects = [
   { id: 1, name: 'Project One', description: 'Project Description......', owner_id: 1},
@@ -27,17 +28,17 @@ function Projects(){
   // })
   return (
     <div className='project_cards'>
-      <Grid container spacing={3} sx={{ flexGrow: 0 }}>
-        {projects.map((project) => {
-          return (
-            <Grid item xs={12}>
-              <Paper elevation={1} style={paperStyle} key={project.id}>
-              {project.name}
-              </Paper>
-            </Grid>
-            )
-        })}
-      </Grid>
+      <Container>
+        <Grid container spacing={2}>
+          {projects.map((project) => {
+            return (
+              <Grid item xs={12} sm={6} md={3} key={project.id}>
+                <Project project={project} />
+              </Grid>
+              )
+          })}
+        </Grid>
+      </Container>
     </div>
     )
 }
