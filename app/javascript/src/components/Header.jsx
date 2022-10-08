@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 const pages = [ 'home','projects'];
 const settings = ['Profile','Dashboard','Logout'];
 
-const Header = ({ logoutHandler, isLoggedIn }) => {
+function Header({ logoutHandler, isLoggedIn }){
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
