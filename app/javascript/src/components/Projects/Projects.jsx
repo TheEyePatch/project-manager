@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import AuthContext from '../../store/AuthContext';
 import { getProjects } from '../../api/index';
-import Paper from '@mui/material/Paper';
+import { Project } from './../index';
 import Grid from '@mui/material/Grid';
 import { Container } from '@mui/material'
 
@@ -11,12 +11,6 @@ const projects = [
   { id: 3, name: 'Project One', description: 'Project Description......', owner_id: 2},
   { id: 4, name: 'Project One', description: 'Project Description......', owner_id: 2},
 ]
-
-
-const paperStyle = {
-  width: '10rem',
-  backgroundColor: '#5e17eb'
-}
 
 function Projects(){
   const authCtx = useContext(AuthContext);
