@@ -20,7 +20,6 @@ module Api::V1::SessionHelper
   end
 
   def cache_salt(token)
-    binding.pry
     Rails.cache.fetch(token) do
       generate_salt
     end
