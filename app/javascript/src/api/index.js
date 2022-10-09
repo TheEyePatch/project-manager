@@ -27,3 +27,16 @@ export const destroyUserSession = async (token) => {
 
 // Tasks
 export const getIndexTasks = async () => axios.get('/api/v1/tasks');
+
+
+// Projects
+
+export const getProjects = async (params) => {
+  try {
+    const response = await axios.get('/api/v1/projects', { params: params});
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
