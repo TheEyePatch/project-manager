@@ -16,7 +16,6 @@ function Projects(){
     getProjects({token: token})
     .then(response => {
       setProjects(response);
-      console.log(projects)
     })
 
   }, []);

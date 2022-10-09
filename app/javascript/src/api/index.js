@@ -15,7 +15,7 @@ export const createUserSession = async (params) => {
   try {
     const response = await axios.post('/api/v1/sessions', params);
     return response.data
-  } catch{
+  } catch (error){
     console.log(error)
   }
 }
@@ -34,8 +34,16 @@ export const getIndexTasks = async () => axios.get('/api/v1/tasks');
 export const getProjects = async (params) => {
   try {
     const response = await axios.get('/api/v1/projects', { params: params});
-    console.log(response)
     return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getProject = async ({ project_id }) => {
+  try {
+    const response = await axios.get(`api/v1/projects/${project_id}`);
+    return response.data
   } catch (error) {
     console.log(error)
   }
