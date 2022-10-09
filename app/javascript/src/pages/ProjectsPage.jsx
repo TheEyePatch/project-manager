@@ -3,7 +3,14 @@ import { Projects } from './../components/index';
 
 function ProjectsPage() {
   
-  return <section><Projects/></section>
+  return (
+  <section style={{
+    paddingTop: '1rem',
+    paddingTop: '1rem'
+  }}>
+    <Projects/>
+  </section>
+  )
 }
 
 
