@@ -21,19 +21,15 @@ function Projects(){
   }, []);
 
   return (
-    <div className='project_cards'>
-      <Container>
-        <Grid container spacing={2}>
-          {projects?.map((project) => {
-            return (
-              <Grid item xs={12} sm={6} md={3} key={project.id}>
-                <Project project={project} />
-              </Grid>
-              )
-          })}
-        </Grid>
-      </Container>
-    </div>
+    <Grid container spacing={2}>
+      {projects?.map((project) => {
+        return (
+          <Grid item xs={12} sm={6} md={3} key={project.id}>
+            <Project project={project} />
+          </Grid>
+          )
+      })}
+    </Grid>
     )
 }
 
