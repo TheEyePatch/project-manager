@@ -1,17 +1,45 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import {
           Button,
           Dialog,
           DialogActions,
           DialogContent,
-          DialogContentText,
           DialogTitle,
           TextField
         } from '@mui/material'
 
-function ProjectForm({ modalOpen, setModalOpen }) {
+import { postProject } from '../../api/index'
+import AuthContext from '../../store/AuthContext'
+
+function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
+  const [projectInput, setProjectIntput] = useState({
+    name: '',
+    description: '',
+  })
+
+  const handleInput = (e) => {
+    setProjectIntput((prev) => {
+      return {
+        ...prev,
+        [e.target.id]: e.target.value
+      }
+    })
+  }
+
   const handleClose = () => setModalOpen(false);
-  const handleSubmit= () => console.log('submit!');
+
+  const authCtx = useContext(AuthContext)
+  const handleSubmit= () => {
+    postProject({ token: authCtx.token, inputs: projectInput })
+    .then((res) => setProjects(prev => [...prev, res.project]));
+
+    setProjectIntput({
+      name: '',
+      description: ''
+    })
+
+    setModalOpen(false)
+  }
 
   return(
   <Dialog open={modalOpen} onClose={handleClose}>
@@ -19,14 +47,13 @@ function ProjectForm({ modalOpen, setModalOpen }) {
       New Project
     </DialogTitle>
     <DialogContent>
-      <DialogContentText>
-        Create New Project
-      </DialogContentText>
       <TextField
         autoFocus
         margin="dense"
         id="name"
         label="Name"
+        value={projectInput.name}
+        onChange={handleInput}
         fullWidth
         variant="standard"
       />
@@ -34,8 +61,10 @@ function ProjectForm({ modalOpen, setModalOpen }) {
       <TextField
         autoFocus
         margin="dense"
-        id="name"
+        id="description"
         label="Description"
+        value={projectInput.description}
+        onChange={handleInput}
         fullWidth
         variant="standard"
         multiline
