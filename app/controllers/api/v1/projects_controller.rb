@@ -10,11 +10,23 @@ class Api::V1::ProjectsController < Api::ApiController
     render json: projects
   end
 
-  def show; end
+  def create
+    new_project = current_user.owned_projects.build(project_params)
 
-  def create; end
+    if new_project.valid? && new_project.save
+      render json: { project: new_project.as_json(include: %i[owner]) }, status: :ok
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
 
   def update; end
 
   def destroy; end
+
+  private
+
+  def project_params
+    params.require(:project).permit(:name, :description)
+  end
 end

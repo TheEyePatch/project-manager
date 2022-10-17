@@ -48,3 +48,14 @@ export const getProject = async ({ project_id }) => {
     console.log(error)
   }
 }
+
+export const postProject = async ({token, inputs}) => {
+  
+  try {
+    const response = await axios.post('api/v1/projects', { token: token, project: inputs})
+    return response.data
+  } catch (error) {
+    console.log(error)
+    console.log(params)
+  }
+}
