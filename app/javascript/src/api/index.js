@@ -52,10 +52,22 @@ export const getProject = async ({ project_id }) => {
 export const postProject = async ({token, inputs}) => {
   
   try {
-    const response = await axios.post('api/v1/projects', { token: token, project: inputs})
+    const response = await axios.post('/api/v1/projects', { token: token, project: inputs})
     return response.data
   } catch (error) {
     console.log(error)
     console.log(params)
   }
 }
+
+// Boards
+
+export const getBoards = async (params) => {
+  try {
+    const response =  await axios.get('/api/v1/boards/', { params: params });
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+

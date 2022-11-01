@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'tasks#index'
   get '/registrations', to: 'tasks#index'
   get '/projects', to: 'tasks#index'
+  get '/boards/:project_id', to: 'tasks#index'
 
   namespace :api do
     namespace :v1 do

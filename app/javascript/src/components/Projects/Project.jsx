@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, IconButton, Typography, CardActions, Button} from '@mui/material';
 import { DeleteOutline } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom"
 
 function Project({ project }){
-  const handleViewProject = () => {
-    console.log('Clicked')
-  }
+  const navigate = useNavigate();
+
   return (
     <div>
       <Card elevation={2}>
@@ -24,7 +24,7 @@ function Project({ project }){
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size='small' onClick={handleViewProject}>
+          <Button size='small' onClick={() => navigate(`/boards/${project.id}`)}>
             View
           </Button>
         </CardActions>
