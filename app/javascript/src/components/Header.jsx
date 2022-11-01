@@ -57,21 +57,24 @@ function Header({ logoutHandler, isLoggedIn }){
           {
             isLoggedIn && (
               <>
+                {/* App Nav */}
                 <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                   {pages.map((page) => (
-                    <Button
-                      key={page}
-                      sx={{ my: 2, color: 'white', display: 'block' }}
+                  <Link
+                    to={`/${page}`}
+                    key={page}
+                    style={{ textDecoration: 'none', color: 'white' }}
                     >
-                      <Link
-                      to={`/${page}`}
-                      style={{ textDecoration: 'none', color: 'white' }}
+                      <Button
+                        sx={{ my: 2, color: 'white', display: 'block' }}
                       >
                         {page}
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
                   ))}
                 </Box>
+
+                {/* User Settings */}
                 <Box sx={{ flexGrow: 0 }}>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
