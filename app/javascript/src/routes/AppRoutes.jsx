@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { BoardsPage, Home, SignUpPage, ProjectsPage } from '../pages';
-import { Header } from '../components';
+import { Boards, Home, SignUpPage, ProjectsPage } from '../pages';
+import { Header, Projects } from '../components';
 import { destroyUserSession} from '../api/index'
 import AuthContext from '../store/AuthContext';
 
@@ -27,8 +27,8 @@ function AppRoutes(){
           { authContext.loggedIn && (
             <>
               <Route exact path='/' element={< Home />}></Route>
-              <Route exact path="/boards" element={ <BoardsPage/> }></Route>
-              <Route exact path="/projects" element={ <ProjectsPage/> }></Route>
+              <Route exact path="/boards/:project_id" element={ <Boards/> }></Route>
+              <Route exact path="/projects" element={ <Projects/> }></Route>
             </> )
           }
           { !authContext.loggedIn && <Route exact path="/registrations" element={ <SignUpPage/> }></Route> }
