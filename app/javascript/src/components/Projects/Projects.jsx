@@ -23,10 +23,6 @@ function Projects(){
   }, []);
 
   return (
-    <section style={{
-      paddingTop: '1rem',
-      paddingTop: '1rem'
-    }}>
       <Container>
         <div style={{ 
           margin: '1rem 0 1rem',
@@ -49,7 +45,6 @@ function Projects(){
           })}
         </Grid>
       </Container>
-    </section>
     )
 }
 

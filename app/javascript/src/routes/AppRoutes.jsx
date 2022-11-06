@@ -23,18 +23,23 @@ function AppRoutes(){
           logoutHandler={logoutHandler}
           isLoggedIn={isLoggedIn}
           />
-        <Routes>
-          { authContext.loggedIn && (
-            <>
-              <Route exact path='/' element={< Home />}></Route>
-              <Route path='/boards/:project_id' element={ <Boards/> }></Route>
-              <Route exact path="/projects" element={ <Projects/> }></Route>
-            </> )
-          }
-          { !authContext.loggedIn && <Route exact path="/registrations" element={ <SignUpPage/> }></Route> }
-          { !authContext.loggedIn && <Route path='*' element={<Navigate to="/registrations" replace />}></Route> }
-          { authContext.loggedIn && <Route path='*' element={<Navigate to="/" replace />}></Route>}
-       </Routes>
+          <section style={{
+            paddingTop: '1rem',
+            paddingTop: '1rem'
+          }}>
+            <Routes>
+              { authContext.loggedIn && (
+                <>
+                  <Route exact path='/' element={< Home />}></Route>
+                  <Route path='/boards/:project_id' element={ <Boards/> }></Route>
+                  <Route exact path="/projects" element={ <Projects/> }></Route>
+                </> )
+              }
+              { !authContext.loggedIn && <Route exact path="/registrations" element={ <SignUpPage/> }></Route> }
+              { !authContext.loggedIn && <Route path='*' element={<Navigate to="/registrations" replace />}></Route> }
+              { authContext.loggedIn && <Route path='*' element={<Navigate to="/" replace />}></Route>}
+          </Routes>
+        </section>
        </div>
     </Router>
   )
