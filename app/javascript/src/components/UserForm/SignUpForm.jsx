@@ -5,10 +5,10 @@ import AuthContext from '../../store/AuthContext'
 
 function SignUpForm(){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
-  const [isLoginForm, setisLoginForm] = useState(false)
+  const [isLoginForm, setisLoginForm] = useState(true)
   const [formState, setFormState] = useState({
-    submit: 'Sign Up',
-    formFormat: 'Login Existing Account'
+    submit: 'Sign In',
+    formFormat: 'Create New Account'
   })
   const [input, setInput] = useState({
     name: '',
@@ -49,7 +49,7 @@ function SignUpForm(){
 
     sendRequest(input).then(res => {
       authContext.login(res.token)
-    }).catch((err) => alert(err))
+    })
   
     setInput({
       name: '',
