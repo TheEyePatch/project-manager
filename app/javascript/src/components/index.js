@@ -1,7 +1,7 @@
-export { default as Board } from './Board'
 export { default as SignUpForm } from './UserForm/SignUpForm'
 export { default as Header } from './Header'
 export { default as Projects } from './Projects/Projects'
 export { default as Project } from './Projects/Project'
 export { default as ProjectForm } from './Projects/ProjectForm'
 export { default as Boards } from './Boards/Boards'
+export { default as Board } from './Boards/Board'
