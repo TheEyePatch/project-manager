@@ -10,19 +10,22 @@ function Projects(){
   const authCtx = useContext(AuthContext);
   // const userLoggedIn = authCtx.loggedIn;
   const token = authCtx.token;
-  const [projects, setProjects] = useState([]);
+  const [ownedProjects, setOwnedProjects] = useState([]);
+  const [participatedProjects, setParticipatedProjects] = useState([]);
   const [modalOpen, setModalOpen] = useState(false)
   const handleNewProject = () => setModalOpen(true);
 
   useEffect(() => {
-    getProjects({token: token})
+  getProjects({token: token})
     .then(response => {
-      setProjects(response);
+      setOwnedProjects(response.owned_projects);
+      setParticipatedProjects(response.participated_projects)
     })
 
   }, []);
 
   return (
+      // TO DO: ADD FILTER FOR SHOWING OWNED PROJECTS AND PARTICIPATED PROJECTS
       <Container>
         <div style={{ 
           margin: '1rem 0 1rem',
@@ -32,11 +35,23 @@ function Projects(){
           <Button variant="contained" size="large" onClick={handleNewProject}>
             New Project
           </Button>
-          <ProjectForm modalOpen={modalOpen} setModalOpen={setModalOpen} setProjects={setProjects}/>
+          <ProjectForm modalOpen={modalOpen} setModalOpen={setModalOpen} setOwnedProjects={setOwnedProjects}/>
         </div>
 
+        <h1>Owned Projects</h1>
         <Grid container spacing={2}>
-          {projects?.map((project) => {
+          {ownedProjects?.map((project) => {
+            return (
+              <Grid item xs={12} sm={6} md={3} key={project.id}>
+                <Project project={project} />
+              </Grid>
+              )
+          })}
+        </Grid>
+
+        <h1>Participated Projects</h1>
+        <Grid container spacing={2}>
+          {participatedProjects?.map((project) => {
             return (
               <Grid item xs={12} sm={6} md={3} key={project.id}>
                 <Project project={project} />

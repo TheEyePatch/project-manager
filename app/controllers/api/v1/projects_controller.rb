@@ -1,13 +1,21 @@
 class Api::V1::ProjectsController < Api::ApiController
   def index
-    owned_projects = current_user.owned_projects
-                                 .as_json(include: %i[owner])
-    participated_projects = current_user.participated_projects
-                                        .as_json(include: %i[owner])
+    render json: {
+      owned_projects: owned_projects,
+      participated_projects: participated_projects
+    }
+  end
 
-    projects = owned_projects | participated_projects
+  def owned_projects
+    @owned_projects ||= current_user.owned_projects
+                                    .includes(:owner, :participants)
+                                    .as_json(include: %i[owner participants])
+  end
 
-    render json: projects
+  def participated_projects
+    @participated_projects ||= current_user.participated_projects
+                                           .includes(:owner, :participants)
+                                           .as_json(include: %i[owner participants])
   end
 
   def create

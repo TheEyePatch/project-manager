@@ -13,7 +13,7 @@ import { postProject, postMultipleBoards } from '../../api/index'
 import { BoardsTable } from './../index'
 import AuthContext from '../../store/AuthContext'
 
-function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
+function ProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
   const authCtx = useContext(AuthContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',
@@ -38,7 +38,7 @@ function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
   const handleSubmit= () => {
     postProject({ token: authCtx.token, inputs: projectInput })
     .then((res) => {
-      setProjects(prev => [...prev, res.project])
+      setOwnedProjects(prev => [...prev, res.project])
 
       console.log(res.project)
       postMultipleBoards({ 
