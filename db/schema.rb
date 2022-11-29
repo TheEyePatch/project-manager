@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2022_08_07_074612) do
     t.string "title", null: false
     t.string "description"
     t.bigint "project_id", null: false
+    t.integer "position", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

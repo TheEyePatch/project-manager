@@ -8,6 +8,7 @@ export const postUserRegistration = async (params) => {
 
   } catch (error) {
     console.log(error)
+    alert(error)
   }
 }
 
@@ -71,3 +72,20 @@ export const getBoards = async (params) => {
   }
 }
 
+// MUST REQUIRE EXISTING PROJECT
+export const postBoards = async (params) => {
+  try {
+    const response = await axios.post('/api/v1/boards/', { params: params })
+  } catch (error) {
+    alert(error)
+  }
+}
+
+export const postMultipleBoards = async (params) => {
+  try {
+    const response = await axios.post(`api/v1/boards/${params.project_id}/create_multiple_boards`, params )
+    return response.data;
+  } catch (error) {
+    alert(error)
+  }
+}

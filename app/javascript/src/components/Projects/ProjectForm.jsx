@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import Typography from '@mui/material/Typography';
 import {
           Button,
           Dialog,
@@ -8,14 +9,17 @@ import {
           TextField
         } from '@mui/material'
 
-import { postProject } from '../../api/index'
+import { postProject, postMultipleBoards } from '../../api/index'
+import { BoardsTable } from './../index'
 import AuthContext from '../../store/AuthContext'
 
 function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
+  const authCtx = useContext(AuthContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',
     description: '',
   })
+  const [boards, setBoards] = useState([]); // TODO: ADD ARRAY OF BOARD INPUTS
 
   const handleInput = (e) => {
     setProjectIntput((prev) => {
@@ -26,12 +30,23 @@ function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
     })
   }
 
-  const handleClose = () => setModalOpen(false);
+  const handleBoardInput = (e) => {
 
-  const authCtx = useContext(AuthContext)
+  }
+
+  const handleClose = () => setModalOpen(false);
   const handleSubmit= () => {
     postProject({ token: authCtx.token, inputs: projectInput })
-    .then((res) => setProjects(prev => [...prev, res.project]));
+    .then((res) => {
+      setProjects(prev => [...prev, res.project])
+
+      console.log(res.project)
+      postMultipleBoards({ 
+        project_id: res.project.id,
+        boards: boards,
+        token: authCtx.token
+       })
+    }) // TO DO: POST BOARD INPUTS AFTER PROJECT IS SUCCESSFULLY CREATED
 
     setProjectIntput({
       name: '',
@@ -44,7 +59,19 @@ function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
   return(
   <Dialog open={modalOpen} onClose={handleClose}>
     <DialogTitle>
-      New Project
+      <Typography
+          variant="h4"
+          noWrap
+          component="span"
+          sx={{
+            mr: 2,
+            display: { md: 'flex' },
+            color: 'inherit',
+            textDecoration: 'none',
+          }}
+        >
+          New Project
+      </Typography>
     </DialogTitle>
     <DialogContent>
       <TextField
@@ -59,7 +86,6 @@ function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
       />
 
       <TextField
-        autoFocus
         margin="dense"
         id="description"
         label="Description"
@@ -70,6 +96,8 @@ function ProjectForm({ modalOpen, setModalOpen, setProjects }) {
         multiline
         minRows={4}
       />
+
+      <BoardsTable boards={boards} setBoards={setBoards}/>
     </DialogContent>
     <DialogActions>
       <Button onClick={handleClose}>Cancel</Button>

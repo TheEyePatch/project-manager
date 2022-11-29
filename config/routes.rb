@@ -8,9 +8,17 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :tasks, only: %i[index show]
+
       resources :projects, only: %i[index show create update destroy]
-      resources :boards, only: %i[index show create update destroy]
+
+      resources :boards, only: %i[index show create update destroy] do
+        collection do
+          post '/:project_id/create_multiple_boards', action: 'create_multiple_boards'
+        end
+      end
+
       resources :registrations, only: %i[create]
+
       constraints(token: /[^\/]+/) do
         resources :sessions, only: %i[create destroy], param: :token
       end

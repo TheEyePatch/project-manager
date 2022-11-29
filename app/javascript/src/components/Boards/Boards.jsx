@@ -3,27 +3,36 @@ import { useParams } from 'react-router-dom';
 import { getBoards, getProjects } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import { Container, Grid, Box } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { Board } from './../index'
+import { Board } from './../index';
 
 function Boards() {
+  const boardsLength = 6
   const params = useParams();
   const authCtx = useContext(AuthContext);
-  const [project, setProject] = useState({});
   const [boards, setBoards] = useState([]);
+  const [content, setContent] = useState('center')
 
   useEffect(() => {
+    console.log('restarting')
     getBoards({
                   token: authCtx.token,
                   project_id: params.project_id
                 }).then(res => {
-                  setProject(res.project);
                   setBoards(res.boards)
+                  if (res.boards.length > 6) {
+                    setContent('start')
+                  } else {
+                    setContent('center')
+                  }
                 })
   }, [])
+
+  const container_style = {
+    maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px'
+  }
   
   return (
-    <Container style={{maxWidth: '90vw', overflowY: 'auto', display: 'flex', justifyContent: 'center'}}>
+    <Container style={container_style}>
         {
           boards?.map(board => {
             return (
@@ -31,20 +40,6 @@ function Boards() {
             )
           })
         }
-
-        <Box item
-              style={{ margin: '.5rem',
-                      p: '2',
-                      width: '12rem',
-                      border: '2px dashed grey',
-                      backgroundColor: 'rgb(230, 230, 230)',
-                      borderRadius: '.2rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center' }}
-        >
-          <AddIcon fontSize='large'/>
-        </Box>
     </Container>
   )
 }

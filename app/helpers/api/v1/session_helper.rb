@@ -32,4 +32,8 @@ module Api::V1::SessionHelper
     @current_user ||=
       User.find(user_id)
   end
+
+  def authenticate_user
+    render json: {}, status: :unprocessable_entity unless decoded_token(params[:token])
+  end
 end
