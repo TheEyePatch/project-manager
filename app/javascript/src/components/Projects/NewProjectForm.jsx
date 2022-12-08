@@ -10,10 +10,10 @@ import {
         } from '@mui/material'
 
 import { postProject, postMultipleBoards } from '../../api/index'
-import { BoardsTable } from './../index'
+import { BoardsTable } from '../index'
 import AuthContext from '../../store/AuthContext'
 
-function ProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
+function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
   const authCtx = useContext(AuthContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',
@@ -30,11 +30,14 @@ function ProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
     })
   }
 
-  const handleBoardInput = (e) => {
-
+  const handleClose = () => {
+    setModalOpen(false);
+    setProjectIntput({
+      name: '',
+      description: '',
+    })
   }
 
-  const handleClose = () => setModalOpen(false);
   const handleSubmit= () => {
     postProject({ token: authCtx.token, inputs: projectInput })
     .then((res) => {
@@ -107,4 +110,4 @@ function ProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
   )
 }
 
-export default ProjectForm;
+export default NewProjectForm;

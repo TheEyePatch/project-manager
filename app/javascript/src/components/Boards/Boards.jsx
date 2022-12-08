@@ -5,8 +5,9 @@ import AuthContext from '../../store/AuthContext'
 import { Container, Grid, Box } from '@mui/material';
 import { Board } from './../index';
 
+const BOARDS_LENGTH = 6;
+
 function Boards() {
-  const boardsLength = 6
   const params = useParams();
   const authCtx = useContext(AuthContext);
   const [boards, setBoards] = useState([]);
@@ -18,8 +19,8 @@ function Boards() {
                   token: authCtx.token,
                   project_id: params.project_id
                 }).then(res => {
-                  setBoards(res.boards)
-                  if (res.boards.length > 6) {
+                  setBoards(res)
+                  if (res.length > BOARDS_LENGTH) {
                     setContent('start')
                   } else {
                     setContent('center')

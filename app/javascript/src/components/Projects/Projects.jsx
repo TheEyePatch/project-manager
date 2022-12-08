@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/AuthContext';
 import { getProjects } from '../../api/index';
-import { Project, ProjectForm } from './../index';
+import { Project, NewProjectForm } from './../index';
 import Grid from '@mui/material/Grid';
 import { Button, Container } from '@mui/material';
 
@@ -13,7 +13,9 @@ function Projects(){
   const [ownedProjects, setOwnedProjects] = useState([]);
   const [participatedProjects, setParticipatedProjects] = useState([]);
   const [modalOpen, setModalOpen] = useState(false)
-  const handleNewProject = () => setModalOpen(true);
+  const handleNewProject = () => {
+    setModalOpen(true)
+  };
 
   useEffect(() => {
   getProjects({token: token})
@@ -35,7 +37,11 @@ function Projects(){
           <Button variant="contained" size="large" onClick={handleNewProject}>
             New Project
           </Button>
-          <ProjectForm modalOpen={modalOpen} setModalOpen={setModalOpen} setOwnedProjects={setOwnedProjects}/>
+          <NewProjectForm
+            setModalOpen={setModalOpen}
+            setOwnedProjects={setOwnedProjects}
+            modalOpen={modalOpen}
+          />
         </div>
 
         <h1>Owned Projects</h1>
