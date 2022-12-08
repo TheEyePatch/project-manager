@@ -4,10 +4,7 @@ class Api::V1::BoardsController < Api::ApiController
   def index
     boards = project.boards
                     .as_json()
-    render json: {
-      boards: boards,
-      project: project
-    }, status: :ok
+    render json: boards, status: :ok
   end
 
   def show; end

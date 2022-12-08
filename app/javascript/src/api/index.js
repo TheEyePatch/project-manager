@@ -61,6 +61,17 @@ export const postProject = async ({token, inputs}) => {
   }
 }
 
+export const putProject = async (params) => {
+  const project_id = params.project_id
+  try {
+    const response = await axios.put(`/api/v1/projects/${project_id}`, params)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    console.log(params)
+  }
+}
+
 // Boards
 
 export const getBoards = async (params) => {
