@@ -28,11 +28,33 @@ class Api::V1::ProjectsController < Api::ApiController
     end
   end
 
-  def update; end
+  def update
+    if project.valid? && project.update(project_params)
+      project.boards.destroy_all
+
+      new_boards = request.params[:boards].map do |board|
+        {
+          project_id: project.id,
+          title: board[:title],
+          description: board[:description],
+          position: board[:position],
+        }
+      end
+      Board.import new_boards
+
+      render json: project.as_json(include: %i[owner]), status: :ok
+    else
+      render json: project.errors, status: :unprocessable_entity
+    end
+  end
 
   def destroy; end
 
   private
+
+  def project
+    @project ||= Project.includes(:owner).find(params[:project_id])              
+  end
 
   def project_params
     params.require(:project).permit(:name, :description)

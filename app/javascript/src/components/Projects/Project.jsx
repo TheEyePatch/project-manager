@@ -7,6 +7,7 @@ import { UpdateProjectForm } from './../index';
 function Project({ project }){
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false)
+  const [currentProject, setCurrentProject] = useState(project)
 
   const editProjectHandler = () => {
     setModalOpen(true)
@@ -20,12 +21,12 @@ function Project({ project }){
               <DeleteOutline/>
             </IconButton>
           }
-          title={project.name}
-          subheader={`Owner: ${project.owner.account}`}
+          title={currentProject.name}
+          subheader={`Owner: ${currentProject.owner.account}`}
         />
         <CardContent>
           <Typography noWrap variant='body2' color='textSecondary'>
-            {project.description}
+            {currentProject.description}
           </Typography>
         </CardContent>
         <CardActions>
@@ -39,8 +40,9 @@ function Project({ project }){
       </Card>
       <UpdateProjectForm
           setModalOpen={setModalOpen}
-          project={project}
+          project={currentProject}
           modalOpen={modalOpen}
+          setCurrentProject={setCurrentProject}
           />
     </div>
   )

@@ -99,7 +99,7 @@ function Header({ logoutHandler, isLoggedIn }){
                   >
                     {settings.map((setting) => (
                       <MenuItem key={setting} slot={setting} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center">{setting}</Typography>
+                        <Typography textAlign="center" slot={setting}>{setting}</Typography>
                       </MenuItem>
                     ))}
                   </Menu>

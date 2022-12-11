@@ -12,21 +12,20 @@ import { BoardsTable } from '../index'
 import AuthContext from '../../store/AuthContext'
 import { putProject, getBoards } from '../../api'
 
-function UpdateProjectForm ({ modalOpen, setModalOpen, project }) {
+function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProject }) {
   const authCtx = useContext(AuthContext)
   const [projectInput, setProjectIntput] = useState({
     name: project.name,
     description: project.description,
   })
   const [boards, setBoards] = useState([]); // TODO: ADD ARRAY OF BOARD INPUTS
-  const [projectUpdate, setprojectUpdate] = useState(project)
 
   useEffect(() => {
-    getBoards({token: authCtx.token, project_id: projectUpdate.id})
+    getBoards({token: authCtx.token, project_id: project.id})
     .then(res => {
       setBoards(res)
     })
-  }, [projectUpdate])
+  }, [project])
 
   const handleInput = (e) => {
     setProjectIntput((prev) => {
@@ -40,8 +39,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project }) {
   const handleClose = () => {
     setModalOpen(false);
     setProjectIntput({
-      name: '',
-      description: '',
+      name: project.name,
+      description: project.description,
     })
   }
 
@@ -49,14 +48,14 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project }) {
     // putProject(projectInput)
 
     let updatedProject = {
-      project_id: projectUpdate.id,
+      project_id: project.id,
       project: projectInput,
       boards: boards
     }
-    console.log(updatedProject)
+
     putProject(updatedProject)
     .then(res => {
-      setprojectUpdate(res)
+      setCurrentProject(res)
     })
 
     setModalOpen(false);
@@ -76,7 +75,7 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project }) {
               textDecoration: 'none',
             }}
           >
-            {projectUpdate.name}
+            {project.name}
         </Typography>
       </DialogTitle>
       <DialogContent>
