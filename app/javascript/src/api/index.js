@@ -72,6 +72,16 @@ export const putProject = async (params) => {
   }
 }
 
+export const deleteProject = async (params) => {
+  try {
+    const response = await axios.post(`/api/v1/projects/delete`, params)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    console.log(params)
+  }
+}
+
 // Boards
 
 export const getBoards = async (params) => {

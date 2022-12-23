@@ -9,7 +9,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :tasks, only: %i[index show]
 
-      resources :projects, only: %i[index show create update destroy]
+      resources :projects, only: %i[index show create update] do
+        collection do
+          post :delete
+        end
+      end
 
       resources :boards, only: %i[index show create update destroy] do
         collection do

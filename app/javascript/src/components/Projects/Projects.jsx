@@ -17,6 +17,11 @@ function Projects(){
     setModalOpen(true)
   };
 
+  const deleteProjectHandler = (project) => {
+    const newProjects = ownedProjects.filter((item) => item.id != project.id)
+    setOwnedProjects(newProjects)
+  }
+
   useEffect(() => {
   getProjects({token: token})
     .then(response => {
@@ -49,7 +54,7 @@ function Projects(){
           {ownedProjects?.map((project) => {
             return (
               <Grid item xs={12} sm={6} md={3} key={project.id}>
-                <Project project={project} />
+                <Project project={project} isOwned={true} deleteProjectHandler={deleteProjectHandler}/>
               </Grid>
               )
           })}
@@ -60,7 +65,7 @@ function Projects(){
           {participatedProjects?.map((project) => {
             return (
               <Grid item xs={12} sm={6} md={3} key={project.id}>
-                <Project project={project} />
+                <Project project={project} isOwned={false} deleteProjectHandler={deleteProjectHandler}/>
               </Grid>
               )
           })}

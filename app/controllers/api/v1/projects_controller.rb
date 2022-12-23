@@ -1,4 +1,5 @@
 class Api::V1::ProjectsController < Api::ApiController
+  before_action :authenticate_user, only: %i[delete]
   def index
     render json: {
       owned_projects: owned_projects,
@@ -48,7 +49,9 @@ class Api::V1::ProjectsController < Api::ApiController
     end
   end
 
-  def destroy; end
+  def delete
+    render json: { project: project } if project.destroy
+  end
 
   private
 
