@@ -19,6 +19,10 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProjec
     description: project.description,
   })
   const [boards, setBoards] = useState([]); // TODO: ADD ARRAY OF BOARD INPUTS
+  const [inputErrors, setInputErrors] = useState({
+    name: false,
+    description: false,
+  })
 
   useEffect(() => {
     getBoards({token: authCtx.token, project_id: project.id})
@@ -34,6 +38,23 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProjec
         [e.target.id]: e.target.value
       }
     })
+    setInputErrors(prev => {
+      return {
+        ...prev,
+        [e.target.id]: false
+      }
+    })
+  }
+
+  const handleInputErrors = () => {
+    if(projectInput.name < 4){
+      setInputErrors(prev => {
+        return {
+          ...prev,
+          name: true
+        }
+      })
+    }
   }
 
   const handleClose = () => {
@@ -42,10 +63,21 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProjec
       name: project.name,
       description: project.description,
     })
+
+    setInputErrors({
+      name: false,
+      description: false,
+    })
   }
 
   const handleSubmit = () => {
     // putProject(projectInput)
+
+    if(projectInput.name.length < 4) {
+      handleInputErrors()
+
+      return
+    }
 
     let updatedProject = {
       project_id: project.id,
@@ -80,6 +112,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProjec
       </DialogTitle>
       <DialogContent>
         <TextField
+          error={inputErrors.name}
+          helperText={inputErrors.name ? "Incorrect entry." : null}
           autoFocus
           margin="dense"
           id="name"
@@ -91,6 +125,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProjec
         />
 
         <TextField
+          error={inputErrors.description}
+          helperText={inputErrors.description ? "Incorrect entry." : null}
           margin="dense"
           id="description"
           label="Description"

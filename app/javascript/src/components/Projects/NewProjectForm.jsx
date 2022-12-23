@@ -13,6 +13,7 @@ import { postProject, postMultipleBoards } from '../../api/index'
 import { BoardsTable } from '../index'
 import AuthContext from '../../store/AuthContext'
 
+const PROJ_NAME_MIN_LEN = 4
 function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
   const authCtx = useContext(AuthContext)
   const [projectInput, setProjectIntput] = useState({
@@ -20,12 +21,32 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
     description: '',
   })
   const [boards, setBoards] = useState([]); // TODO: ADD ARRAY OF BOARD INPUTS
+  const [inputErrors, setInputErrors] = useState({
+    name: false,
+    description: false,
+  })
+
+  const handleInputErrors = () => {
+    setInputErrors(prev => {
+      return {
+        ...prev,
+        name: true
+      }
+    })
+  }
 
   const handleInput = (e) => {
     setProjectIntput((prev) => {
       return {
         ...prev,
         [e.target.id]: e.target.value
+      }
+    })
+
+    setInputErrors(prev => {
+      return {
+        ...prev,
+        [e.target.id]: false
       }
     })
   }
@@ -36,9 +57,15 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
       name: '',
       description: '',
     })
+    setInputErrors({
+      name: false,
+      description: false,
+    })
   }
 
   const handleSubmit= () => {
+    if (projectInput.name.length < PROJ_NAME_MIN_LEN) return handleInputErrors()
+
     postProject({ token: authCtx.token, inputs: projectInput })
     .then((res) => {
       setOwnedProjects(prev => [...prev, res.project])
@@ -78,6 +105,8 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
     </DialogTitle>
     <DialogContent>
       <TextField
+        error={inputErrors.name}
+        helperText={inputErrors.name ? "Incorrect entry." : null}
         autoFocus
         margin="dense"
         id="name"
@@ -89,6 +118,8 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
       />
 
       <TextField
+        error={inputErrors.description}
+        helperText={inputErrors.description ? "Incorrect entry." : null}
         margin="dense"
         id="description"
         label="Description"
