@@ -29,6 +29,9 @@ export const destroyUserSession = async (token) => {
 // Tasks
 export const getIndexTasks = async () => axios.get('/api/v1/tasks');
 
+export const postTask = async (params) => {
+  const response = await axios.post('/api/v1/tasks', params)
+}
 
 // Projects
 
