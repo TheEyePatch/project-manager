@@ -33,7 +33,7 @@ function Boards() {
   }, [])
 
   const container_style = {
-    maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px',
+    maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px', alignItems: 'start'
   }
   
   return (
@@ -57,7 +57,7 @@ function Boards() {
           {
             boards?.map(board => {
               return (
-                <Board board={board} key={board.id}/>
+                <Board board={board} key={board.id} token={authCtx.token}/>
               )
             })
           }

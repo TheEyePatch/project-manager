@@ -90,11 +90,11 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
   <Dialog open={modalOpen} onClose={handleClose}>
     <DialogTitle>
       <Typography
-          variant="h4"
+          variant="h6"
           noWrap
           component="span"
           sx={{
-            mr: 2,
+            mb: 2,
             display: { md: 'flex' },
             color: 'inherit',
             textDecoration: 'none',

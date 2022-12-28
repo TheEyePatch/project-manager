@@ -71,10 +71,10 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
             component="span"
             sx={{
               display: { md: 'flex' },
-              color: 'inherit',
+              color: '#173A5E',
               textDecoration: 'none',
               fontWeight:'bold',
-              // minWidth: '30rem'
+              minWidth: '25rem',
               mb: 2,
               mt: 2,
             }}
@@ -102,9 +102,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
             mt: 2,
             mb: 2,
             display: { md: 'flex' },
-            color: 'inherit',
-            textDecoration: 'none',
-            minWidth: '30rem',
+            color: '#173A5E',
             fontSize: '1rem',
             fontWeight:'bold',
             color: 'F4F4F'

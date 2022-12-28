@@ -96,7 +96,7 @@ function BoardsTable({project_id, boards, setBoards}) {
       <div className={style['table-header']}>
         <Typography variant="h6" noWrap component="span"
             sx={{
-              mr: 2,
+              mb: 2,
               display: { md: 'flex' },
               color: 'inherit',
               textDecoration: 'none',
