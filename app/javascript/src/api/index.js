@@ -27,10 +27,22 @@ export const destroyUserSession = async (token) => {
 }
 
 // Tasks
-export const getIndexTasks = async () => axios.get('/api/v1/tasks');
+export const getIndexTasks = async (params) => {
+  try {
+    const response = await axios.get('/api/v1/tasks', {params: params})
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 export const postTask = async (params) => {
-  const response = await axios.post('/api/v1/tasks', params)
+  try{
+    const response = await axios.post('/api/v1/tasks', params)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // Projects

@@ -1,9 +1,9 @@
 class Api::V1::BoardsController < Api::ApiController
-  before_action :authenticate_user
-
   def index
     boards = project.boards
-                    .as_json()
+                    .includes(:tasks)
+                    .as_json(include: :tasks)
+
     render json: boards, status: :ok
   end
 
