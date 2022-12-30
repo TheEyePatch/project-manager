@@ -25,7 +25,6 @@ function AppRoutes(){
           />
           <section style={{
             paddingTop: '1rem',
-            paddingTop: '1rem',
             display: 'flex',
             justifyContent: 'center'
           }}>

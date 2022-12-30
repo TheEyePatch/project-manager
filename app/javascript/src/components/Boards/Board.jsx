@@ -1,25 +1,35 @@
-import React from 'react'
-import { Box } from '@mui/material';
+import React, { useState, useEffect } from 'react'
+import { Box, Typography } from '@mui/material';
+import { Task } from './../index';
+import { getIndexTasks } from '../../api';
 
-function Board ({ board }) {
+function Board ({ board, children }) {
   return (
     <Box
         item key={board.id}
-        style={{ margin: '.5rem',
+        sx={{ margin: '.5rem',
                 boxSizing: 'border-box',
-                p: '2',
-                width: '12rem',
-                border: '2px solid grey',
-                backgroundColor: 'rgb(230, 230, 230)',
+                p: '.5rem',
+                width: '14rem',
+                backgroundColor: '#F5F5F5',
                 borderRadius: '.2rem',
-                minHeight: '80vh',
+                minHeight: '30vh',
                 position: 'relative',
                 flexShrink: '0' }}
     >
       <Box style={{ padding: '.2rem', marginBottom: '.3rem' }}>
-        <h3>{board.title}</h3>
+        <Typography
+          noWrap
+          variant='h6'
+          sx={{
+            color: 'text.primary',
+            fontWeight:'bold'
+          }}>
+          {board.title}
+        </Typography>
       </Box>
-      <Box style={{ padding: '.2rem', backgroundColor: 'rgb(0, 230, 230)', minHeight: '80%'}}>
+      <Box style={{ minHeight: '80%'}}>
+        { children }
       </Box>
     </Box>
   )
