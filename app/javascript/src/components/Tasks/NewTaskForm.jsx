@@ -102,7 +102,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
             mt: 2,
             mb: 2,
             display: { md: 'flex' },
-            color: '#173A5E',
+            // color: '#173A5E',
             fontSize: '1rem',
             fontWeight:'bold',
             color: 'F4F4F'
