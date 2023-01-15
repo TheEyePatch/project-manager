@@ -5,6 +5,7 @@ class CreateBoards < ActiveRecord::Migration[6.0]
       t.string :description
       t.bigint :project_id, null: false
       t.integer :position, null: false
+      t.integer :tasks_count
       t.timestamps
     end
   end

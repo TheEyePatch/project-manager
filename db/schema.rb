@@ -20,9 +20,9 @@ ActiveRecord::Schema.define(version: 2022_12_28_030954) do
     t.string "description"
     t.bigint "project_id", null: false
     t.integer "position", null: false
+    t.integer "tasks_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["title", "project_id"], name: "index_boards_on_title_and_project_id", unique: true
   end
 
   create_table "participations", force: :cascade do |t|
@@ -54,12 +54,14 @@ ActiveRecord::Schema.define(version: 2022_12_28_030954) do
   create_table "tasks", force: :cascade do |t|
     t.string "title", null: false
     t.text "description"
+    t.integer "position"
     t.bigint "board_id"
     t.bigint "project_id", null: false
     t.bigint "user_id"
     t.bigint "sprint_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id", "position"], name: "index_tasks_on_board_id_and_position", unique: true
   end
 
   create_table "users", force: :cascade do |t|
