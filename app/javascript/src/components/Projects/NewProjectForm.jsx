@@ -130,8 +130,6 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
         multiline
         minRows={4}
       />
-
-      <BoardsTable boards={boards} setBoards={setBoards}/>
     </DialogContent>
     <DialogActions>
       <Button onClick={handleClose}>Cancel</Button>

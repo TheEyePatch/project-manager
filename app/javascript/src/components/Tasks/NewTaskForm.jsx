@@ -10,7 +10,7 @@ import {
         } from '@mui/material'
 import { postTask } from '../../api';
 
-function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
+function NewTaskForm({ modalOpen, setModalOpen, project_id, token, setBoards}) {
   const [inputErrors, setInputErrors] = useState({
     title: false,
     description: false,
@@ -42,11 +42,9 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
     })
   }
   const handleClose = () => {
-    setTaskProject(prev => {
-      return {
-        title: '',
-        description: ''
-      }
+    setTaskProject({
+      title: '',
+      description: ''
     })
 
     setModalOpen(false)
@@ -59,7 +57,19 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
       project_id: project_id,
       token: token,
     })
-    .then(res => console.log(res))
+    .then(res => {
+      setBoards(oldBoard => {
+        const newBoard = oldBoard.map(item => item)
+        newBoard[0].tasks.push(res)
+
+        return newBoard
+      })
+    })
+
+    setTaskProject({
+      title: '',
+      description: ''
+    })
     setModalOpen(false)
   }
   return (
