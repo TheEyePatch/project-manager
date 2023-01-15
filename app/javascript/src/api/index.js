@@ -45,6 +45,15 @@ export const postTask = async (params) => {
   }
 }
 
+export const importTasks = async (params) => {
+  try {
+    const response = await axios.post('/api/v1/tasks/import_tasks', params)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // Projects
 
 export const getProjects = async (params) => {

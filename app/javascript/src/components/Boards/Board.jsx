@@ -3,9 +3,10 @@ import { Box, Typography } from '@mui/material';
 import { Task } from './../index';
 import { getIndexTasks } from '../../api';
 
-function Board ({ board, children }) {
+function Board ({ board, children, onDragEnter }) {
   return (
     <Box
+        onDragEnter={onDragEnter}
         item key={board.id}
         sx={{ margin: '.5rem',
                 boxSizing: 'border-box',

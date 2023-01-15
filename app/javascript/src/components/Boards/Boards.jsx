@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBoards, getProjects } from '../../api';
+import { getBoards, getProjects, importTasks } from '../../api';
 import AuthContext from '../../store/AuthContext'
-import { Container, Button } from '@mui/material';
-import { Board, NewTaskForm, Task } from './../index';
+import { Container, Button, MenuItem, TextField } from '@mui/material';
+import { Board, NewTaskForm, Task, BoardsCreateButton, NewBoardForm } from './../index';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 const BOARDS_LENGTH = 6;
 
@@ -14,12 +15,10 @@ function Boards() {
   const [boards, setBoards] = useState([]);
   const [content, setContent] = useState('center')
   const [modalOpen, setModalOpen] = useState(false)
+  const [boardModalOpen, setBoardModalOpen] = useState(false)
   const [dragging, setDragging] = useState(false)
   const selectedDragTask = useRef()
   const selectedNodeTask = useRef()
-  const handleNewTask = () => {
-    setModalOpen(true)
-  }
   const container_style = {
     maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px', alignItems: 'start'
   }
@@ -43,18 +42,40 @@ function Boards() {
     setTimeout(() => setDragging(true), 0)
   }
   const handleDragEnd = () => {
+    const tasks = boards[selectedDragTask.current.boardIndex].tasks
+    importTasks({tasks: tasks})
     setDragging(false)
     selectedNodeTask.current.removeEventListener('dragend', handleDragEnd)
     selectedDragTask.current = null
     selectedNodeTask.current = null
   }
   const handleDragEnter = (e, params) => {
-    
-  }
+    if (JSON.stringify(selectedDragTask.current) != JSON.stringify(params)){
+      const selectedBoardId = selectedDragTask.current.board_id
+      const selectedBoardIndex = selectedDragTask.current.boardIndex
+      const selectedTaskIndex = selectedDragTask.current.taskIndex
+      setBoards(oldBoard => {
+        const newBoard = oldBoard.map(item => item)
+        const selectedTask = newBoard[selectedBoardIndex].tasks[selectedTaskIndex]
+        newBoard[selectedBoardIndex].tasks.splice(selectedTaskIndex, 1)
+        if(params.board_id == selectedBoardId) {
+          newBoard[params.boardIndex].tasks.splice(params.taskIndex, 0, selectedTask)
+          selectedDragTask.current = params
+        } else if(params.board_id != selectedBoardId) { // If target of dragEnter is a different board or in a different board
+          newBoard[params.boardIndex].tasks.push(selectedTask)
+          const lastIndex = newBoard[params.boardIndex].tasks.length - 1
 
+          selectedTask.board_id = params.board_id
+          selectedDragTask.current = { boardIndex: params.boardIndex, taskIndex: lastIndex, board_id: selectedBoardId}
+        }
+
+        return newBoard        
+      })
+    }
+  }
+  
   const taskBackgroundColor = (params) => {
     const currentItem = selectedDragTask.current
-    console.log(currentItem != params)
     if(currentItem.boardIndex == params.boardIndex && currentItem.taskIndex == params.taskIndex){
       return 'rgba(0, 144, 154, 0.3)'
     }
@@ -66,29 +87,34 @@ function Boards() {
         display: 'flex',
         justifyContent: 'flex-end'
       }}>
-        <Button variant="contained" size="large" onClick={handleNewTask}>New Task</Button>
+        <BoardsCreateButton setModalOpen={setModalOpen} setBoardModalOpen={setBoardModalOpen}/>
         <NewTaskForm
           modalOpen={modalOpen}
+          setBoards={setBoards}
           setModalOpen={setModalOpen}
           project_id={params.project_id}
           token={authCtx.token}
         />
+
       </div>
 
       <Container style={container_style}>
           {
             boards?.map((board, boardIndex) => {
               return (
-                <Board board={board} key={board.id}>
+                <Board
+                board={board}
+                key={board.id}
+                onDragEnter={dragging && board.tasks.length < 1 ? (e) => handleDragEnter(e, { boardIndex, taskIndex: -1, board_id: board.id }) : null }>
                   {
                     board.tasks?.map((task, taskIndex) => {
                       return (
                         <Task
                           task={task}
                           key={task.id}
-                          onDragStart={(e) => handleDragStart(e, { boardIndex, taskIndex })}
-                          onDragEnter={dragging ? (e) => handleDragEnter(e, { boardIndex, taskIndex }) : null }
-                          backgroundColor={dragging ? taskBackgroundColor({ boardIndex, taskIndex }) : null}
+                          onDragStart={(e) => handleDragStart(e, { boardIndex, taskIndex, board_id: board.id })}
+                          onDragEnter={dragging ? (e) => handleDragEnter(e, { boardIndex, taskIndex, board_id: board.id }) : null }
+                          backgroundColor={dragging ? taskBackgroundColor({ boardIndex, taskIndex, board_id: board.id }) : null}
                         />
                       )
                     })
