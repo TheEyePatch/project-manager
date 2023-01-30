@@ -9,7 +9,6 @@ class Api::V1::TasksController < Api::ApiController
     task = project.tasks.build(sanitized_task_params)
 
     if task.valid? && task.save
-      task.update(board_id: project.boards.first.id)
       render json: task, status: :ok
     else
       render json: task.errors.full_messages, status: :unprocessable_entity

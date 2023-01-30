@@ -1,5 +1,5 @@
 class Board < ApplicationRecord
-  has_many :tasks, counter_cache: true, dependent: :delete_all
+  has_many :tasks, dependent: :delete_all
   belongs_to :project
 
   validates :title, presence: true

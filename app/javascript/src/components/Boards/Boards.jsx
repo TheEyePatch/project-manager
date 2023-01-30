@@ -50,35 +50,37 @@ function Boards() {
     selectedNodeTask.current = null
   }
   const handleDragEnter = (e, params) => {
-    if (JSON.stringify(selectedDragTask.current) != JSON.stringify(params)){
-      const selectedBoardId = selectedDragTask.current.board_id
-      const selectedBoardIndex = selectedDragTask.current.boardIndex
-      const selectedTaskIndex = selectedDragTask.current.taskIndex
-      setBoards(oldBoard => {
-        const newBoard = oldBoard.map(item => item)
-        const selectedTask = newBoard[selectedBoardIndex].tasks[selectedTaskIndex]
-        newBoard[selectedBoardIndex].tasks.splice(selectedTaskIndex, 1)
-        if(params.board_id == selectedBoardId) {
-          newBoard[params.boardIndex].tasks.splice(params.taskIndex, 0, selectedTask)
-          selectedDragTask.current = params
-        } else if(params.board_id != selectedBoardId) { // If target of dragEnter is a different board or in a different board
-          newBoard[params.boardIndex].tasks.push(selectedTask)
-          const lastIndex = newBoard[params.boardIndex].tasks.length - 1
+    if (JSON.stringify(selectedDragTask.current) == JSON.stringify(params)) return
 
-          selectedTask.board_id = params.board_id
-          selectedDragTask.current = { boardIndex: params.boardIndex, taskIndex: lastIndex, board_id: selectedBoardId}
-        }
+    const selectedBoardId = selectedDragTask.current.board_id
+    const selectedBoardIndex = selectedDragTask.current.boardIndex
+    const selectedTaskIndex = selectedDragTask.current.taskIndex
+    setBoards(oldBoard => {
+      const newBoard = oldBoard.map(item => item)
+      const selectedTask = newBoard[selectedBoardIndex].tasks[selectedTaskIndex]
+      newBoard[selectedBoardIndex].tasks.splice(selectedTaskIndex, 1)
+      if(params.board_id == selectedBoardId) {
+        newBoard[params.boardIndex].tasks.splice(params.taskIndex, 0, selectedTask)
+        selectedDragTask.current = params
+      } else if(params.board_id != selectedBoardId) { // If target of dragEnter is a different board or in a different board
+        newBoard[params.boardIndex].tasks.push(selectedTask)
+        const lastIndex = newBoard[params.boardIndex].tasks.length - 1
 
-        return newBoard        
-      })
-    }
+        selectedTask.board_id = params.board_id
+        selectedDragTask.current = { boardIndex: params.boardIndex, taskIndex: lastIndex, board_id: selectedBoardId}
+      }
+
+      selectedTask.position = params.position
+      return newBoard        
+    })
   }
   
   const taskBackgroundColor = (params) => {
     const currentItem = selectedDragTask.current
-    if(currentItem.boardIndex == params.boardIndex && currentItem.taskIndex == params.taskIndex){
-      return 'rgba(0, 144, 154, 0.3)'
-    }
+    if(currentItem.boardIndex != params.boardIndex) return
+    if(currentItem.taskIndex != params.taskIndex) return
+
+    return 'rgba(0, 144, 154, 0.2)'
   }
   return (
     <Container>
@@ -105,15 +107,15 @@ function Boards() {
                 <Board
                 board={board}
                 key={board.id}
-                onDragEnter={dragging && board.tasks.length < 1 ? (e) => handleDragEnter(e, { boardIndex, taskIndex: -1, board_id: board.id }) : null }>
+                onDragEnter={dragging && board.tasks.length < 1 ? (e) => handleDragEnter(e, { boardIndex, taskIndex: 0, board_id: board.id, position: board.tasks_count }) : null }>
                   {
                     board.tasks?.map((task, taskIndex) => {
                       return (
                         <Task
                           task={task}
-                          key={task.id}
+                          key={task?.id}
                           onDragStart={(e) => handleDragStart(e, { boardIndex, taskIndex, board_id: board.id })}
-                          onDragEnter={dragging ? (e) => handleDragEnter(e, { boardIndex, taskIndex, board_id: board.id }) : null }
+                          onDragEnter={dragging ? (e) => handleDragEnter(e, { boardIndex, taskIndex, board_id: board.id, position: task.position }) : null }
                           backgroundColor={dragging ? taskBackgroundColor({ boardIndex, taskIndex, board_id: board.id }) : null}
                         />
                       )
