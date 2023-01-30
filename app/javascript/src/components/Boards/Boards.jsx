@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getBoards, getProjects, importTasks } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import { Container, Button, MenuItem, TextField } from '@mui/material';
-import { Board, NewTaskForm, Task, BoardsCreateButton, NewBoardForm } from './../index';
+import { Board, Task, BoardsCreateButton } from './../index';
 import { ConstructionOutlined } from '@mui/icons-material';
 
 const BOARDS_LENGTH = 6;
@@ -14,14 +14,9 @@ function Boards() {
   const authCtx = useContext(AuthContext);
   const [boards, setBoards] = useState([]);
   const [content, setContent] = useState('center')
-  const [modalOpen, setModalOpen] = useState(false)
-  const [boardModalOpen, setBoardModalOpen] = useState(false)
   const [dragging, setDragging] = useState(false)
   const selectedDragTask = useRef()
   const selectedNodeTask = useRef()
-  const container_style = {
-    maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px', alignItems: 'start'
-  }
 
   useEffect(() => {
     console.log('restarting')
@@ -74,7 +69,7 @@ function Boards() {
       return newBoard        
     })
   }
-  
+
   const taskBackgroundColor = (params) => {
     const currentItem = selectedDragTask.current
     if(currentItem.boardIndex != params.boardIndex) return
@@ -82,6 +77,11 @@ function Boards() {
 
     return 'rgba(0, 144, 154, 0.2)'
   }
+
+  const container_style = {
+    maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px', alignItems: 'start'
+  }
+
   return (
     <Container>
       <div style={{ 
@@ -89,15 +89,11 @@ function Boards() {
         display: 'flex',
         justifyContent: 'flex-end'
       }}>
-        <BoardsCreateButton setModalOpen={setModalOpen} setBoardModalOpen={setBoardModalOpen}/>
-        <NewTaskForm
-          modalOpen={modalOpen}
-          setBoards={setBoards}
-          setModalOpen={setModalOpen}
+        <BoardsCreateButton
           project_id={params.project_id}
           token={authCtx.token}
+          setBoards={setBoards}
         />
-
       </div>
 
       <Container style={container_style}>

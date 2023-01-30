@@ -120,7 +120,8 @@ export const getBoards = async (params) => {
 // MUST REQUIRE EXISTING PROJECT
 export const postBoards = async (params) => {
   try {
-    const response = await axios.post('/api/v1/boards/', { params: params })
+    const response = await axios.post('/api/v1/boards/', params)
+    return response.data
   } catch (error) {
     alert(error)
   }

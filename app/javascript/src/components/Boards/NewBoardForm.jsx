@@ -8,10 +8,12 @@ import {
           DialogTitle,
           TextField
         } from '@mui/material'
+import { postBoards } from '../../api'
 
-function NewBoardForm ({ board, modalOpen, setModalOpen }) {
+function NewBoardForm ({ modalOpen, setModalOpen, setBoards, project_id, token }) {
   const [boardInput, setBoardInput] = useState({
-    title: boardInput.title
+    title: '',
+    position: '',
   })
 
   const [inputError, setInputError] = useState({ title: false })
@@ -26,21 +28,57 @@ function NewBoardForm ({ board, modalOpen, setModalOpen }) {
     setInputError(false)
   }
   const handleClose = () =>{
+    setBoardInput({
+      title: '',
+      position: '',
+    })
     setModalOpen(false)
   }
   const handleSubmit = () => {
-    if(boardInput.title.length < 1) {
-      return setInputError({ title: true })
-    }
+    if(boardInput.title.length < 1) return setInputError({ title: true })
 
-    console.log('submitted')
+    postBoards({
+      token: token,
+      project_id: project_id,
+      board: {
+        title: boardInput.title,
+      }
+    }).then(res => {
+      setBoards(boards => {
+        const newBoard = [...boards, res]
+
+        return newBoard.sort((a, b) => a.position - b.position)
+      })
+    })
+
+    setBoardInput({
+      title: '',
+      position: '',
+    })
+    setModalOpen(false)
   }
   return (
     <Dialog open={modalOpen} onClose={handleClose}>
       <DialogTitle>
+      <Typography
+            variant="h6"
+            noWrap
+            component="span"
+            sx={{
+              display: { md: 'flex' },
+              color: '#173A5E',
+              textDecoration: 'none',
+              fontWeight:'bold',
+              minWidth: '25rem',
+              mb: 2,
+              mt: 2,
+            }}
+          >
+            Create Board
+        </Typography>
         <TextField
             error={inputError.title}
-            helperText={inputError.title ? "Incorrect entry." : null}
+            helperText={inputError.title ? "Title required" : null}
             autoFocus
             margin="dense"
             id="title"

@@ -10,10 +10,10 @@ class Api::V1::BoardsController < Api::ApiController
   def show; end
 
   def create
-    board = project.boards.create(board_params)
+    board = project.boards.includes(:tasks).create(board_params)
 
     if board.valid? && board.save
-      render json: board.to_json, status: :ok
+      render json: board.as_json(include: :tasks), status: :ok
     end
   end
 
@@ -41,6 +41,7 @@ class Api::V1::BoardsController < Api::ApiController
     @board ||= Board.find(params[:board_id])
   end
 
-  def assign_project_id
+  def board_params
+    params.require(:board).permit(:title, :project_id)
   end
 end

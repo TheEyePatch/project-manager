@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { NewTaskForm, NewBoardForm } from './../index'
 
-function BoardsCreateButton({ setModalOpen, setBoardModalOpen }) {
+function BoardsCreateButton({ project_id, token, setBoards }) {
+  const [modalOpen, setModalOpen] = useState(false)
+  const [boardModalOpen, setBoardModalOpen] = useState(false)
+
   const handleNewTask = () => {
     setModalOpen(true)
   }
@@ -28,6 +32,21 @@ function BoardsCreateButton({ setModalOpen, setBoardModalOpen }) {
         },
       }}
     >
+      <NewTaskForm
+          modalOpen={modalOpen}
+          setBoards={setBoards}
+          setModalOpen={setModalOpen}
+          project_id={project_id}
+          token={token}
+        />
+
+      <NewBoardForm
+        modalOpen={boardModalOpen}
+        setModalOpen={setBoardModalOpen}
+        setBoards={setBoards}
+        project_id={project_id}
+        token={token}
+      />
       <ButtonGroup size="large" aria-label="large button group" variant=  'contained'>
         {buttons}
       </ButtonGroup>

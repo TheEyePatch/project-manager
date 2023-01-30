@@ -4,12 +4,13 @@ class Task < ApplicationRecord
   belongs_to :assignee, class_name: 'User', foreign_key: :user_id, optional: true
 
   validates :title, presence: true
+  validates :title, uniqueness: { scope: :project,
+    message: 'should contain unique title per project'}
 
   before_save :assign_board
   before_save :assign_position
 
   def assign_position
-    binding.pry
     self.position = board.tasks_count || 0
   end
 
