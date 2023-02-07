@@ -58,6 +58,8 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
+    acts_as_list (1.0.4)
+      activerecord (>= 4.2)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     bcrypt (3.1.18)
@@ -261,6 +263,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  acts_as_list
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   capybara (>= 2.15)
