@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Typography } from '@mui/material';
-import { Task } from './../index';
+import { Box, Typography, IconButton } from '@mui/material';
+import { Task, UpdateBoardForm } from './../index';
 import { getIndexTasks } from '../../api';
+import BorderColorTwoToneIcon from '@mui/icons-material/BorderColorTwoTone';
 
 function Board ({ board, children, onDragEnter }) {
+  const [currentBoard, setCurrentBoard] = useState(board)
+  const [modalOpen, setModalOpen] = useState(false)
+  const handleEdit = () => {
+    setModalOpen(true)
+  }
   return (
-    <Box
+    <>
+      <Box
         onDragEnter={onDragEnter}
         item key={board.id}
         sx={{ margin: '.5rem',
@@ -17,22 +24,33 @@ function Board ({ board, children, onDragEnter }) {
                 minHeight: '30vh',
                 position: 'relative',
                 flexShrink: '0' }}
-    >
-      <Box style={{ padding: '.2rem', marginBottom: '.3rem' }}>
-        <Typography
-          noWrap
-          variant='h6'
-          sx={{
-            color: 'text.primary',
-            fontWeight:'bold'
-          }}>
-          {board.title}
-        </Typography>
-      </Box>
+      >
+        <Box style={{ padding: '.2rem', marginBottom: '.3rem' }}>
+          <Typography
+            noWrap
+            variant='h6'
+            sx={{
+              color: 'text.primary',
+              fontWeight:'bold'
+            }}>
+            {currentBoard.title} ID: {currentBoard.id}
+          </Typography>
+          <IconButton onClick={handleEdit}>
+            <BorderColorTwoToneIcon fontSize='small'/>
+          </IconButton>
+        </Box>
       <Box style={{ minHeight: '80%'}}>
         { children }
       </Box>
     </Box>
+
+    <UpdateBoardForm
+      modalOpen={modalOpen}
+      board={currentBoard}
+      setModalOpen={setModalOpen}
+      setCurrentBoard={setCurrentBoard}
+    />
+    </>
   )
 }
 

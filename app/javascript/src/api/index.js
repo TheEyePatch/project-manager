@@ -135,3 +135,13 @@ export const postMultipleBoards = async (params) => {
     alert(error)
   }
 }
+
+export const updateBoard = async (params) => {
+  try {
+    const response = await axios.put(`http://localhost:3000/api/v1/boards/${params.board_id}`, params)
+    return response.data
+  } catch (error) {
+    console.log(error)
+    alert(error)
+  }
+}

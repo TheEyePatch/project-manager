@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Typography from '@mui/material/Typography';
 import {
           Button,
@@ -8,11 +8,15 @@ import {
           DialogTitle,
           TextField
         } from '@mui/material'
+import { updateBoard } from '../../api';
+import AuthContext from '../../store/AuthContext'
 
-function UpdateBoardForm ({ board, modalOpen, setModalOpen }) {
+function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
   const [boardInput, setBoardInput] = useState({
-    title: boardInput.title
+    title: board.title
   })
+  const authCtx = useContext(AuthContext);
+  const token = authCtx.token
 
   const [inputError, setInputError] = useState({ title: false })
 
@@ -33,11 +37,20 @@ function UpdateBoardForm ({ board, modalOpen, setModalOpen }) {
       return setInputError({ title: true })
     }
 
-    console.log('submitted')
+    updateBoard({
+      token: token,
+      board_id: board.id,
+      board: {
+        title: boardInput.title,
+      }
+    }).then(res => setCurrentBoard(res))
+    setModalOpen(false)
   }
   return (
     <Dialog open={modalOpen} onClose={handleClose}>
-      <DialogTitle>
+      <DialogTitle
+        sx={{minWidth: '25rem',}}
+      >
         <TextField
             error={inputError.title}
             helperText={inputError.title ? "Incorrect entry." : null}
