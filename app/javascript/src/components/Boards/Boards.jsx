@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBoards, getProjects, importTasks } from '../../api';
+import { getBoards, getProjects, importTask } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import { Container, Button, MenuItem, TextField } from '@mui/material';
 import { Board, Task, BoardsCreateButton } from './../index';
 import { ConstructionOutlined } from '@mui/icons-material';
 
-const BOARDS_LENGTH = 6;
+const BOARDS_LENGTH = 3;
 
 function Boards() {
   // HOOK USAGE
@@ -17,9 +17,9 @@ function Boards() {
   const [dragging, setDragging] = useState(false)
   const selectedDragTask = useRef()
   const selectedNodeTask = useRef()
+  const importTaskParam = useRef({})
 
   useEffect(() => {
-    console.log('restarting')
     getBoards({ token: authCtx.token, project_id: params.project_id})
     .then(res => {
       setBoards(res)
@@ -30,15 +30,25 @@ function Boards() {
   const handleDragStart = (e, params) => {
     selectedDragTask.current = params;
     selectedNodeTask.current = e.target;
-    // console.log('dragging', selectedDragTask.current)
-    // console.log('node', selectedNodeTask.current)
 
     selectedNodeTask.current.addEventListener('dragend', handleDragEnd)
     setTimeout(() => setDragging(true), 0)
   }
   const handleDragEnd = () => {
-    const tasks = boards[selectedDragTask.current.boardIndex].tasks
-    importTasks({tasks: tasks})
+    importTask({task: importTaskParam.current})
+      .then(res => {
+        setBoards(oldBoards => {
+          const newBoards = oldBoards.map(item => {
+              if(res.id == item.id) return res
+
+              return item
+            }
+          )
+
+          return newBoards
+        })
+      })
+
     setDragging(false)
     selectedNodeTask.current.removeEventListener('dragend', handleDragEnd)
     selectedDragTask.current = null
@@ -53,19 +63,22 @@ function Boards() {
     setBoards(oldBoard => {
       const newBoard = oldBoard.map(item => item)
       const selectedTask = newBoard[selectedBoardIndex].tasks[selectedTaskIndex]
+      const enteredTask = newBoard[selectedBoardIndex].tasks[params.taskIndex]
       newBoard[selectedBoardIndex].tasks.splice(selectedTaskIndex, 1)
       if(params.board_id == selectedBoardId) {
         newBoard[params.boardIndex].tasks.splice(params.taskIndex, 0, selectedTask)
         selectedDragTask.current = params
+        importTaskParam.current.board_id = params.board_id
+        importTaskParam.current.id = selectedTask.id
+        if(enteredTask.id != selectedTask.id) importTaskParam.current.position = enteredTask.position
       } else if(params.board_id != selectedBoardId) { // If target of dragEnter is a different board or in a different board
         newBoard[params.boardIndex].tasks.push(selectedTask)
         const lastIndex = newBoard[params.boardIndex].tasks.length - 1
 
-        selectedTask.board_id = params.board_id
+        importTaskParam.current = { board_id: params.board_id, id: selectedTask.id }
         selectedDragTask.current = { boardIndex: params.boardIndex, taskIndex: lastIndex, board_id: selectedBoardId}
       }
 
-      selectedTask.position = params.position
       return newBoard        
     })
   }

@@ -16,8 +16,12 @@ class Api::V1::TasksController < Api::ApiController
   end
 
   def import_tasks
-    tasks = request.params[:tasks]
-    Task.import(tasks, on_duplicate_key_update: %i[board_id position])
+    task = Task.find(params.dig(:task, :id))
+    if task.update(task_params)
+
+      render json: Board.includes(:tasks).find(task_params[:board_id]).as_json(methods: :tasks)
+    end
+    # Task.import(tasks, on_duplicate_key_update: %i[board_id position])
   end
 
   def show
@@ -35,7 +39,7 @@ class Api::V1::TasksController < Api::ApiController
     @project ||= Project.find(params[:project_id])
   end
 
-  def sanitized_task_params
-    params.require(:task).permit(:title, :description)
+  def task_params
+    params.require(:task).permit(:title, :description, :board_id, :position)
   end
 end

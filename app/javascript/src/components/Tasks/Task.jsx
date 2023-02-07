@@ -16,7 +16,7 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor }) {
       <CardActionArea onClick={handleClick}>
         <CardContent >
           <Typography gutterBottom variant="h6">
-            {task.title}
+            {task.title} | {task.position}
           </Typography>
           </CardContent>
       </CardActionArea>

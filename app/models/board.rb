@@ -7,17 +7,16 @@ class Board < ApplicationRecord
   ####### Callback ###########
 
   # after_commit :create_sequence, on: :create
-  before_save :assign_position
 
 
   ####### Callback Definition ##########
 
-  def assign_position
-    self.position = project.boards.count || 0
-  end
-
   def create_sequence
     sql_query = "CREATE SEQUENCE task_position_seq_#{id} INCREMENT 1 START 1"
     ActiveRecord::Base.connection.execute(sql_query)
+  end 
+
+  def tasks
+    super.order(position: :asc)
   end
 end

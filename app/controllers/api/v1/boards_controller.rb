@@ -1,8 +1,8 @@
 class Api::V1::BoardsController < Api::ApiController
   def index
-    boards = project.boards
+    boards = project.boards.order(position: :asc)
                     .includes(:tasks)
-                    .as_json(include: :tasks)
+                    .as_json(methods: :tasks)
 
     render json: boards, status: :ok
   end
@@ -26,7 +26,15 @@ class Api::V1::BoardsController < Api::ApiController
     Board.import(boards, on_duplicate_key_update: {conflict_target: [:id], columns: [:title]})
   end
 
-  def update; end
+  def update
+    board = Board.find(params[:board_id])
+
+    if board.update(board_params)
+      render json: board.as_json(include: :tasks), status: :ok
+    else
+      render json: board.errors, status: :unprocessable_entity
+    end
+  end
 
   def destroy; end
 
