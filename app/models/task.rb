@@ -13,4 +13,8 @@ class Task < ApplicationRecord
   def assign_board
     self.update(board_id: project.boards.first.id)
   end
+
+  def positions
+    board.tasks.pluck :position
+  end
 end

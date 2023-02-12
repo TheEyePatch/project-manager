@@ -2,7 +2,7 @@ class Api::V1::BoardsController < Api::ApiController
   def index
     boards = project.boards.order(position: :asc)
                     .includes(:tasks)
-                    .as_json(methods: :tasks)
+                    .as_json(include: { tasks: { only: %i[id title position] } })
 
     render json: boards, status: :ok
   end

@@ -114,15 +114,17 @@ function Boards() {
             boards?.map((board, boardIndex) => {
               return (
                 <Board
-                board={board}
-                key={board.id}
-                onDragEnter={dragging && board.tasks.length < 1 ? (e) => handleDragEnter(e, { boardIndex, taskIndex: 0, board_id: board.id, position: board.tasks_count }) : null }>
+                  board={board}
+                  key={board.id}
+                  onDragEnter={dragging && board.tasks.length < 1 ? (e) => handleDragEnter(e, { boardIndex, taskIndex: 0, board_id: board.id, position: board.tasks_count }) : null }
+                >
                   {
                     board.tasks?.map((task, taskIndex) => {
                       return (
                         <Task
                           task={task}
                           key={task?.id}
+                          token={authCtx.token}
                           onDragStart={(e) => handleDragStart(e, { boardIndex, taskIndex, board_id: board.id })}
                           onDragEnter={dragging ? (e) => handleDragEnter(e, { boardIndex, taskIndex, board_id: board.id, position: task.position }) : null }
                           backgroundColor={dragging ? taskBackgroundColor({ boardIndex, taskIndex, board_id: board.id }) : null}
