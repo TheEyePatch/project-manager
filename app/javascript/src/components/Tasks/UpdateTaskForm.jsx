@@ -1,26 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Typography from '@mui/material/Typography';
 import {
-          Button,
           Dialog,
           DialogActions,
           DialogContent,
           DialogTitle,
-          TextField
         } from '@mui/material'
+import { EditableContent } from '../index';
+import AuthContext from "../../store/AuthContext";
+import { UpdateTask } from '../../api'
 
-function UpdateTaskForm ({ task, modalOpen, setModalOpen }){
+function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
+  const authCtx = useContext(AuthContext)
   const handleClose = () => {
     setModalOpen(false)
+  }
+  const handleChangeTitle = (value) => {
+    UpdateTask({
+      task_id: task.id,
+      token: authCtx.token,
+      task: {
+        title: value.trim()
+      }
+    }).then(res => setTask(res))
   }
   return (
     <Dialog open={modalOpen} onClose={handleClose}>
       <DialogTitle>
-        <Typography
+        <EditableContent submitEdit={handleChangeTitle}>
+          <Typography
             variant="h6"
             noWrap
-            component="div"
+            component="p"
             sx={{
+              padding: '5px',
               display: { md: 'flex' },
               color: '#173A5E',
               textDecoration: 'none',
@@ -31,7 +44,8 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen }){
             }}
           >
             {task.title}
-        </Typography>
+          </Typography>
+        </EditableContent>
       </DialogTitle>
     </Dialog>  
   )

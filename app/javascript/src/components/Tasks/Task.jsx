@@ -26,12 +26,12 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
       <CardActionArea onClick={handleClick}>
         <CardContent >
           <Typography gutterBottom variant="h6">
-            {task.title} | {task.position}
+            {currentTask.title}
           </Typography>
           </CardContent>
       </CardActionArea>
 
-      { modalOpen &&  <UpdateTaskForm task={task} modalOpen={modalOpen} setModalOpen={setModalOpen} />}
+      { modalOpen &&  <UpdateTaskForm task={currentTask} setTask={setCurrentTask} modalOpen={modalOpen} setModalOpen={setModalOpen} />}
     </Card>
   )
 }

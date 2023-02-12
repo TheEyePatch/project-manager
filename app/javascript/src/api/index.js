@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UpdateTaskForm } from "../components";
 
 // User Registrations and Sessions
 export const postUserRegistration = async (params) => { 
@@ -54,6 +55,23 @@ export const importTask = async (params) => {
   }
 }
 
+export const getTask = async (params) => {
+  try {
+    const response = await axios.get(`/api/v1/tasks/${params.id}`, {params: params})
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const UpdateTask = async (params) => {
+  try {
+    const response = await axios.put(`/api/v1/tasks/${params.task_id}`, params)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
 // Projects
 
 export const getProjects = async (params) => {

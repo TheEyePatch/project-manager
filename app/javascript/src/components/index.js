@@ -13,3 +13,5 @@ export { default as BoardsCreateButton } from './Boards/BoardsCreateButton'
 export { default as NewTaskForm } from './Tasks/NewTaskForm'
 export { default as Task } from './Tasks/Task'
 export { default as UpdateTaskForm } from './Tasks/UpdateTaskForm'
+
+export { default as EditableContent } from './common/EditableContent'

@@ -15,6 +15,15 @@ class Api::V1::TasksController < Api::ApiController
     end
   end
 
+  def update
+    task = Task.find(params[:id])
+    if task.update(task_params)
+      render json: task.as_json(methods: %i[positions])
+    else
+      render json: task.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
   def import_tasks
     task = Task.find(params.dig(:task, :id))
     if task.update(task_params)
@@ -25,7 +34,12 @@ class Api::V1::TasksController < Api::ApiController
   end
 
   def show
-    @task = Task.find(params[:id])
+    task = Task.find(params[:id])
+    if task.present?
+      render json: task.as_json(methods: %i[positions])
+    else
+      render json: {}, status: :unprocessable_entity
+    end
   end
 
   private
