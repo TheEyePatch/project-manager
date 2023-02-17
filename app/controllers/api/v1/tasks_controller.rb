@@ -6,7 +6,7 @@ class Api::V1::TasksController < Api::ApiController
   end
   
   def create
-    task = project.tasks.build(sanitized_task_params)
+    task = project.tasks.build(task_params)
 
     if task.valid? && task.save
       render json: task, status: :ok

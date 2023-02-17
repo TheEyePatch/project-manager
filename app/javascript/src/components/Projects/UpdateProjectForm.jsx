@@ -12,24 +12,17 @@ import { BoardsTable } from '../index'
 import AuthContext from '../../store/AuthContext'
 import { putProject, getBoards } from '../../api'
 
-function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProject }) {
+function UpdateProjectForm ({ modalOpen, setModalOpen, project, setCurrentProject, boards, setBoards }) {
   const authCtx = useContext(AuthContext)
   const [projectInput, setProjectIntput] = useState({
     name: project.name,
     description: project.description,
   })
-  const [boards, setBoards] = useState([]); // TODO: ADD ARRAY OF BOARD INPUTS
+
   const [inputErrors, setInputErrors] = useState({
     name: false,
     description: false,
   })
-
-  useEffect(() => {
-    getBoards({token: authCtx.token, project_id: project.id})
-    .then(res => {
-      setBoards(res)
-    })
-  }, [project])
 
   const handleInput = (e) => {
     setProjectIntput((prev) => {

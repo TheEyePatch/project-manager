@@ -4,15 +4,21 @@ import { DeleteOutline } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"
 import { UpdateProjectForm } from './../index';
 import AuthContext from '../../store/AuthContext'
-import { deleteProject } from '../../api';
+import { deleteProject, getBoards } from '../../api';
 
 function Project({ project, deleteProjectHandler }){
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext)
   const [modalOpen, setModalOpen] = useState(false)
   const [currentProject, setCurrentProject] = useState(project)
+  const [boards, setBoards] = useState([]);
 
   const editProjectHandler = () => {
+    getBoards({token: authCtx.token, project_id: project.id})
+    .then(res => {
+      setBoards(res)
+    })
+
     setModalOpen(true)
   }
 
@@ -51,6 +57,8 @@ function Project({ project, deleteProjectHandler }){
           project={currentProject}
           modalOpen={modalOpen}
           setCurrentProject={setCurrentProject}
+          boards={boards}
+          setBoards={setBoards}
           />
     </div>
   )
