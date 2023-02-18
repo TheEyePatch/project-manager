@@ -1,5 +1,6 @@
 import axios from "axios";
 import { UpdateTaskForm } from "../components";
+axios.defaults.baseURL = '/'
 
 // User Registrations and Sessions
 export const postUserRegistration = async (params) => { 
@@ -83,9 +84,9 @@ export const getProjects = async (params) => {
   }
 }
 
-export const getProject = async ({ project_id }) => {
+export const getProject = async (params) => {
   try {
-    const response = await axios.get(`api/v1/projects/${project_id}`);
+    const response = await axios.get(`api/v1/projects/${params.project_id}`, { params: params });
     return response.data
   } catch (error) {
     console.log(error)

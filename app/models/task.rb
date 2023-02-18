@@ -11,6 +11,8 @@ class Task < ApplicationRecord
   after_commit :assign_board, on: :create
 
   def assign_board
+    return if self.board_id.present?
+
     self.update(board_id: project.boards.first.id)
   end
 

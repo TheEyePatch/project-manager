@@ -4,7 +4,7 @@ class Api::V1::ProjectsController < Api::ApiController
     render json: {
       owned_projects: owned_projects,
       participated_projects: participated_projects
-    }
+    }, status: :ok
   end
 
   def owned_projects
@@ -17,6 +17,14 @@ class Api::V1::ProjectsController < Api::ApiController
     @participated_projects ||= current_user.participated_projects
                                            .includes(:owner, :participants)
                                            .as_json(include: %i[owner participants])
+  end
+
+  def show
+    project =
+      Project.joins(:boards)
+            .find(params[:id])
+          .as_json(methods: :basic_board_info)
+    render json: project, status: :ok
   end
 
   def create

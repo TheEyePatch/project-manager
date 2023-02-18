@@ -6,4 +6,8 @@ class Project < ApplicationRecord
   has_many :boards
 
   validates :name, presence: true
+
+  def basic_board_info
+    boards.order(position: :asc).select('boards.id, boards.title as board_title')
+  end
 end
