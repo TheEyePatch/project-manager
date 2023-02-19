@@ -46,7 +46,7 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
 
     setTask(taskUpdateResponse)
 
-    if(attribute == 'board_id' && task.board_id != value){
+    if(attribute == 'board_id' || attribute == 'position'){
       const boardUpdateResponse = await getBoards({
         token: authCtx.token,
         project_id: task.project_id
@@ -131,6 +131,22 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
               {
                 statuses.map(stat => {
                   return  <MenuItem  key={stat.id} value={stat.id}>{stat.title}</MenuItem>
+                })
+              }
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small">Status</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              value={task?.position}
+              id="position"
+              label={"Position"}
+              onChange={(e) => handleChange({ value: e.target.value, attribute: 'position' })}
+            > 
+              {
+                task?.positions.map(position => {
+                  return  <MenuItem  key={position} value={position}>{position}</MenuItem>
                 })
               }
             </Select>
