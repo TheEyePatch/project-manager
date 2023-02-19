@@ -8,6 +8,6 @@ class Project < ApplicationRecord
   validates :name, presence: true
 
   def basic_board_info
-    boards.order(position: :asc).select('boards.id, boards.title as board_title')
+    boards.order(position: :asc).select('boards.id, boards.title')
   end
 end

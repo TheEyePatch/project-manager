@@ -21,9 +21,10 @@ class Api::V1::ProjectsController < Api::ApiController
 
   def show
     project =
-      Project.joins(:boards)
-            .find(params[:id])
-          .as_json(methods: :basic_board_info)
+      Project.includes(:boards)
+             .find(params[:id])
+             .as_json(methods: :basic_board_info)
+
     render json: project, status: :ok
   end
 

@@ -25,16 +25,19 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token, setBoards}) {
     title: '',
     description: '',
     board_id: '',
+    position: '',
   })
   const authCtx = useContext(AuthContext);
   const [statuses, setStatuses] = useState([])
+
   useEffect(() => {
     getProject({
       token: authCtx.token,
       project_id: project_id,
     }).then(res => {
+      if(res == undefined) return
+
       setStatuses(res.basic_board_info)
-      console.log(res.basic_board_info)
     })
   }, [project_id])
 
@@ -99,11 +102,12 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token, setBoards}) {
     })
     setModalOpen(false)
   }
-  const handleSelect = (e) => {
+  const handleSelect = (e, object) => {
     setTaskProject(prev => {
       return {
         ...prev,
-        board_id: e.target.value
+        [object.field]: e.target.value,
+
       }
     })
   }
@@ -182,11 +186,11 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token, setBoards}) {
               id="board_id"
               value={taskInput.board_id}
               label="Status"
-              onChange={handleSelect}
+              onChange={(e) => handleSelect(e, { field: 'board_id' })}
             >
               {
                 statuses.map(stat => {
-                  return  <MenuItem key={stat.id} value={stat.id}>{stat.board_title}</MenuItem>
+                  return  <MenuItem  key={stat.id} data-name={'board_id'} value={stat.id}>{stat.title}</MenuItem>
                 })
               }
             </Select>
