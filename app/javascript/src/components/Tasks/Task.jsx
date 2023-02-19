@@ -7,7 +7,7 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import { UpdateTaskForm } from './../index'
 import { getTask } from '../../api'
 
-function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
+function Task({ setBoards, task, onDragStart, onDragEnter, backgroundColor, token }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [currentTask, setCurrentTask] = useState(task)
   const handleClick = () => {
@@ -16,9 +16,9 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
       id: currentTask.id
     })
     .then(res => {
+      setModalOpen(true)
       setCurrentTask(res)
     })
-    setModalOpen(true)
   }
 
   return (
@@ -31,7 +31,7 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
           </CardContent>
       </CardActionArea>
 
-      { modalOpen &&  <UpdateTaskForm task={currentTask} setTask={setCurrentTask} modalOpen={modalOpen} setModalOpen={setModalOpen} />}
+      { modalOpen &&  <UpdateTaskForm setBoards={setBoards} task={currentTask} setTask={setCurrentTask} modalOpen={modalOpen} setModalOpen={setModalOpen} />}
     </Card>
   )
 }

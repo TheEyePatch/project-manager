@@ -128,6 +128,7 @@ function Boards() {
                           onDragStart={(e) => handleDragStart(e, { boardIndex, taskIndex, board_id: board.id })}
                           onDragEnter={dragging ? (e) => handleDragEnter(e, { boardIndex, taskIndex, board_id: board.id, position: task.position }) : null }
                           backgroundColor={dragging ? taskBackgroundColor({ boardIndex, taskIndex, board_id: board.id }) : null}
+                          setBoards={setBoards}
                         />
                       )
                     })
