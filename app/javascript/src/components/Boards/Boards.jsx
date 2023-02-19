@@ -106,6 +106,7 @@ function Boards() {
           project_id={params.project_id}
           token={authCtx.token}
           setBoards={setBoards}
+          boards={boards}
         />
       </div>
 

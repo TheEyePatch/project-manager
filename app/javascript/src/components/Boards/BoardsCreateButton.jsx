@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { NewTaskForm, NewBoardForm } from './../index'
 
-function BoardsCreateButton({ project_id, token, setBoards }) {
+function BoardsCreateButton({ boards, project_id, token, setBoards }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [boardModalOpen, setBoardModalOpen] = useState(false)
 
@@ -38,6 +38,7 @@ function BoardsCreateButton({ project_id, token, setBoards }) {
           setModalOpen={setModalOpen}
           project_id={project_id}
           token={token}
+          boards={boards}
         />
 
       <NewBoardForm

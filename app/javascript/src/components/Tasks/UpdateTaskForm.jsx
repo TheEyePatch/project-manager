@@ -19,7 +19,6 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
   const [statuses, setStatuses] = useState([])
 
   useEffect(() => {
-    console.log(task)
     if(task.project_id == undefined) return
 
     getProject({

@@ -70,7 +70,6 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
     .then((res) => {
       setOwnedProjects(prev => [...prev, res.project])
 
-      console.log(res.project)
       postMultipleBoards({ 
         project_id: res.project.id,
         boards: boards,

@@ -15,7 +15,7 @@ import {
 import { postTask, getProject } from '../../api';
 import AuthContext from '../../store/AuthContext';
 
-function NewTaskForm({ modalOpen, setModalOpen, project_id, token, setBoards}) {
+function NewTaskForm({ boards, modalOpen, setModalOpen, project_id, token, setBoards}) {
   //  Hooks
   const [inputErrors, setInputErrors] = useState({
     title: false,
@@ -39,7 +39,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token, setBoards}) {
 
       setStatuses(res.basic_board_info)
     })
-  }, [project_id])
+  }, [boards])
 
   // Methods
   const handleInput = (e) => {
