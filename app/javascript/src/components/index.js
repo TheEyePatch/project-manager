@@ -15,3 +15,4 @@ export { default as Task } from './Tasks/Task'
 export { default as UpdateTaskForm } from './Tasks/UpdateTaskForm'
 
 export { default as EditableContent } from './common/EditableContent'
+export { default as EditableContentV2 } from './common/EditableContentV2'

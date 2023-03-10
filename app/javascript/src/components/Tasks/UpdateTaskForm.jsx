@@ -10,7 +10,7 @@ import {
           FormControl,
           Select
         } from '@mui/material'
-import { EditableContent } from '../index';
+import { EditableContent, EditableContentV2 } from '../index';
 import AuthContext from "../../store/AuthContext";
 import { UpdateTask, getProject, getBoards } from '../../api'
 
@@ -29,7 +29,7 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
 
       setStatuses(res.basic_board_info)
     })
-  }, [task.project_id])
+  }, [])
 
   const handleClose = () => {
     setModalOpen(false)
@@ -100,29 +100,29 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
           >
             Description
           </Typography>
-          <EditableContent attribute={'description'} submitEdit={handleChange} cancelEdit={cancelEdit}>
-            <Typography
-              variant="p"
-              component="p"
-              sx={{
-                textDecoration: 'none',
-                minWidth: '15rem',
-                maxWidth: '25rem',
-                padding: '5px 10px 5px 10px',
-                borderRadius: '5px',
-                m: 2,
-              }}
-            >
-              {task.description}
-            </Typography>
-          </EditableContent>
+
+          <EditableContentV2 
+            innerHTML={task.description}
+            attribute={'description'} submitEdit={handleChange} cancelEdit={cancelEdit}
+            style={{
+              textDecoration: 'none',
+              minWidth: '15rem',
+              maxWidth: '30rem',
+              padding: '5px 5px 5px 5px',
+              borderRadius: '5px',
+              margin: '10px',
+              marginLeft: '15px',
+              overflowY: 'hidden',
+              fontFamily: 'Arial, Helvetica, sans-serif',
+            }}
+          />
         </div>
 
         <div style={{ minWidth: '15rem'}}>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="demo-select-small">Status</InputLabel>
+            <InputLabel id="task-status-select">Status</InputLabel>
             <Select
-              labelId="demo-select-small"
+              labelId="status-select"
               value={task?.board_id}
               id="board_id"
               label={"Status"}
@@ -136,9 +136,9 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="demo-select-small">Status</InputLabel>
+            <InputLabel id="task-position-select">Position</InputLabel>
             <Select
-              labelId="demo-select-small"
+              labelId="task-position-select"
               value={task?.position}
               id="position"
               label={"Position"}
