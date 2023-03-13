@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import {
           Button,
@@ -9,14 +9,16 @@ import {
           TextField
         } from '@mui/material'
 import { postBoards } from '../../api'
+import BoardContext from '../../store/BoardContext';
 
-function NewBoardForm ({ modalOpen, setModalOpen, setBoards, project_id, token }) {
+function NewBoardForm ({ modalOpen, setModalOpen, project_id, token }) {
   const [boardInput, setBoardInput] = useState({
     title: '',
     position: '',
   })
 
   const [inputError, setInputError] = useState({ title: false })
+  const boardCtx = useContext(BoardContext);
 
   const handleInput = (e) => {
     setBoardInput(prev => {
@@ -44,7 +46,7 @@ function NewBoardForm ({ modalOpen, setModalOpen, setBoards, project_id, token }
         title: boardInput.title,
       }
     }).then(res => {
-      setBoards(boards => {
+      boardCtx.setBoards(boards => {
         const newBoard = [...boards, res]
 
         return newBoard.sort((a, b) => a.position - b.position)

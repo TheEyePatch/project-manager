@@ -14,8 +14,9 @@ import {
         } from '@mui/material'
 import { postTask, getProject } from '../../api';
 import AuthContext from '../../store/AuthContext';
+import BoardContext from '../../store/BoardContext';
 
-function NewTaskForm({ boards, modalOpen, setModalOpen, project_id, token, setBoards}) {
+function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
   //  Hooks
   const [inputErrors, setInputErrors] = useState({
     title: false,
@@ -28,6 +29,7 @@ function NewTaskForm({ boards, modalOpen, setModalOpen, project_id, token, setBo
     position: '',
   })
   const authCtx = useContext(AuthContext);
+  const boardCtx = useContext(BoardContext)
   const [statuses, setStatuses] = useState([])
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function NewTaskForm({ boards, modalOpen, setModalOpen, project_id, token, setBo
 
       setStatuses(res.basic_board_info)
     })
-  }, [boards])
+  }, [modalOpen])
 
   // Methods
   const handleInput = (e) => {
@@ -82,7 +84,7 @@ function NewTaskForm({ boards, modalOpen, setModalOpen, project_id, token, setBo
       token: token,
     })
     .then(res => {
-      setBoards(oldBoard => {
+      boardCtx.setBoards(oldBoard => {
         const newBoard = oldBoard.map(item => {
           if(item.id == res.board_id){
             item.tasks.push(res)

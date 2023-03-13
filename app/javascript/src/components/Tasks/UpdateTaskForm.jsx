@@ -13,9 +13,11 @@ import {
 import { EditableContent, EditableContentV2 } from '../index';
 import AuthContext from "../../store/AuthContext";
 import { UpdateTask, getProject, getBoards } from '../../api'
+import BoardContext from "../../store/BoardContext";
 
-function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
+function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
   const authCtx = useContext(AuthContext)
+  const boardCtx = useContext(BoardContext)
   const [statuses, setStatuses] = useState([])
 
   useEffect(() => {
@@ -52,7 +54,7 @@ function UpdateTaskForm ({ setBoards, task, modalOpen, setModalOpen, setTask }){
         project_id: task.project_id
       })
 
-      setBoards(boardUpdateResponse)
+      boardCtx.setBoards(boardUpdateResponse)
     }
   }
 

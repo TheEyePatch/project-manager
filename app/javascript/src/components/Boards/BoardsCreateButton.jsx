@@ -1,10 +1,11 @@
-import React, { useState }  from 'react';
+import React, { useContext, useState }  from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { NewTaskForm, NewBoardForm } from './../index'
+import BoardContext from '../../store/BoardContext';
 
-function BoardsCreateButton({ boards, project_id, token, setBoards }) {
+function BoardsCreateButton({ project_id, token }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [boardModalOpen, setBoardModalOpen] = useState(false)
 
@@ -34,17 +35,14 @@ function BoardsCreateButton({ boards, project_id, token, setBoards }) {
     >
       <NewTaskForm
           modalOpen={modalOpen}
-          setBoards={setBoards}
           setModalOpen={setModalOpen}
           project_id={project_id}
           token={token}
-          boards={boards}
         />
 
       <NewBoardForm
         modalOpen={boardModalOpen}
         setModalOpen={setBoardModalOpen}
-        setBoards={setBoards}
         project_id={project_id}
         token={token}
       />
