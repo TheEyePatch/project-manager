@@ -14,7 +14,7 @@ function BoardsPage() {
   return (
     <>
       <BoardsContextProvider>
-        <Container>
+        <Container style={{ maxWidth: '75vw' }}>
           <div style={{ 
             margin: '1rem 0 1rem',
             display: 'flex',

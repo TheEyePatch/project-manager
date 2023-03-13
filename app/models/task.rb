@@ -13,6 +13,8 @@ class Task < ApplicationRecord
   def assign_board
     return if self.board_id.present?
 
+    return unless project.boards.exists?
+
     self.update(board_id: project.boards.first.id)
   end
 

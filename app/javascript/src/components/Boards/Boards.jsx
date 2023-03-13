@@ -18,9 +18,9 @@ function Boards() {
   const importTaskParam = useRef({});
 
   useEffect(() => {
-    boardCtx.fetchBoards().then(res => 
+    boardCtx.fetchBoards().then(res => {
       res.length > BOARDS_LENGTH ? setContent('start') : setContent('center')
-    )
+    })
   }, [])
 
   const handleDragStart = (e, params) => {
@@ -89,7 +89,7 @@ function Boards() {
   }
 
   const container_style = {
-    maxWidth: '90vw', overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px', alignItems: 'start'
+    overflowX: 'auto', display: 'flex', justifyContent: content,  padding: '1px', alignItems: 'start'
   }
 
   return (
