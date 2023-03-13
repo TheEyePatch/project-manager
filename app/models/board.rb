@@ -1,6 +1,6 @@
 class Board < ApplicationRecord
   has_many :tasks, dependent: :delete_all
-  belongs_to :project
+  belongs_to :project, counter_cache: true
   acts_as_list scope: :project
   validates :title, presence: true
 

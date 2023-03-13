@@ -5,10 +5,10 @@ import { getIndexTasks } from '../../api';
 import BorderColorTwoToneIcon from '@mui/icons-material/BorderColorTwoTone';
 
 function Board ({ board, children, onDragEnter }) {
-  const [currentBoard, setCurrentBoard] = useState(board)
-  const [modalOpen, setModalOpen] = useState(false)
+  const [currentBoard, setCurrentBoard] = useState(board);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleEdit = () => {
-    setModalOpen(true)
+    setModalOpen(true);
   }
   return (
     <>
@@ -42,14 +42,18 @@ function Board ({ board, children, onDragEnter }) {
       <Box style={{ minHeight: '80%'}}>
         { children }
       </Box>
-    </Box>
+      </Box>
 
-    <UpdateBoardForm
-      modalOpen={modalOpen}
-      board={currentBoard}
-      setModalOpen={setModalOpen}
-      setCurrentBoard={setCurrentBoard}
-    />
+    {
+      modalOpen && (
+        <UpdateBoardForm
+          modalOpen={modalOpen}
+          board={currentBoard}
+          setModalOpen={setModalOpen}
+          setCurrentBoard={setCurrentBoard}
+        />
+      )
+    }
     </>
   )
 }

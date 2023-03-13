@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import {
           Button,
@@ -6,19 +6,33 @@ import {
           DialogActions,
           DialogContent,
           DialogTitle,
-          TextField
+          TextField,
+          InputLabel,
+          MenuItem,
+          FormControl,
+          Select
         } from '@mui/material'
-import { updateBoard } from '../../api';
+import { updateBoard, getBoard } from '../../api';
 import AuthContext from '../../store/AuthContext'
 
 function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
   const [boardInput, setBoardInput] = useState({
-    title: board.title
+    title: board.title,
+    position: board.position,
   })
   const authCtx = useContext(AuthContext);
+  const [inputError, setInputError] = useState({ title: false })
+  const [boardPositions, setBoardPositions] = useState([])
   const token = authCtx.token
 
-  const [inputError, setInputError] = useState({ title: false })
+  useEffect(()  => {
+    getBoard({
+      board_id: board.id,
+      project_id: board.project_id
+    }).then(res => {
+      setBoardPositions(res.board_positions)
+    })
+  }, [])
 
   const handleInput = (e) => {
     setBoardInput(prev => {
@@ -32,18 +46,20 @@ function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
   const handleClose = () =>{
     setModalOpen(false)
   }
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if(boardInput.title.length < 1) {
       return setInputError({ title: true })
     }
-
-    updateBoard({
+    let boardUpdateResponse = await updateBoard({
       token: token,
       board_id: board.id,
       board: {
         title: boardInput.title,
+        position: boardInput.position,
       }
-    }).then(res => setCurrentBoard(res))
+    })
+    setCurrentBoard(boardUpdateResponse)
+
     setModalOpen(false)
   }
   return (
@@ -63,6 +79,22 @@ function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
             fullWidth
             variant="standard"
           />
+        <FormControl style={{ minWidth: '5rem', marginTop: '15px'}}>
+          <InputLabel id="board-position-select">Position</InputLabel>
+            <Select
+              labelId="task-position-select"
+              value={boardInput?.position}
+              id="position"
+              label={"Position"}
+              onChange={(e) => handleInput({ target: { id: 'position', value: e.target.value }})}
+            > 
+              {
+                boardPositions.map(position => {
+                  return  <MenuItem  key={position} value={position}>{position}</MenuItem>
+                })
+              }
+            </Select>
+        </FormControl>
       </DialogTitle>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

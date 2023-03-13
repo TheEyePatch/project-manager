@@ -7,8 +7,8 @@ class Task < ApplicationRecord
   validates :title, presence: true
   validates :title, uniqueness: { scope: :project,
     message: 'should contain unique title per project'}
-
-  after_commit :assign_board, on: :create
+  validates :board_id, presence: true
+  before_validation :assign_board, on: :create
 
   def assign_board
     return if self.board_id.present?

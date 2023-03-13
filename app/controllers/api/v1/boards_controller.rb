@@ -1,13 +1,19 @@
 class Api::V1::BoardsController < Api::ApiController
   def index
-    boards = project.boards.order(position: :asc)
+    boards = project.boards
+                    .order(position: :asc)
                     .includes(:tasks)
                     .as_json(include: { tasks: { only: %i[id title position] } })
 
     render json: boards, status: :ok
   end
 
-  def show; end
+  def show
+    render json: board.as_json
+                      .merge({ 
+                        board_positions: project.boards.pluck(:position).sort
+                      }), status: :ok
+  end
 
   def create
     board = project.boards  
@@ -19,6 +25,7 @@ class Api::V1::BoardsController < Api::ApiController
     end
   end
 
+  # TODO: Remove create_multiple_boards method
   def create_multiple_boards
     boards = request.params[:boards].map do |board|
       board[:project_id] = params[:project_id]
@@ -52,6 +59,6 @@ class Api::V1::BoardsController < Api::ApiController
   end
 
   def board_params
-    params.require(:board).permit(:title, :project_id)
+    params.require(:board).permit(:title, :project_id, :position)
   end
 end

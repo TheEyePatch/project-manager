@@ -164,3 +164,12 @@ export const updateBoard = async (params) => {
     alert(error)
   }
 }
+
+export const getBoard = async (params) => {
+  try {
+    const response = await axios.get(`/api/v1/boards/${params.board_id}`, { params: params })
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
