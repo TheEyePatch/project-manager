@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2022_12_28_030954) do
     t.string "name", null: false
     t.string "description"
     t.bigint "owner_id"
+    t.integer "boards_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name", "owner_id"], name: "index_projects_on_name_and_owner_id", unique: true
@@ -54,21 +55,12 @@ ActiveRecord::Schema.define(version: 2022_12_28_030954) do
 
   create_table "tasks", force: :cascade do |t|
     t.string "title", null: false
-    t.text "description"
+    t.json "description"
     t.integer "position"
     t.bigint "board_id"
     t.bigint "project_id", null: false
     t.bigint "user_id"
     t.bigint "sprint_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "account", null: false
-    t.string "name"
-    t.string "password"
-    t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
