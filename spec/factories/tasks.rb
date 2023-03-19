@@ -9,7 +9,6 @@ FactoryBot.define do
     end
 
     association :board
-    association :project
-    association :assignee
+    association :project, factory: :project
   end
 end
