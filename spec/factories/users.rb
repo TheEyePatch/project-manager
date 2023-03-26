@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :user, aliases: %i[owner participants assignee] do
-    name { 'Cid' }
+    email { 'eminence@shadow' }
+    first_name { 'Cid' }
+    last_name { 'Kagenou' }
     account { 'shadow031' }
     password { '123456' }
 

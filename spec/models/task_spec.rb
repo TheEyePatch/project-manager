@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Task, type: :model do
   let(:board) { create(:board, :in_progress) }
   let(:project) { board.project }
-  let(:user) { create(:user, account: 'luffy25', password: '1234567') }
+  let(:user) { create(:user, email: 'luffy@strawhat.com', account: 'luffy25') }
   let(:tasks) { create_list(:task, 5, :multiple_tasks, project: project, assignee: user) }
 
   context 'create' do

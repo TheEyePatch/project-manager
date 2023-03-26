@@ -5,8 +5,7 @@ module Api::V1::SessionHelper
       user_id: user.id,
       account: user.account,
     }
-    token = JWT.encode payload, "#{generate_salt}#{SESSION_KEY}" ,  'HS256'
-    cache_salt(token)
+    token = JWT.encode payload, ecdsa_key ,  'ES256'
 
     token
   end
@@ -35,5 +34,9 @@ module Api::V1::SessionHelper
 
   def authenticate_user
     render json: {}, status: :unprocessable_entity unless decoded_token(params[:token])
+  end
+
+  def ecdsa_key
+    @ecdsa_key ||= OpenSSL::PKey::EC.generate('prime256v1')
   end
 end

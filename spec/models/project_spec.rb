@@ -5,7 +5,8 @@ RSpec.describe Project, type: :model do
   let(:to_do) { project.first.board }
   let(:owner) { project.owner }
   let(:task) { Task.new(title: 'TitleOne',  description: 'Desc') }
-  let(:participant_one) {create(:user, account: 'ParticipantOne') }
+  let(:participant_one) {create(:user, email: 'par@one.com', account: 'ParticipantOne') }
+
   it 'should belong to User model' do
     expect(project.owner.account).to eql('shadow031')
   end
