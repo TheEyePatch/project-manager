@@ -3,20 +3,19 @@ import { UpdateTaskForm } from "../components";
 axios.defaults.baseURL = '/'
 
 // User Registrations and Sessions
-export const postUserRegistration = async (params) => { 
+export const postUserRegistration = async (params) => {
   try {
-    const response = await axios.post('/api/v1/registrations', params);
+    const response = await axios.post('/api/v1/sign_up', params);
     return response.data
-
   } catch (error) {
-    console.log(error)
     alert(error)
+    return(error.response.data)
   }
 }
 
 export const createUserSession = async (params) => {
   try {
-    const response = await axios.post('/api/v1/sessions', params);
+    const response = await axios.post('/api/v1/sign_in', params);
     return response.data
   } catch (error){
     console.log(error)
@@ -24,7 +23,7 @@ export const createUserSession = async (params) => {
 }
 
 export const destroyUserSession = async (token) => {
-  const response = await axios.delete(`/api/v1/sessions/${token}`);
+  const response = await axios.delete(`/api/v1/sign_out/${token}`);
   return response.data
 }
 

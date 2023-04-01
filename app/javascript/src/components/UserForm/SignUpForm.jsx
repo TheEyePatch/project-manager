@@ -5,34 +5,13 @@ import AuthContext from '../../store/AuthContext'
 
 function SignUpForm(){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
-  const [isLoginForm, setisLoginForm] = useState(true)
-  const [formState, setFormState] = useState({
-    submit: 'Sign In',
-    formFormat: 'Create New Account'
-  })
   const [input, setInput] = useState({
-    name: '',
+    email: '',
     account: '',
     password: ''
   });
 
   const authContext = useContext(AuthContext);
-  const renderFormState = () => {
-    if(isLoginForm){
-      setisLoginForm(false)
-      setFormState({
-        submit: 'Sign Up',
-        formFormat: 'Login Existing Account'
-      })
-    }else if(!isLoginForm){
-      setisLoginForm(true)
-      setFormState({
-        submit: 'Sign In',
-        formFormat: 'Create New Account'
-      })
-    }
-  }
-
   const handleInput = (e) => {
     setInput(prevInput => {
       return {
@@ -44,15 +23,13 @@ function SignUpForm(){
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    const sendRequest = isLoginForm ? createUserSession : postUserRegistration;
 
-    sendRequest(input).then(res => {
+    postUserRegistration({register: input}).then(res => {
       authContext.login(res.token)
     })
   
     setInput({
-      name: '',
+      email: '',
       account: '',
       password: ''
     })
@@ -62,20 +39,20 @@ function SignUpForm(){
     <Grid>
       <Paper variant='outlined' style={style}>
         <Avatar/>
-        <h1>{ isLoginForm ? 'Log In' : 'Sign Up' }</h1>
+        <h1>{ 'Sign Up' }</h1>
         <div>
           <form onSubmit={handleSubmit}>
-          { !isLoginForm && <TextField
-              name='name'
-              id="name"
-              label="Name"
-              value={input.name}
+          <TextField
+              name='email'
+              id="email"
+              label="Email"
+              value={input.email}
               fullWidth
               required
               variant="standard" 
               margin="dense"
               onChange={handleInput}
-            />}
+            />
 
             <TextField
               name='account'
@@ -102,10 +79,10 @@ function SignUpForm(){
               onChange={handleInput}
             />
 
-            <Button type='submit' variant="contained" color='primary'>{formState.submit}</Button>
+            <Button type='submit' variant="contained" color='primary'>Sign Up</Button>
           </form>
         </div>
-        <Button onClick={renderFormState}>{formState.formFormat}</Button>
+        {/* <Button onClick={renderFormState}>{formState.formFormat}</Button> */}
       </ Paper>
     </Grid>
   )
