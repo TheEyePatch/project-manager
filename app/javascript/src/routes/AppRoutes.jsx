@@ -34,11 +34,11 @@ function AppRoutes(){
                   <Route exact path='/' element={< Home />}></Route>
                   <Route path='/boards/:project_id' element={ <BoardsPage/> }></Route>
                   <Route exact path="/projects" element={ <Projects/> }></Route>
+                  <Route path='*' element={<Navigate to="/" replace />}></Route>
                 </> )
               }
               { !authContext.loggedIn && <Route exact path="/registrations" element={ <SignUpPage/> }></Route> }
               { !authContext.loggedIn && <Route path='*' element={<Navigate to="/registrations" replace />}></Route> }
-              { authContext.loggedIn && <Route path='*' element={<Navigate to="/" replace />}></Route>}
           </Routes>
         </section>
        </div>

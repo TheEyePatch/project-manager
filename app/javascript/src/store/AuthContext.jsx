@@ -15,7 +15,7 @@ export function AuthContextProvider(props) {
 
   const loginHandler = (token) => {
     setToken(token);
-    sessionStorage.setItem('session_token', token);
+    if(token) sessionStorage.setItem('session_token', token);
   }
 
   const logoutHandler = () => {
