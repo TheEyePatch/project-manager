@@ -39,6 +39,12 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
+
+  # # Include Warden test helpers specifically for login/logout
+  config.include Warden::Test::Helpers
+
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false

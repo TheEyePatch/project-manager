@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe "Session", type: %i[request session] do
+RSpec.describe "Session", type: %i[request session controller] do
   let(:user) { build(:user) }
   describe 'POST user' do
     it 'returns successful register' do
-      post('/api/users', params: {
+      post('/api/sign_up', params: {
         register: {
           email: user.email,
           account: user.account,
@@ -17,7 +17,8 @@ RSpec.describe "Session", type: %i[request session] do
     end
 
     it 'returns successful sign_in' do
-      post('/api/users/sign_in',
+      user.save
+      post('/api/sign_in',
         params: {
           sign_in: {
             email: user.email,
