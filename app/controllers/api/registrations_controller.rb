@@ -6,12 +6,12 @@ class Api::RegistrationsController < Devise::RegistrationsController
     user = User.new(register_params)
 
     if user.valid? && user.save
-      token = generate_token(user)
+      sign_in 'user', user
 
       render json: {
         message: 'Register Success',
         account: register_params[:account],
-        token: token,
+        token: generate_token(user),
       }, status: :ok
     else 
       render json: {}, status: :bad_request
