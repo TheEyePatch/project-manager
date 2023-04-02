@@ -16,16 +16,16 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :owned_projects, class_name: 'Project', foreign_key: :owner_id
+  # Association
+  has_many :owned_projects, class_name: 'Project', foreign_key: :owner_id, dependent: :destroy
   has_many :participations
   has_many :participated_projects, through: :participations, source: :project
 
-
-  validate :is_correct_email_format
-
-  private
-
-  def is_correct_email_format
-    record.errors.add :base, 'Invalid Email Format' unless /(?<user>.+)@(?<host>.+)/.match(email)
-  end
+  # Validation
+  validates :email, presence: true, format: { with:  /(.+)@(.+)/, message: 'invalid format'}
+  validates :account, presence: true, uniqueness: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :password, confirmation: true
+  validates :password_confirmation, presence: true, on: :create
 end

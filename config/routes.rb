@@ -6,13 +6,13 @@ Rails.application.routes.draw do
   get '/projects', to: 'tasks#index'
   get '/boards/:project_id', to: 'tasks#index'
 
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     # devise_for :users, controllers: { sessions: 'api/sessions' }
     namespace :v1 do
       devise_scope :user do
         post :sign_up, to: 'registrations#create'
         post :sign_in, to: 'sessions#create'
-        delete :sign_out, to: 'sessions#destroy'
+        post :sign_out, to: 'sessions#destroy'
       end
 
       resources :tasks, only: %i[index show create update] do

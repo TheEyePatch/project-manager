@@ -1,10 +1,14 @@
-import React from "react";
-import { SignUpForm } from '../../components/index'
+import React, { useState } from "react";
+import { LoginForm, SignUpForm } from '../../components/index'
 
 function SignUpPage() {
+  const [isLoginForm, setFormType] = useState(true)
+
   return (
     <section>
-      <SignUpForm />
+      {
+        isLoginForm ? <LoginForm setFormType={setFormType}/> : <SignUpForm setFormType={setFormType} />
+      }
     </section>
     )
 }

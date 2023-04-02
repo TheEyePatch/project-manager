@@ -25,13 +25,13 @@ module Api::V1::SessionHelper
   #   end
   # end
 
-  # def current_user
-  #   return @current_user if @current_user.present?
-  #   user_id  = decoded_token(params[:token]).dig(0, 'user_id')
+  def current_user
+    return @current_user if @current_user.present?
+    # user_id  = decoded_token(params[:token]).dig(0, 'user_id')
 
-  #   @current_user ||=
-  #     User.find(user_id)
-  # end
+    @current_user ||=
+      User.find_by(token: request.headers[:Authorization])
+  end
 
   def authenticate_user
     render json: {}, status: :unprocessable_entity unless decoded_token(params[:token])

@@ -8,7 +8,6 @@ export const postUserRegistration = async (params) => {
     const response = await axios.post('/api/v1/sign_up', params);
     return response.data
   } catch (error) {
-    alert(error)
     return(error.response.data)
   }
 }
@@ -18,12 +17,17 @@ export const createUserSession = async (params) => {
     const response = await axios.post('/api/v1/sign_in', params);
     return response.data
   } catch (error){
-    console.log(error)
+    return error.response.data
   }
 }
 
 export const destroyUserSession = async (token) => {
-  const response = await axios.delete(`/api/v1/sign_out/${token}`);
+  const response = await axios(
+  {
+    method: 'post',
+    url: '/api/v1/sign_out/',
+    headers: { 'Authorization':  token }
+  });
   return response.data
 }
 

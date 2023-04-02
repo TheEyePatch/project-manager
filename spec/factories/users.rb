@@ -5,6 +5,7 @@ FactoryBot.define do
     last_name { 'Kagenou' }
     account { 'shadow031' }
     password { '123456' }
+    password_confirmation { '123456' }
 
     trait :invalid_account do
       account { nil }
