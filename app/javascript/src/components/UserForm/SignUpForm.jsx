@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
-import { Paper, Grid, Avatar, TextField, Button } from '@mui/material'
-import { postUserRegistration, createUserSession } from'../../api/index'
+import { Paper, Grid, Avatar, TextField, Button, Typography } from '@mui/material'
+import { postUserRegistration } from'../../api/index'
 import AuthContext from '../../store/AuthContext'
 
-function SignUpForm(){
+function SignUpForm({setFormType}){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
   const [input, setInput] = useState({
     email: '',
@@ -25,12 +25,7 @@ function SignUpForm(){
 
   const authContext = useContext(AuthContext);
   const handleInput = (e) => {
-    setInput(prevInput => {
-      return {
-        ...prevInput,
-      [e.target.id] : e.target.value
-      }
-    })
+    setInput(prevInput => { return {...prevInput, [e.target.id] : e.target.value }})
   }
 
   const handleSubmit = (e) => {
@@ -68,9 +63,20 @@ function SignUpForm(){
     <Grid>
       <Paper variant='outlined' style={style}>
         <Avatar/>
-        <h1>{ 'Sign Up' }</h1>
-        <div>
-          <form onSubmit={handleSubmit}>
+        <Typography
+          variant='h5'
+          sx={{
+            mt: 2,
+            display: { md: 'flex' },
+            fontFamily: 'monospace',
+            fontWeight: 700,
+            letterSpacing: '.3rem',
+            color: 'inherit',
+            textDecoration: 'none',
+        }}>
+          Sign Up
+        </Typography>
+        <form onSubmit={handleSubmit}>
           <TextField
               error={errorInput.email.invalid}
               helperText={errorInput.email.message}
@@ -157,10 +163,16 @@ function SignUpForm(){
               onChange={handleInput}
             />
 
-            <Button type='submit' variant="contained" color='primary'>Sign Up</Button>
+            <div style={{marginTop: '2rem'}}>
+              <Button type='submit' variant="contained" color='primary'>Sign Up</Button>
+              <Button style={{ display: 'block', marginTop: '10px', marginLeft: '-5px' }} 
+              type='button'
+              onClick={() => setFormType(true)}
+              >
+                Login Existing Account
+              </Button>
+            </div>
           </form>
-        </div>
-        {/* <Button onClick={renderFormState}>{formState.formFormat}</Button> */}
       </ Paper>
     </Grid>
   )

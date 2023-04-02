@@ -11,7 +11,6 @@ function AppRoutes(){
   const logoutHandler = () => {
     destroyUserSession(sessionStorage.getItem('session_token')).then(res => {
       authContext.logout();
-      alert(res.message)
     })
   }
 
