@@ -15,9 +15,10 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       }, status: :ok
     else 
       render json: {
-        message: 'Register Failed',
+        message: 'Failed',
         account: nil,
         token: nil,
+        errors: user.errors.messages,
       }, status: :bad_request
     end
   end
@@ -29,6 +30,11 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   end
 
   def register_params
-    params.require(:register).permit(:email, :account, :first_name, :password)
+    params.require(:register).permit(:email,
+      :account,
+      :first_name,
+      :last_name,
+      :password,
+      :password_confirmation)
   end
 end

@@ -8,7 +8,6 @@ export const postUserRegistration = async (params) => {
     const response = await axios.post('/api/v1/sign_up', params);
     return response.data
   } catch (error) {
-    alert(error)
     return(error.response.data)
   }
 }
