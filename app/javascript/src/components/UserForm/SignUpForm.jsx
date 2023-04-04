@@ -164,7 +164,7 @@ function SignUpForm({setFormType}){
             />
 
             <div style={{marginTop: '2rem'}}>
-              <Button type='submit' variant="contained" color='primary'>Sign Up</Button>
+              <Button style={{width: '100%'}} type='submit' variant="contained" color='primary'>Sign Up</Button>
               <Button style={{ display: 'block', marginTop: '10px', marginLeft: '-5px' }} 
               type='button'
               onClick={() => setFormType(true)}
