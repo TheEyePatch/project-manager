@@ -72,8 +72,8 @@ function LoginForm({setFormType}){
               margin="dense"
               onChange={handleInput}
             />
-            <div style={{marginTop: '2rem'}}>
-              <Button type='submit' variant="contained" color='primary'>Sign In</Button>
+            <div style={{marginTop: '2rem', styles: '100vw'}}>
+              <Button type='submit' variant="contained" color='primary' style={{width: '100%'}}>Sign In</Button>
               <Button
                 type='button'
                 color='primary'

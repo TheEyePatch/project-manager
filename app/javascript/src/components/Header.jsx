@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom'
 
 const pages = [ 'home','projects'];
-const settings = ['Profile','Dashboard','Logout'];
+const settings = ['profile','Dashboard','Logout'];
 
 function Header({ logoutHandler, isLoggedIn }){
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -30,7 +30,7 @@ function Header({ logoutHandler, isLoggedIn }){
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { md: 'flex' }, mr: 1 }} />
@@ -98,9 +98,18 @@ function Header({ logoutHandler, isLoggedIn }){
                     onClose={handleCloseUserMenu}
                   >
                     {settings.map((setting) => (
-                      <MenuItem key={setting} slot={setting} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center" slot={setting}>{setting}</Typography>
-                      </MenuItem>
+                      setting == 'Logout' ? (
+                        <MenuItem key={setting} slot={setting} onClick={handleCloseUserMenu}>
+                          <Typography textAlign="center" slot={setting}>{setting}</Typography>
+                        </MenuItem>
+                      ) : (
+                        <Link key={setting} style={{ textDecoration: 'none'}} to={`/${setting}`}>
+                          <MenuItem key={setting} slot={setting}>
+                            <Typography textAlign="center" slot={setting}>{setting}</Typography>
+                          </MenuItem>
+                        </Link>
+                      )
+                      
                     ))}
                   </Menu>
                 </Box>
