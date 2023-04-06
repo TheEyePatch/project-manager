@@ -10,11 +10,13 @@ class Api::V1::SessionsController < Devise::SessionsController
 
       render json: {
         message: 'Sign In Success',
+        account: user.account,
         token: generate_token(user),
       }, status: :ok
     else
       render json: {
         message: 'Sign In Failed',
+        account: nil,
         token: nil,
       }, status: :bad_request
     end

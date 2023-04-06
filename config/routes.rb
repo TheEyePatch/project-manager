@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get '/registrations', to: 'tasks#index'
   get '/projects', to: 'tasks#index'
   get '/boards/:project_id', to: 'tasks#index'
+  get '/profile', to: 'tasks#index'
 
   namespace :api, defaults: { format: :json } do
     # devise_for :users, controllers: { sessions: 'api/sessions' }
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
         post :sign_up, to: 'registrations#create'
         post :sign_in, to: 'sessions#create'
         post :sign_out, to: 'sessions#destroy'
+        get :profile, to: 'registrations#edit'
+        patch :user, to: 'registrations#update'
       end
 
       resources :tasks, only: %i[index show create update] do

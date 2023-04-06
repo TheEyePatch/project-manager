@@ -1,5 +1,4 @@
 import axios from "axios";
-import { UpdateTaskForm } from "../components";
 axios.defaults.baseURL = '/'
 
 // User Registrations and Sessions
@@ -29,6 +28,37 @@ export const destroyUserSession = async (token) => {
     headers: { 'Authorization':  token }
   });
   return response.data
+}
+
+export const getUserProfile = async (token) => {
+  console.log(token)
+  const response = await axios(
+    {
+      method: 'get',
+      url: 'api/v1/profile',
+      headers: { 'Authorization': token }
+    }
+  )
+
+  return response.data
+}
+
+export const updateUserProfile = async ({params, token}) => {
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: '/api/v1/user',
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      },
+      data: params,
+    })
+
+    return response.data
+  } catch(error) {
+    console.log(error)
+  }
 }
 
 // Tasks
