@@ -1,6 +1,7 @@
 import React from "react";
 import AppRoutes from './routes/AppRoutes'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { UserContextProvider } from "./store/UserContext";
 
 const theme = createTheme({
   palette: {
@@ -16,7 +17,9 @@ const theme = createTheme({
 function App(){
   return (
     <ThemeProvider theme={theme}>
-      <AppRoutes/>
+      <UserContextProvider>
+        <AppRoutes/>
+      </UserContextProvider>
     </ThemeProvider>
   );
 }

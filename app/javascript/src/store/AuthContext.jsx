@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { destroyUserSession } from '../api';
 
 const AuthContext = React.createContext({
   token: '',
@@ -19,8 +20,10 @@ export function AuthContextProvider(props) {
   }
 
   const logoutHandler = () => {
-    sessionStorage.removeItem('session_token');
-    setToken(null);
+    destroyUserSession(token).then(res => {
+      sessionStorage.removeItem('session_token');
+      setToken(null);
+    })
   }
 
   const AuthContextValue = {

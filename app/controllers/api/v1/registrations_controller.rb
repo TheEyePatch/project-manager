@@ -28,9 +28,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   def edit
     if current_user.present?
-      render json: current_user.as_json(only: %i[
-        email account first_name last_name
-      ], methods: %i[avatar_url]), status: :ok
+      render json: json_current_user, status: :ok
     end
   end
 
@@ -38,14 +36,18 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     if current_user.present? && current_user.update(account_update_params)
       current_user.avatar.attach(params[:image]) if params[:image]
 
-      render json: current_user.as_json(
-        only: %i[email account first_name last_name],
-        methods: %i[avatar_url]
-      ), status: :ok
+      render json: json_current_user, status: :ok
     end
   end
 
   private
+
+  def json_current_user
+    current_user.as_json(
+      only: %i[email account first_name last_name],
+      methods: %i[avatar_url]
+    )
+  end
 
   def handle_unverified_request
     super unless request.host.in?(ALLOWED_HOSTS)
@@ -53,7 +55,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   def configure_update_params
     devise_parameter_sanitizer.permit(:account_update) do |user|
-      user.permit(:email, :account, :first_name, :last_name, :image)
+      user.permit(:email, :account, :first_name, :last_name)
     end
   end
 

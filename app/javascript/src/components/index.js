@@ -16,5 +16,7 @@ export { default as NewTaskForm } from './Tasks/NewTaskForm'
 export { default as Task } from './Tasks/Task'
 export { default as UpdateTaskForm } from './Tasks/UpdateTaskForm'
 
+// Common
 export { default as EditableContent } from './common/EditableContent'
 export { default as EditableContentV2 } from './common/EditableContentV2'
+export { default as UserAvatar } from './common/UserAvatar'

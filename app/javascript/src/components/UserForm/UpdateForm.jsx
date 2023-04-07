@@ -3,11 +3,14 @@ import { Paper, Grid, Avatar, TextField, Button, Typography } from '@mui/materia
 import { updateUserProfile } from'../../api/index'
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import AuthContext from '../../store/AuthContext';
+import UserContext from '../../store/UserContext';
 
-function UpdateForm({user, token}){
+function UpdateForm({user}){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
   const [input, setInput] = useState(user);
-  const [avatarImage, setAvatarImage] = useState('')
+  const authCtx = useContext(AuthContext)
+  const userCtx = useContext(UserContext)
 
   const [errorInput, setErrorInput] = useState({
     email: {invalid: false, message: ''},
@@ -23,7 +26,7 @@ function UpdateForm({user, token}){
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO
-    updateUserProfile({ params:{ user: input }, token: token })
+    updateUserProfile({ params:{ user: input }, token: authCtx.token })
     .then(res => console.log(res))
     setInput(user)
   }
@@ -33,11 +36,10 @@ function UpdateForm({user, token}){
     const fileUrl = URL.createObjectURL(file)
     const formData = new FormData()
     formData.append('image', file, file.name)
-    setInput(prev => {
-      return { ...prev, avatar_url: fileUrl }
-    })
+    setInput(prev => { return { ...prev, avatar_url: fileUrl } })
 
-    updateUserProfile({ params: formData, token: token })
+    updateUserProfile({ params: formData, token: authCtx.token })
+    .then(res => userCtx.setCurrentUser(res))
   }
 
   return (
@@ -118,7 +120,7 @@ function UpdateForm({user, token}){
             />
 
             <div style={{marginTop: '2rem'}}>
-              <Button style={{width: '100%'}} type='submit' variant="contained" color='primary'>Sign Up</Button>
+              <Button style={{width: '100%'}} type='submit' variant="contained" color='primary'>Update Profile</Button>
             </div>
           </form>
       </ Paper>

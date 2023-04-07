@@ -14,12 +14,11 @@ function AppRoutes(){
     })
   }
 
-  const isLoggedIn = authContext.loggedIn;
   return (
     <Router>
         <div className="App-header">
           {
-            isLoggedIn && <Header logoutHandler={logoutHandler} isLoggedIn={isLoggedIn}/>
+            authContext.loggedIn && <Header logoutHandler={logoutHandler}/>
           }
 
           <section style={{
@@ -39,8 +38,8 @@ function AppRoutes(){
               }
               { !authContext.loggedIn && <Route exact path="/registrations" element={ <SignUpPage/> }></Route> }
               { !authContext.loggedIn && <Route path='*' element={<Navigate to="/registrations" replace />}></Route> }
-          </Routes>
-        </section>
+            </Routes>
+          </section>
        </div>
     </Router>
   )
