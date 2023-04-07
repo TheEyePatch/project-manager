@@ -31,7 +31,6 @@ export const destroyUserSession = async (token) => {
 }
 
 export const getUserProfile = async (token) => {
-  console.log(token)
   const response = await axios(
     {
       method: 'get',
