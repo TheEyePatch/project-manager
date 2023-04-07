@@ -30,7 +30,8 @@ module Api::V1::SessionHelper
     # user_id  = decoded_token(params[:token]).dig(0, 'user_id')
 
     @current_user ||=
-      User.find_by(token: request.headers[:Authorization])
+      User.includes(avatar_attachment: :blob)
+          .find_by(token: request.headers[:Authorization])
   end
 
   def authenticate_user

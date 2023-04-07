@@ -15,7 +15,7 @@ RSpec.describe "Session", type: %i[request session controller] do
           password_confirmation: user.password_confirmation,
         }
       }.to_json, headers: { 'Content-Type': 'application/json' })
-      
+
       expect(response_body[:token]).to be_present
       expect(response_body[:account]).to eql(user.account)
     end

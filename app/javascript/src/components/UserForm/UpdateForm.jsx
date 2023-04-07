@@ -27,7 +27,8 @@ function UpdateForm({user}){
     e.preventDefault();
     // TODO
     updateUserProfile({ params:{ user: input }, token: authCtx.token })
-    .then(res => console.log(res))
+    .then(res => userCtx.setCurrentUser(res))
+
     setInput(user)
   }
 
