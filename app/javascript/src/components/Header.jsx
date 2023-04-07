@@ -15,7 +15,7 @@ import UserContext from '../store/UserContext';
 import AuthContext from '../store/AuthContext';
 import { UserAvatar } from '../components/index'
 const pages = [ 'home','projects'];
-const settings = ['profile','dashboard','logout'];
+const settings = ['profile', 'logout'];
 
 function Header(){
   const [anchorElUser, setAnchorElUser] = React.useState(null);

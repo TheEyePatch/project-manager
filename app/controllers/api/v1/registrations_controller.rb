@@ -3,6 +3,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   include Api::V1::SessionHelper
   prepend_before_action :require_no_authentication, only: [:create, :edit]
   before_action :configure_update_params, only: %i[update]
+  before_action :configure_register_params, only: %i[create]
   skip_before_action :authenticate_scope!
 
   def create
@@ -59,8 +60,10 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def sign_up_params
-    super
+  def configure_register_params
+    devise_parameter_sanitizer.permit(:sign_up) do |user|
+      user.permit(:email, :account, :first_name, :last_name, :password, :password_confirmation)
+    end
   end
 
   def register_params

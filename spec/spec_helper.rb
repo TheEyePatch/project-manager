@@ -48,7 +48,7 @@ RSpec.configure do |config|
 
   # Add modules for different rspec types
   config.include ApiRequestHelper, type: :request
-  config.include SessionHelper, type: :session
+  config.include SessionSpecHelper, type: :session
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.

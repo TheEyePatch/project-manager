@@ -31,7 +31,7 @@ function SignUpForm({setFormType}){
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    postUserRegistration({register: input}).then(res => {
+    postUserRegistration({user: input}).then(res => {
       if(res.token) {
         authContext.login(res.token)
       } else {

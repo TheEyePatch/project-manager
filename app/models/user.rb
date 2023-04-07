@@ -32,7 +32,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, on: :create
 
   def avatar_url
-    return unless avatar
+    return unless avatar.attached?
 
     rails_blob_path(avatar)
   end
