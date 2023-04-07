@@ -11,6 +11,7 @@ class UserValidator < ActiveModel::Validator
 end
 
 class User < ApplicationRecord
+  include Rails.application.routes.url_helpers
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -20,6 +21,7 @@ class User < ApplicationRecord
   has_many :owned_projects, class_name: 'Project', foreign_key: :owner_id, dependent: :destroy
   has_many :participations
   has_many :participated_projects, through: :participations, source: :project
+  has_one_attached :avatar
 
   # Validation
   validates :email, presence: true, format: { with:  /(.+)@(.+)/, message: 'invalid format'}
@@ -28,4 +30,10 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, on: :create
+
+  def avatar_url
+    return unless avatar
+
+    rails_blob_path(avatar)
+  end
 end

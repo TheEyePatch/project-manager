@@ -16,7 +16,7 @@ function ProfilePage() {
 
   return (
     <section style={{ overflowY: 'auto', boxSizing: 'border-box', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: 'purple'}}>
-      { userData.email && <UpdateForm user={userData} token={authCtx.token}/>}
+      { Object.values(userData).length > 0 && <UpdateForm user={userData} token={authCtx.token}/>}
     </section>
   )
 }

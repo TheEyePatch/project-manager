@@ -1,18 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Paper, Grid, Avatar, TextField, Button, Typography } from '@mui/material'
 import { updateUserProfile } from'../../api/index'
+import IconButton from '@mui/material/IconButton';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 function UpdateForm({user, token}){
   const style = { padding: '30px 20px', width: '300px', margin: '20px auto' }
   const [input, setInput] = useState(user);
+  const [avatarImage, setAvatarImage] = useState('')
 
   const [errorInput, setErrorInput] = useState({
     email: {invalid: false, message: ''},
     account: {invalid: false, message: ''},
     first_name: {invalid: false, message: ''},
     last_name: {invalid: false, message: ''},
-    password: {invalid: false, message: ''},
-    password_confirmation: {invalid: false, message: ''},
   })
 
   const handleInput = (e) => {
@@ -27,11 +28,38 @@ function UpdateForm({user, token}){
     setInput(user)
   }
 
+  const handleImage = (e) => {
+    const file = e.currentTarget.files[0]
+    const fileUrl = URL.createObjectURL(file)
+    const formData = new FormData()
+    formData.append('image', file, file.name)
+    setInput(prev => {
+      return { ...prev, avatar_url: fileUrl }
+    })
+
+    updateUserProfile({ params: formData, token: token })
+  }
+
   return (
     <Grid>
-      <Paper variant='outlined' style={style}>
-        <div style={{display: 'flex', justifyContent: 'space-around', alignItems: 'center'}}>
-          <Avatar/>
+      <Paper variant='outlined' style={{ ...style }}>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', position: 'relative' }}>
+            <Avatar alt={input.account}
+              size='large'
+              src={input.avatar_url}
+              sx={{ width: '5rem', height: '5rem', fontSize: '2rem' }}>
+              {input.account[0]}
+            </Avatar>
+            <IconButton style={{ position: 'absolute', top: '50px', left: '50px'}}
+              size="medium"
+              variant="contained"
+              aria-label="upload picture"
+              component="label">
+              <input hidden accept="image/*" type="file" onChange={handleImage}/>
+              <PhotoCamera />
+            </IconButton>
+          </div>
           <Typography
             variant='h5'
             sx={{

@@ -30,15 +30,17 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     if current_user.present?
       render json: current_user.as_json(only: %i[
         email account first_name last_name
-      ])
+      ], methods: %i[avatar_url]), status: :ok
     end
   end
 
   def update
     if current_user.present? && current_user.update(account_update_params)
+      current_user.avatar.attach(params[:image]) if params[:image]
 
       render json: current_user.as_json(
-        only: %i[email account first_name last_name]
+        only: %i[email account first_name last_name],
+        methods: %i[avatar_url]
       ), status: :ok
     end
   end
@@ -51,7 +53,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   def configure_update_params
     devise_parameter_sanitizer.permit(:account_update) do |user|
-      user.permit(:email, :account, :first_name, :last_name)
+      user.permit(:email, :account, :first_name, :last_name, :image)
     end
   end
 
