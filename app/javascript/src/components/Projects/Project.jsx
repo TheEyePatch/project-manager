@@ -4,14 +4,21 @@ import { DeleteOutline } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom"
 import { UpdateProjectForm } from './../index';
 import AuthContext from '../../store/AuthContext'
+import ProjectContext from '../../store/ProjectContext';
 import { deleteProject, getBoards } from '../../api';
 
-function Project({ project, deleteProjectHandler }){
+function Project({ project }){
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext)
+  const projectCtx = useContext(ProjectContext)
   const [modalOpen, setModalOpen] = useState(false)
   const [currentProject, setCurrentProject] = useState(project)
   const [boards, setBoards] = useState([]);
+
+  const deleteProjectHandler = (project) => {
+    const newProjects = projectCtx.projects.filter((item) => item.id != project.id)
+    projectCtx.setProjects(newProjects)
+  }
 
   const editProjectHandler = () => {
     getBoards({token: authCtx.token, project_id: project.id})
@@ -35,7 +42,7 @@ function Project({ project, deleteProjectHandler }){
               <DeleteOutline/>
             </IconButton>
           }
-          title={currentProject.name}
+          title={currentProject.name + ' ' + currentProject.id}
           subheader={`Owner: ${currentProject.owner.account}`}
         />
         <CardContent>

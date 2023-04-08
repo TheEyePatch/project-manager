@@ -24,11 +24,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :projects, only: %i[index show create update] do
-        collection do
-          post :delete
-        end
-      end
+      resources :projects, only: %i[index show create update destroy], param: :project_id      
 
       resources :boards, only: %i[index show create update destroy] do
         collection do

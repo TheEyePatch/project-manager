@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(version: 2023_04_06_122117) do
     t.bigint "project_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_participations_on_project_id"
+    t.index ["user_id"], name: "index_participations_on_user_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -93,6 +95,7 @@ ActiveRecord::Schema.define(version: 2023_04_06_122117) do
     t.string "first_name"
     t.string "last_name"
     t.string "token"
+    t.integer "projects_count", default: 0, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Home, SignUpPage, BoardsPage, ProfilePage } from '../pages';
+import { Home, SignUpPage, BoardsPage, ProfilePage, ProjectsPage } from '../pages';
 import { Header, Projects, Boards } from '../components';
 import { destroyUserSession } from '../api/index'
 import AuthContext from '../store/AuthContext';
@@ -31,7 +31,7 @@ function AppRoutes(){
                 <>
                   <Route exact path='/' element={< Home />}></Route>
                   <Route path='/boards/:project_id' element={ <BoardsPage/> }></Route>
-                  <Route exact path="/projects" element={ <Projects/> }></Route>
+                  <Route exact path="/projects" element={ <ProjectsPage/> }></Route>
                   <Route exact path="/profile" element={ <ProfilePage/> }></Route>
                   <Route path='*' element={<Navigate to="/" replace />}></Route>
                 </> )

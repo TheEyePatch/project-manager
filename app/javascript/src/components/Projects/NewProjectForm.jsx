@@ -12,15 +12,18 @@ import {
 import { postProject, postMultipleBoards } from '../../api/index'
 import { BoardsTable } from '../index'
 import AuthContext from '../../store/AuthContext'
+import ProjectContext from '../../store/ProjectContext';
+import UserContext from '../../store/UserContext';
 
 const PROJ_NAME_MIN_LEN = 4
-function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
+function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, page }) {
   const authCtx = useContext(AuthContext)
+  const userCtx =useContext(UserContext)
+  const projectCtx = useContext(ProjectContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',
     description: '',
   })
-  const [boards, setBoards] = useState([]); // TODO: ADD ARRAY OF BOARD INPUTS
   const [inputErrors, setInputErrors] = useState({
     name: false,
     description: false,
@@ -68,14 +71,16 @@ function NewProjectForm({ modalOpen, setModalOpen, setOwnedProjects }) {
 
     postProject({ token: authCtx.token, inputs: projectInput })
     .then((res) => {
-      setOwnedProjects(prev => [...prev, res.project])
+      if(!inProjectPage || page != 1) return
+      projectCtx.setProjects(prev => {
+        if (projectType === 'owned') {
+          prev.pop()
+          return [res.project, ...prev]
+        }
 
-      postMultipleBoards({ 
-        project_id: res.project.id,
-        boards: boards,
-        token: authCtx.token
-       })
-    }) // TO DO: POST BOARD INPUTS AFTER PROJECT IS SUCCESSFULLY CREATED
+        return prev
+      })
+    })
 
     setProjectIntput({
       name: '',
