@@ -107,9 +107,14 @@ export const UpdateTask = async (params) => {
 }
 // Projects
 
-export const getProjects = async (params) => {
+export const getProjects = async ({params, token}) => {
   try {
-    const response = await axios.get('/api/v1/projects', { params: params});
+    const response = await axios.get('/api/v1/projects',
+    { params: params,
+      headers: {
+        'Authorization': token
+      }
+    });
     return response.data;
   } catch (error) {
     console.log(error)
@@ -128,11 +133,16 @@ export const getProject = async (params) => {
 export const postProject = async ({token, inputs}) => {
   
   try {
-    const response = await axios.post('/api/v1/projects', { token: token, project: inputs})
+    const response = await axios({
+      method: 'post',
+      url: '/api/v1/projects',
+      data: { project: inputs },
+      headers: { 'Authorization': token }
+    })
+
     return response.data
   } catch (error) {
     console.log(error)
-    console.log(params)
   }
 }
 
@@ -147,9 +157,16 @@ export const putProject = async (params) => {
   }
 }
 
-export const deleteProject = async (params) => {
+export const deleteProject = async ({project_id, token}) => {
   try {
-    const response = await axios.post(`/api/v1/projects/delete`, params)
+    // const response = await axios.post(`/api/v1/projects/delete`, params)
+    const response = await axios({
+      method: 'delete',
+      url: `/api/v1/projects/${project_id}`,
+      headers: {
+        'Authorization': token
+      }
+    })
     return response.data
   } catch (error) {
     console.log(error)

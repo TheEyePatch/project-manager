@@ -1,31 +1,25 @@
 class Api::V1::ProjectsController < Api::ApiController
-  before_action :authenticate_user, only: %i[delete]
+  # before_action :authenticate_user, only: %i[delete]
+  PAGE_LIMIT = 8;
+
   def index
     render json: {
-      owned_projects: owned_projects,
-      participated_projects: participated_projects
+      projects: projects,
+      project_count: project_count,
+      page_limit: PAGE_LIMIT,
+      project_type: params[:project_type],
     }, status: :ok
-  end
-
-  def owned_projects
-    @owned_projects ||= current_user.owned_projects
-                                    .includes(:owner, :participants)
-                                    .as_json(include: %i[owner participants])
-  end
-
-  def participated_projects
-    @participated_projects ||= current_user.participated_projects
-                                           .includes(:owner, :participants)
-                                           .as_json(include: %i[owner participants])
   end
 
   def show
     project =
-      Project.includes(:boards)
-             .find(params[:id])
-             .as_json(methods: :basic_board_info)
+      Project.includes(:boards, :participants)
+             .find(params[:project_id])
 
-    render json: project, status: :ok
+    render json: {
+      project: project.as_json(include: %i[participants], methods: :basic_board_info),
+      participants_count: project.participants.count
+    }, status: :ok
   end
 
   def create
@@ -61,11 +55,23 @@ class Api::V1::ProjectsController < Api::ApiController
     end
   end
 
-  def delete
-    render json: { project: project } if project.destroy
+  def destroy
+    render json: { project: project, deleted: true } if project.destroy
   end
 
   private
+
+  def projects
+    page = params[:page].present? ? params[:page].to_i : 1
+    offset = (page - 1) * PAGE_LIMIT
+    @projects ||=
+      current_user.send("#{params[:project_type]}_projects")
+                  .includes(:owner, :participants)
+                  .order(id: :desc)
+                  .offset(offset)
+                  .limit(PAGE_LIMIT)
+                  .as_json(include: %i[owner participants])
+  end
 
   def project
     @project ||= Project.includes(:owner).find(params[:project_id])              
@@ -73,5 +79,11 @@ class Api::V1::ProjectsController < Api::ApiController
 
   def project_params
     params.require(:project).permit(:name, :description)
+  end
+
+  def project_count
+    return current_user.projects_count if params[:project_type] == 'owned'
+
+    current_user.send("#{params[:project_type]}_projects").count
   end
 end

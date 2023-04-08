@@ -1,76 +1,45 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../store/AuthContext';
+import UserContext from '../../store/UserContext';
+import ProjectContext from '../../store/ProjectContext'
 import { getProjects } from '../../api/index';
 import { Project, NewProjectForm } from './../index';
 import Grid from '@mui/material/Grid';
-import { Button, Container } from '@mui/material';
+import { Button, Container, Pagination } from '@mui/material';
 
 
-function Projects(){
-  const authCtx = useContext(AuthContext);
-  // const userLoggedIn = authCtx.loggedIn;
-  const token = authCtx.token;
-  const [ownedProjects, setOwnedProjects] = useState([]);
-  const [participatedProjects, setParticipatedProjects] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false)
-  const handleNewProject = () => {
-    setModalOpen(true)
-  };
-
-  const deleteProjectHandler = (project) => {
-    const newProjects = ownedProjects.filter((item) => item.id != project.id)
-    setOwnedProjects(newProjects)
-  }
+function Projects({ projectType, page, setPage }){
+  const projectCtx = useContext(ProjectContext)
+  const [pageCount, setPageCount] = useState(0)
 
   useEffect(() => {
-  getProjects({token: token})
+    projectCtx.fetchProjects({project_type: projectType, page: page})
     .then(response => {
-      setOwnedProjects(response.owned_projects);
-      setParticipatedProjects(response.participated_projects)
+      projectCtx.setProjects(response.projects)
+      setPageCount(Math.ceil(response.project_count / response.page_limit))
+      projectCtx.setProjectCount(response.project_count)
     })
 
-  }, []);
+  }, [projectType, page]);
 
   return (
       // TO DO: ADD FILTER FOR SHOWING OWNED PROJECTS AND PARTICIPATED PROJECTS
-      <Container>
-        <div style={{ 
-          margin: '1rem 0 1rem',
-          display: 'flex',
-          justifyContent: 'flex-end'
-        }}>
-          <Button variant="contained" size="large" onClick={handleNewProject}>
-            New Project
-          </Button>
-          <NewProjectForm
-            setModalOpen={setModalOpen}
-            setOwnedProjects={setOwnedProjects}
-            modalOpen={modalOpen}
+      <div style={{ boxSizing: 'border-box', padding: '1rem' }}>
+        <Grid container spacing={2} style={{ boxSizing: 'border-box', padding: '1rem'}}>
+          {projectCtx.projects?.map((project) => {
+            return (
+              <Grid item xs={12} sm={6} md={3} key={project.id}>
+                <Project project={project} isOwned={false}/>
+              </Grid>
+              )
+          })}
+        </Grid>
+        { projectCtx.projectCount > 1 &&
+          <Pagination count={pageCount} siblingCount={2} color="primary" shape="rounded"
+            onChange={(e, val) => setPage(val)}
           />
-        </div>
-
-        <h1>Owned Projects</h1>
-        <Grid container spacing={2}>
-          {ownedProjects?.map((project) => {
-            return (
-              <Grid item xs={12} sm={6} md={3} key={project.id}>
-                <Project project={project} isOwned={true} deleteProjectHandler={deleteProjectHandler}/>
-              </Grid>
-              )
-          })}
-        </Grid>
-
-        <h1>Participated Projects</h1>
-        <Grid container spacing={2}>
-          {participatedProjects?.map((project) => {
-            return (
-              <Grid item xs={12} sm={6} md={3} key={project.id}>
-                <Project project={project} isOwned={false} deleteProjectHandler={deleteProjectHandler}/>
-              </Grid>
-              )
-          })}
-        </Grid>
-      </Container>
+        }
+      </div>
     )
 }
 
