@@ -27,5 +27,8 @@
     "vite": "^4.0.0",
     "vite-plugin-ruby": "^3.1.2",
     "webpack-dev-server": "^3"
+  },
+  "resolutions": {
+    "postcss-preset-env": "^7.0.0"
   }
 }
