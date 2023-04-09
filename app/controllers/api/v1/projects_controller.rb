@@ -13,11 +13,26 @@ class Api::V1::ProjectsController < Api::ApiController
 
   def show
     project =
-      Project.includes(:boards, :participants)
+      Project.includes(:owner, :participants)
              .find(params[:project_id])
 
     render json: {
-      project: project.as_json(include: %i[participants], methods: :basic_board_info),
+      project: project.as_json(
+        include: [
+          {
+            owner: {
+              include: { avatar_attachment: { include: :blob } },
+              methods: [:avatar_url]
+            },
+          },
+          {
+            participants: {
+              include: { avatar_attachment: { include: :blob } },
+              methods: [:avatar_url]
+            }
+          },
+        ]
+      ),
       participants_count: project.participants.count
     }, status: :ok
   end
@@ -28,30 +43,53 @@ class Api::V1::ProjectsController < Api::ApiController
     if new_project.valid? && new_project.save
       render json: { project: new_project.as_json(include: %i[owner]) }, status: :ok
     else
-      render json: {}, status: :unprocessable_entity
+      render json: {
+        message: 'Failed',
+        errors: new_project.errors.messages,
+      }, status: :unprocessable_entity
     end
   end
 
   def update
     if project.valid? && project.update(project_params)
-      map_board_ids = params[:boards].map { |board| board[:id] }
-      removed_board_ids = project.boards.ids.filter { |board_id| !board_id.in?(map_board_ids) }
+      # map_board_ids = params[:boards].map { |board| board[:id] }
+      # removed_board_ids = project.boards.ids.filter { |board_id| !board_id.in?(map_board_ids) }
 
-      Board.where(id: removed_board_ids).destroy_all
-      boards = request.params[:boards].map do |board|
-        {
-          project_id: project.id,
-          title: board[:title],
-          description: board[:description],
-          position: board[:position],
-        }
-      end
+      # Board.where(id: removed_board_ids).destroy_all
+      # boards = request.params[:boards].map do |board|
+      #   {
+      #     project_id: project.id,
+      #     title: board[:title],
+      #     description: board[:description],
+      #     position: board[:position],
+      #   }
+      # end
 
-      Board.import boards, on_duplicate_key_ignore: true
+      # Board.import boards, on_duplicate_key_ignore: true
 
-      render json: project.as_json(include: %i[owner]), status: :ok
+      render json: {
+        project: project.as_json(
+          include: [
+            {
+              owner: {
+                include: { avatar_attachment: { include: :blob } },
+                methods: [:avatar_url]
+              },
+            },
+            {
+              participants: {
+                include: { avatar_attachment: { include: :blob } },
+                methods: [:avatar_url]
+              }
+            },
+          ]
+        )
+      }, status: :ok
     else
-      render json: project.errors, status: :unprocessable_entity
+      render json: {
+        message: 'Failed',
+        errors: project.errors.messages
+      }, status: :unprocessable_entity
     end
   end
 
@@ -66,15 +104,15 @@ class Api::V1::ProjectsController < Api::ApiController
     offset = (page - 1) * PAGE_LIMIT
     @projects ||=
       current_user.send("#{params[:project_type]}_projects")
-                  .includes(:owner, :participants)
+                  .includes(:owner)
                   .order(id: :desc)
                   .offset(offset)
                   .limit(PAGE_LIMIT)
-                  .as_json(include: %i[owner participants])
+                  .as_json(include: %i[owner])
   end
 
   def project
-    @project ||= Project.includes(:owner).find(params[:project_id])              
+    @project ||= Project.includes({owner: { avatar_attachment: :blob }}, :participants).find(params[:project_id])              
   end
 
   def project_params
