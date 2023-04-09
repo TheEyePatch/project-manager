@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react'
-import { Projects } from '../components';
-import { NewProjectForm } from '../components/index'
+import { Projects } from '../../components';
+import { NewProjectForm } from '../../components/index'
 import Grid from '@mui/material/Grid';
 import { Button, Container, Tabs, Tab } from '@mui/material';
-import AuthContext from '../store/AuthContext'
-import { ProjectContextProvider } from '../store/ProjectContext'
+import AuthContext from '../../store/AuthContext'
+import { ProjectContextProvider } from '../../store/ProjectContext'
 
 const PROJECT_TYPES = {
   'owned': 'Owned Projects',

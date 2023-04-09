@@ -18,15 +18,15 @@ const pages = [ 'home','projects'];
 const settings = ['profile', 'logout'];
 
 function Header(){
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [settingOpen, setSetting] = React.useState(false);
   const userCtx = useContext(UserContext)
   const authCtx = useContext(AuthContext)
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+    setSetting(true);
   };
 
   const handleCloseUserMenu = (event) => {
-    setAnchorElUser(null);
+    setSetting(false);
     if(event.target.slot == 'logout') authCtx.logout()
   };
 
@@ -91,7 +91,7 @@ function Header(){
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
+              sx={{ mt: '45px' }} id="menu-appbar"
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -101,7 +101,7 @@ function Header(){
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(anchorElUser)}
+              open={settingOpen}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => setting == 'logout' ? menuItem(setting) : (navLink(setting)) )}
