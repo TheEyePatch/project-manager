@@ -1,5 +1,6 @@
 class Api::V1::ProjectsController < Api::ApiController
-  # before_action :authenticate_user, only: %i[delete]
+  before_action :authenticate_user
+  before_action :authenticate_project_owner, only: %i[update destroy]
   PAGE_LIMIT = 8;
 
   def index
@@ -123,5 +124,16 @@ class Api::V1::ProjectsController < Api::ApiController
     return current_user.projects_count if params[:project_type] == 'owned'
 
     current_user.send("#{params[:project_type]}_projects").count
+  end
+
+  def authenticate_project_owner
+    valid = project.owner_id == current_user.id
+
+    return if valid
+
+    render json: {
+      message: 'Unauthorized',
+      errors: 'Current User is not Owner of Project'
+    }, status: :bad_request
   end
 end

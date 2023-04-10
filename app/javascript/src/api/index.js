@@ -60,6 +60,19 @@ export const updateUserProfile = async ({params, token}) => {
   }
 }
 
+export const inviteProjectUser = async ({params, token}) => {
+  const response = await axios({
+    method: 'post',
+    url: '/api/v1/invitations/project_invite',
+    headers: {
+      Authorization: token, // Not Yet Implemented
+    },
+    data: params
+  })
+
+  return response.data
+}
+
 // Tasks
 export const getIndexTasks = async (params) => {
   try {

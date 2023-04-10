@@ -9,15 +9,67 @@ import {
           TextField,
           MenuList,
           MenuItem,
+          Popover
         } from '@mui/material'
 import { UserAvatar } from '../index'
 import AuthContext from '../../store/AuthContext'
-import { putProject, getProject } from '../../api'
+import { putProject, getProject, inviteProjectUser } from '../../api'
 import ProjectContext from '../../store/ProjectContext';
+import UserContext from '../../store/UserContext';
+
+
+const EmailPopover = ({ project_id, token }) => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [emailInput, setInput] = useState('')
+  const [errorInput, setErrorInput] = useState({invalid: false, message: ''})
+
+  const handleInvite = (e) => setAnchorEl(e.currentTarget)
+  const handleClose = () => {
+    setAnchorEl(null)
+    setInput('')
+  }
+  const handleInput = (e) => setInput(e.currentTarget.value)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const params = { email: emailInput, project_id: project_id }
+    inviteProjectUser({params: params, token: token})
+
+    console.log(emailInput)
+  }
+  return (
+    <>
+      <Button size='small' variant='contained' onClick={handleInvite}>Invite</Button>
+      <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handleClose}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+    >
+      <div style={{ padding: '1rem' }}>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            error={errorInput.invalid}
+            name='email'
+            id="email"
+            label="Email"
+            value={emailInput}
+            fullWidth
+            required
+            variant="outlined" 
+            margin="dense"
+            onChange={handleInput}
+          />
+        </form>
+        <Button onClick={handleSubmit}>Send</Button>
+      </div>
+    </Popover>
+    </>
+  )
+}
 
 function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
   const authCtx = useContext(AuthContext)
   const projectCtx = useContext(ProjectContext)
+  const userCtx = useContext(UserContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',
     description: ''
@@ -32,6 +84,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
     getProject({project_id: project_id, token: authCtx.token})
     .then(res => {
       setProject(res.project)
+      console.log(res.project)
+      console.log(userCtx.currentUser)
       setProjectIntput({
         name: res.project.name,
         description: res.project.description
@@ -107,6 +161,9 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
             autoFocus margin="dense" id="name" label="Name" variant="standard"
             value={projectInput.name} onChange={handleInput}
             fullWidth
+            InputProps={{
+              readOnly: project.owner?.email != userCtx.currentUser.email,
+            }}
           />
 
           <TextField
@@ -115,6 +172,9 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
             margin="dense" id="description" label="Description" variant="standard"
             value={projectInput.description} onChange={handleInput}
             fullWidth multiline minRows={4}
+            InputProps={{
+              readOnly: project.owner?.email != userCtx.currentUser.email,
+            }}
           />
         </div>
         <div style={{ minWidth: '15rem', paddingLeft: '1rem', display: 'flex', flexDirection: 'column'}}>
@@ -131,7 +191,7 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
               <div style={{marginTop: '1rem', overflowY: 'auto'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                   <Typography variant='h6'>Members</Typography>
-                  <Button size='small' variant='contained'>Invite</Button>
+                  <EmailPopover project_id={project_id} token={authCtx.token} />
                 </div>
                 <MenuList>
                   {
@@ -151,8 +211,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>Submit</Button>
+        <Button onClick={handleClose} disabled={project.owner?.email != userCtx.currentUser.email}>Cancel</Button>
+        <Button onClick={handleSubmit} disabled={project.owner?.email != userCtx.currentUser.email}>Submit</Button>
       </DialogActions>
     </Dialog>
   )
