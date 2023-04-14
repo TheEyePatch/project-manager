@@ -3,7 +3,7 @@ import AuthContext from '../../store/AuthContext';
 import UserContext from '../../store/UserContext';
 import ProjectContext from '../../store/ProjectContext'
 import { getProjects } from '../../api/index';
-import { Project, NewProjectForm } from './../index';
+import { Project, UpdateProjectForm } from './../index';
 import Grid from '@mui/material/Grid';
 import { Button, Container, Pagination } from '@mui/material';
 
@@ -11,6 +11,13 @@ import { Button, Container, Pagination } from '@mui/material';
 function Projects({ projectType, page, setPage }){
   const projectCtx = useContext(ProjectContext)
   const [pageCount, setPageCount] = useState(0)
+  const [updateOpen, setUpdateOpen] = useState(false)
+  const [currentProjectId, setCurrentProject] = useState(null)
+
+  const handleOpenEdit = (project) => {
+    setCurrentProject(project.id)
+    setUpdateOpen(true)
+  }
 
   useEffect(() => {
     projectCtx.fetchProjects({project_type: projectType, page: page})
@@ -29,7 +36,7 @@ function Projects({ projectType, page, setPage }){
           {projectCtx.projects?.map((project) => {
             return (
               <Grid item xs={12} sm={6} md={3} key={project.id}>
-                <Project project={project} isOwned={false}/>
+                <Project project={project} handleOpenEdit={handleOpenEdit}/>
               </Grid>
               )
           })}
@@ -38,6 +45,13 @@ function Projects({ projectType, page, setPage }){
           <Pagination count={pageCount} siblingCount={2} color="primary" shape="rounded"
             onChange={(e, val) => setPage(val)}
           />
+        }
+
+        { 
+          updateOpen &&
+          <UpdateProjectForm setModalOpen={setUpdateOpen}
+            project_id={currentProjectId} modalOpen={updateOpen}
+          /> 
         }
       </div>
     )

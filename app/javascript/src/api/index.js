@@ -60,6 +60,19 @@ export const updateUserProfile = async ({params, token}) => {
   }
 }
 
+export const inviteProjectUser = async ({params, token}) => {
+  const response = await axios({
+    method: 'post',
+    url: '/api/v1/invitations/project_invite',
+    headers: {
+      Authorization: token, // Not Yet Implemented
+    },
+    data: params
+  })
+
+  return response.data
+}
+
 // Tasks
 export const getIndexTasks = async (params) => {
   try {
@@ -121,9 +134,11 @@ export const getProjects = async ({params, token}) => {
   }
 }
 
-export const getProject = async (params) => {
+export const getProject = async ({project_id, token}) => {
   try {
-    const response = await axios.get(`api/v1/projects/${params.project_id}`, { params: params });
+    const response = await axios.get(`/api/v1/projects/${project_id}`, { headers: {
+      'Authorization': token
+    } });
     return response.data
   } catch (error) {
     console.log(error)
@@ -131,30 +146,27 @@ export const getProject = async (params) => {
 }
 
 export const postProject = async ({token, inputs}) => {
-  
-  try {
-    const response = await axios({
-      method: 'post',
-      url: '/api/v1/projects',
-      data: { project: inputs },
-      headers: { 'Authorization': token }
-    })
+  const response = await axios({
+    method: 'post',
+    url: '/api/v1/projects',
+    data: { project: inputs },
+    headers: { 'Authorization': token }
+  })
 
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+  return response.data
 }
 
-export const putProject = async (params) => {
-  const project_id = params.project_id
-  try {
-    const response = await axios.put(`/api/v1/projects/${project_id}`, params)
-    return response.data
-  } catch (error) {
-    console.log(error)
-    console.log(params)
-  }
+export const putProject = async ({params, token}) => {
+  const response = await axios({
+    method: 'put',
+    url: `/api/v1/projects/${params.project_id}`,
+    data: params,
+    headers: {
+      Authorization: token
+    }
+  })
+
+  return response.data
 }
 
 export const deleteProject = async ({project_id, token}) => {

@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <style>
+    body {
+      padding: 1rem;
+    }
+    .invite-button {
+      background-color: #5e17eb;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+    }
+    .invite-button:hover {
+      cursor: pointer;
+    }
+    .project-name {
+      font-size: 2rem;
+    }
+  </style>
+  <body>
+    <h3>Hello, <%= @email%> you have been invited to join the project <span class='project-name'><%= @project.name%></span></h3>
+    <%if User.where(email: @email).exists?%>
+      <p>Please click on the link and sign in to continue.</p>
+      <%= button_to 'Accept Invite', accept_project_invite_api_v1_invitations_url, params: { invite_token:  @invite_token, email: @email}, class: 'invite-button'%>
+      <%# render sign_in %>
+    <%else %>
+      <p>You still don't have an existing account. Please click on the button below and sign up to continue.</p>
+      <%= button_to 'Accept Invite', accept_project_invite_api_v1_invitations_url, params: { invite_token:  @invite_token, email: @email}, class: 'invite-button'%>
+    <%end%>
+
+    <p>Thanks for joining and have a great day!</p>
+  </body>
+</html>

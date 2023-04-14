@@ -20,10 +20,9 @@ export function AuthContextProvider(props) {
   }
 
   const logoutHandler = () => {
-    destroyUserSession(token).then(res => {
-      sessionStorage.removeItem('session_token');
-      setToken(null);
-    })
+    sessionStorage.removeItem('session_token');
+    setToken(null);
+    destroyUserSession(token)
   }
 
   const AuthContextValue = {

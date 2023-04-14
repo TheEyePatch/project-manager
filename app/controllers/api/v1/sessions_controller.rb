@@ -5,13 +5,14 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def create
     if user.present? && user.valid_password?(sign_in_params[:password])
+      add_invited_user_to_project(user) if invite_token(user).present?
 
       sign_in 'user', user
 
       render json: {
         message: 'Sign In Success',
         account: user.account,
-        token: generate_token(user),
+        token: user.generate_token,
       }, status: :ok
     else
       render json: {
@@ -24,6 +25,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def destroy
     if current_user.present?
+      Rails.cache.delete(request.headers[:Authorization])
       current_user.update(token: nil)
 
       render json: {}, status: :ok

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,12 +18,10 @@ const pages = [ 'home','projects'];
 const settings = ['profile', 'logout'];
 
 function Header(){
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const userCtx = useContext(UserContext)
   const authCtx = useContext(AuthContext)
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget)
 
   const handleCloseUserMenu = (event) => {
     setAnchorElUser(null);
@@ -32,7 +30,11 @@ function Header(){
 
   useEffect(() => {
     userCtx.fetchCurrentUser()
-           .then(res => userCtx.setCurrentUser(res))
+           .then(res => {
+            userCtx.setCurrentUser(res)
+          }).catch(err => {
+            authCtx.logout()
+          })
   }, [])
 
   const menuItem = (setting) => {
@@ -90,8 +92,7 @@ function Header(){
                 { userCtx.currentUser.account && <UserAvatar user={userCtx.currentUser} size='small' height='3rem' fontSize='2rem'/> }
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
+            <Menu sx={{ mt: '45px' }} id="menu-appbar"
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -101,6 +102,7 @@ function Header(){
                 vertical: 'top',
                 horizontal: 'right',
               }}
+              anchorEl={anchorElUser}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >

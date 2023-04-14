@@ -24,7 +24,15 @@ FactoryBot.define do
       email { "#{account}@email.com" }
     end
 
+    trait :random_non_unique_creds do
+      first_name { Faker::Name.first_name }
+      last_name { Faker::Name.last_name   }
+      account { first_name }
+      email { "#{account}@email.com" }
+    end
+
     factory :invalid_user, traits: %i[invalid_account invalid_password]
     factory :random_user, traits: %i[random_credentials]
+    factory :random_non_uniq_user, traits: %i[random_non_unique_creds]
   end
 end

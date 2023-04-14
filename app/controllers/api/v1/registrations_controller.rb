@@ -10,12 +10,13 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     user = User.new(sign_up_params)
 
     if user.valid? && user.save
+      add_invited_user_to_project(user) if invite_token(user).present?
       sign_in 'user', user
 
       render json: {
         message: 'Register Success',
         account: user.account,
-        token: generate_token(user),
+        token: user.generate_token,
       }, status: :ok
     else 
       render json: {
@@ -30,12 +31,15 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def edit
     if current_user.present?
       render json: json_current_user, status: :ok
+    else
+      render json: {}, status: :bad_request
     end
   end
 
   def update
     if current_user.present? && current_user.update(account_update_params)
       current_user.avatar.attach(params[:image]) if params[:image]
+      Rails.cache.delete(request.headers[:Authorization])
 
       render json: json_current_user, status: :ok
     end

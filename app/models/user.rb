@@ -12,6 +12,7 @@ end
 
 class User < ApplicationRecord
   include Rails.application.routes.url_helpers
+  include Authentication
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

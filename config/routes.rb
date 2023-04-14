@@ -18,6 +18,13 @@ Rails.application.routes.draw do
         patch :user, to: 'registrations#update'
       end
 
+      resources :invitations, only: %i[index] do
+        collection do
+          post :project_invite
+          post :accept_project_invite
+        end
+      end 
+
       resources :tasks, only: %i[index show create update] do
         collection do
           post :import_tasks
