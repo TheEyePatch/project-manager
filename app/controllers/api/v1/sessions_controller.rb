@@ -25,6 +25,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def destroy
     if current_user.present?
+      Rails.cache.delete(request.headers[:Authorization])
       current_user.update(token: nil)
 
       render json: {}, status: :ok

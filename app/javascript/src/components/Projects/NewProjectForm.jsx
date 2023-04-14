@@ -16,7 +16,6 @@ import UserContext from '../../store/UserContext';
 
 function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, page }) {
   const authCtx = useContext(AuthContext)
-  const userCtx =useContext(UserContext)
   const projectCtx = useContext(ProjectContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',

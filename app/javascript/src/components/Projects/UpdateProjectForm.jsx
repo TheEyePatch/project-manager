@@ -9,7 +9,9 @@ import {
           TextField,
           MenuList,
           MenuItem,
-          Popover
+          Popover,
+          Snackbar,
+          Alert
         } from '@mui/material'
 import { UserAvatar } from '../index'
 import AuthContext from '../../store/AuthContext'
@@ -22,11 +24,12 @@ const EmailPopover = ({ project_id, token }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [emailInput, setInput] = useState('')
   const [errorInput, setErrorInput] = useState({invalid: false, message: ''})
-
+  const [alert, setAlert]  = useState(null)
   const handleInvite = (e) => setAnchorEl(e.currentTarget)
   const handleClose = () => {
     setAnchorEl(null)
     setInput('')
+    setAlert(null)
   }
   const handleInput = (e) => setInput(e.currentTarget.value)
 
@@ -34,34 +37,30 @@ const EmailPopover = ({ project_id, token }) => {
     e.preventDefault()
 
     const params = { email: emailInput, project_id: project_id }
-    inviteProjectUser({params: params, token: token})
-
-    console.log(emailInput)
+    inviteProjectUser({params: params, token: token}).then(res => {
+      setAlert(res.message)
+    })
   }
   return (
     <>
       <Button size='small' variant='contained' onClick={handleInvite}>Invite</Button>
       <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handleClose}
         anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
-    >
-      <div style={{ padding: '1rem' }}>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            error={errorInput.invalid}
-            name='email'
-            id="email"
-            label="Email"
-            value={emailInput}
-            fullWidth
-            required
-            variant="outlined" 
-            margin="dense"
-            onChange={handleInput}
-          />
-        </form>
-        <Button onClick={handleSubmit}>Send</Button>
-      </div>
-    </Popover>
+      >
+        <div style={{ padding: '1rem' }}>
+          <form onSubmit={handleSubmit}>
+            <TextField error={errorInput.invalid} name='email' id="email" label="Email"
+              value={emailInput} fullWidth required variant="outlined" margin="dense" onChange={handleInput}
+            />
+          </form>
+          <Button onClick={handleSubmit}>Send</Button>
+        </div>
+      </Popover>
+      <Snackbar open={Boolean(alert)} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          {alert}
+        </Alert>
+      </Snackbar>
     </>
   )
 }
@@ -84,8 +83,6 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
     getProject({project_id: project_id, token: authCtx.token})
     .then(res => {
       setProject(res.project)
-      console.log(res.project)
-      console.log(userCtx.currentUser)
       setProjectIntput({
         name: res.project.name,
         description: res.project.description
@@ -188,12 +185,12 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
                 </div>
               </div>
 
-              <div style={{marginTop: '1rem', overflowY: 'auto'}}>
+              <div style={{marginTop: '1rem'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                   <Typography variant='h6'>Members</Typography>
                   <EmailPopover project_id={project_id} token={authCtx.token} />
                 </div>
-                <MenuList>
+                <MenuList style={{ minHeight: '10rem', maxHeight: '15rem', overflowY: 'auto'}}>
                   {
                     project.participants.map(user => {
                       return (

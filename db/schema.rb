@@ -55,9 +55,8 @@ ActiveRecord::Schema.define(version: 2023_04_10_095023) do
     t.string "invite_token"
     t.string "invited_email"
     t.index ["invite_token"], name: "index_participations_on_invite_token", unique: true
-    t.index ["invited_email"], name: "index_participations_on_invited_email"
-    t.index ["project_id"], name: "index_participations_on_project_id"
-    t.index ["user_id"], name: "index_participations_on_user_id"
+    t.index ["invited_email", "project_id"], name: "index_participations_on_invited_email_and_project_id", unique: true
+    t.index ["project_id", "user_id"], name: "index_participations_on_project_id_and_user_id", unique: true
   end
 
   create_table "projects", force: :cascade do |t|

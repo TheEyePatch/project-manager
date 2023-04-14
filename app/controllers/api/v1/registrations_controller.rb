@@ -31,12 +31,15 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def edit
     if current_user.present?
       render json: json_current_user, status: :ok
+    else
+      render json: {}, status: :bad_request
     end
   end
 
   def update
     if current_user.present? && current_user.update(account_update_params)
       current_user.avatar.attach(params[:image]) if params[:image]
+      Rails.cache.delete(request.headers[:Authorization])
 
       render json: json_current_user, status: :ok
     end

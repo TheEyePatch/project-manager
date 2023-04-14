@@ -4,8 +4,10 @@ module Api::V1::SessionHelper
     # user_id  = decoded_token(params[:token]).dig(0, 'user_id')
 
     @current_user ||=
-      User.includes(avatar_attachment: :blob)
+      Rails.cache.fetch(request.headers[:Authorization], expires_in: 12.hours) do
+        User.includes(avatar_attachment: :blob)
           .find_by(token: request.headers[:Authorization])
+      end
   end
 
   def authenticate_user

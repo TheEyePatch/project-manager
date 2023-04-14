@@ -30,7 +30,11 @@ function Header(){
 
   useEffect(() => {
     userCtx.fetchCurrentUser()
-           .then(res => userCtx.setCurrentUser(res))
+           .then(res => {
+            userCtx.setCurrentUser(res)
+          }).catch(err => {
+            authCtx.logout()
+          })
   }, [])
 
   const menuItem = (setting) => {
