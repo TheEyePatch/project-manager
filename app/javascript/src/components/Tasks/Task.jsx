@@ -15,7 +15,7 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
   const handleClick = () => {
     getTask({
       token: token,
-      id: currentTask.id
+      id: task.id
     })
     .then(res => {
       setModalOpen(true)

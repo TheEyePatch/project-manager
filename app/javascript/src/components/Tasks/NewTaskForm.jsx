@@ -33,15 +33,8 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
   const [statuses, setStatuses] = useState([])
 
   useEffect(() => {
-    getProject({
-      token: authCtx.token,
-      project_id: project_id,
-    }).then(res => {
-      if(res == undefined) return
-
-      setStatuses(res.basic_board_info)
-    })
-  }, [modalOpen])
+    if(boardCtx.boards.length > 0) setStatuses(boardCtx.boards)
+  }, [modalOpen, project_id])
 
   // Methods
   const handleInput = (e) => {
@@ -78,16 +71,13 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
   const handleSubmit = () => {
     if(taskInput.title.length < 4) return handleInputErrors()
 
-    postTask({
-      task: taskInput,
-      project_id: project_id,
-      token: token,
-    })
+    let params = { task: taskInput, project_id: project_id }
+    postTask({params: params, token: authCtx.token})
     .then(res => {
       boardCtx.setBoards(oldBoard => {
         const newBoard = oldBoard.map(item => {
-          if(item.id == res.board_id){
-            item.tasks.push(res)
+          if(item.id == res.task.board_id){
+            item.tasks.push(res.task)
           }
 
           return item
@@ -191,7 +181,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id, token }) {
               onChange={(e) => handleSelect(e, { field: 'board_id' })}
             >
               {
-                statuses.map(stat => {
+                statuses?.map(stat => {
                   return  <MenuItem  key={stat.id} data-name={'board_id'} value={stat.id}>{stat.title}</MenuItem>
                 })
               }

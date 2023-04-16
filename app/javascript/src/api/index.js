@@ -83,18 +83,33 @@ export const getIndexTasks = async (params) => {
   }
 };
 
-export const postTask = async (params) => {
+export const postTask = async ({params, token}) => {
   try{
-    const response = await axios.post('/api/v1/tasks', params)
+    const response = await axios({
+      url: '/api/v1/tasks',
+      method: 'post',
+      headers: {
+        Authorization: token,
+      },
+      data: params
+    })
+
     return response.data
   } catch (error) {
     console.log(error)
   }
 }
 
-export const importTask = async (params) => {
+export const importTask = async ({params, token}) => {
   try {
-    const response = await axios.post('/api/v1/tasks/import_tasks', params)
+    const response = await axios({
+      url: '/api/v1/tasks/import_tasks',
+      method: 'post',
+      headers: {
+        Authorization: token,
+      },
+      data: params
+    })
     return response.data
   } catch (error) {
     console.log(error)
@@ -110,9 +125,16 @@ export const getTask = async (params) => {
   }
 }
 
-export const UpdateTask = async (params) => {
+export const UpdateTask = async ({params, token}) => {
   try {
-    const response = await axios.put(`/api/v1/tasks/${params.task_id}`, params)
+    const response = await axios({
+      method: 'put',
+      url: `/api/v1/tasks/${params.task_id}`,
+      headers: {
+        Authorization: token
+      },
+      data: params
+    })
     return response.data
   } catch (error) {
     console.log(error)

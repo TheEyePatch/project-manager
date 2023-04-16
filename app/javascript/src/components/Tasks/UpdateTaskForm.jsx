@@ -21,39 +21,24 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
   const [statuses, setStatuses] = useState([])
 
   useEffect(() => {
-    if(task.project_id == undefined) return
-
-    getProject({
-      token: authCtx.token,
-      project_id: task.project_id,
-    }).then(res => {
-      if(res == undefined) return
-
-      setStatuses(res.basic_board_info)
-    })
-  }, [])
+    setStatuses(boardCtx.boards)  
+  }, [task.id])
 
   const handleClose = () => {
     setModalOpen(false)
   }
 
   const handleChange = async ({value, attribute}) => {
+    let params = {task: { [attribute]: String(value)},  task_id: task.id }
     const taskUpdateResponse = await UpdateTask({
-      task_id: task.id,
+      params: params,
       token: authCtx.token,
-      task: {
-        [attribute]: String(value).trim()
-      }
     })
 
     setTask(taskUpdateResponse)
 
     if(attribute == 'board_id' || attribute == 'position'){
-      const boardUpdateResponse = await getBoards({
-        token: authCtx.token,
-        project_id: task.project_id
-      })
-
+      const boardUpdateResponse = await boardCtx.fetchBoards()
       boardCtx.setBoards(boardUpdateResponse)
     }
   }
