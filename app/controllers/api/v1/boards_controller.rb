@@ -1,11 +1,21 @@
 class Api::V1::BoardsController < Api::ApiController
-  def index
-    boards = project.boards
-                    .order(position: :asc)
-                    .includes(:tasks)
-                    .as_json(include: { tasks: { only: %i[id title position] } })
+  before_action :authenticate_user, only: %i[create update show]
 
-    render json: boards, status: :ok
+  def index
+    boards = Board.where(project_id: params[:project_id])
+                  .order(position: :asc)
+
+    tasks = Task.where(board_id: boards.ids, project_id: params[:project_id])
+                .with_task_title(params[:task_title])
+                .with_user_id(params[:user_id])
+                .order(position: :asc)
+                .group_by(&:board_id)
+
+    json_boards = boards.as_json.each do |board|
+      board['tasks'] = tasks[board['id']] || []
+    end
+
+    render json: json_boards, status: :ok
   end
 
   def show
@@ -17,11 +27,10 @@ class Api::V1::BoardsController < Api::ApiController
 
   def create
     board = project.boards  
-                   .includes(:tasks)
                    .create(board_params)
 
     if board.valid? && board.save
-      render json: board.as_json(include: :tasks), status: :ok
+      render json: board.as_json(root: true, include: :tasks), status: :ok
     end
   end
 

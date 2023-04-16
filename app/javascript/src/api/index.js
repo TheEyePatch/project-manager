@@ -210,9 +210,14 @@ export const deleteProject = async ({project_id, token}) => {
 
 // Boards
 
-export const getBoards = async (params) => {
+export const getBoards = async ({token, params}) => {
   try {
-    const response =  await axios.get('/api/v1/boards/', { params: params });
+    const response =  await axios.get('/api/v1/boards/', {
+      headers: {
+        Authorization: token,
+      },
+      params: params,
+    });
     return response.data;
   } catch (error) {
     console.log(error)
@@ -220,13 +225,16 @@ export const getBoards = async (params) => {
 }
 
 // MUST REQUIRE EXISTING PROJECT
-export const postBoards = async (params) => {
-  try {
-    const response = await axios.post('/api/v1/boards/', params)
-    return response.data
-  } catch (error) {
-    alert(error)
-  }
+export const postBoards = async ({params, token}) => {
+  const response = await axios({
+    method: 'post',
+    url: '/api/v1/boards/',
+    headers: {
+      Authorization: token
+    },
+    data: params
+  })
+  return response.data
 }
 
 export const postMultipleBoards = async (params) => {
@@ -248,9 +256,14 @@ export const updateBoard = async (params) => {
   }
 }
 
-export const getBoard = async (params) => {
+export const getBoard = async ({params, token}) => {
   try {
-    const response = await axios.get(`/api/v1/boards/${params.board_id}`, { params: params })
+    const response = await axios.get(`/api/v1/boards/${params.board_id}`, {
+      headers: {
+        Authorization: token
+      },
+      params: params
+    })
     return response.data
   } catch (error) {
     console.log(error)

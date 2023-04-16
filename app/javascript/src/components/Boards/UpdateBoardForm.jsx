@@ -26,10 +26,8 @@ function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
   const token = authCtx.token
 
   useEffect(()  => {
-    getBoard({
-      board_id: board.id,
-      project_id: board.project_id
-    }).then(res => {
+    let params = { board_id: board.id, project_id: board.project_id }
+    getBoard({ params: params, token: token }).then(res => {
       setBoardPositions(res.board_positions)
     })
   }, [])

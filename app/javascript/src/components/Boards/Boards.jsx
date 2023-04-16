@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
-import { importTask } from '../../api';
+import { importTask, getIndexTasks } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import BoardContext from '../../store/BoardContext'
 import { Container, Button, MenuItem, TextField } from '@mui/material';
@@ -20,6 +20,7 @@ function Boards() {
   useEffect(() => {
     boardCtx.fetchBoards().then(res => {
       res.length > BOARDS_LENGTH ? setContent('start') : setContent('center')
+      boardCtx.setBoards(res)
     })
   }, [])
 
@@ -30,8 +31,10 @@ function Boards() {
     selectedNodeTask.current.addEventListener('dragend', handleDragEnd)
     setTimeout(() => setDragging(true), 0)
   }
+
   const handleDragEnd = () => {
-    importTask({task: importTaskParam.current})
+    let params = {task: importTaskParam.current}
+    importTask({params: params, token: authCtx.token})
       .then(res => {
         boardCtx.setBoards(oldBoards => {
           const newBoards = oldBoards.map(item => {
@@ -50,6 +53,7 @@ function Boards() {
     selectedDragTask.current = null
     selectedNodeTask.current = null
   }
+
   const handleDragEnter = (e, params) => {
     if (JSON.stringify(selectedDragTask.current) == JSON.stringify(params)) return
 

@@ -3,15 +3,19 @@ require 'rails_helper'
 RSpec.describe Board, type: :model do
   let(:project) { create(:project) }
   let(:owner) { project.owner }
-
-  context 'create' do
-    it 'should not be valid without title' do
+  describe 'CREATE boards' do
+    it 'not be valid without title' do
       expect(build(:board, title: nil)).to_not be_valid
+    end
+
+    it 'fails with non-unique title' do
+      create(:board, :stage_testing, project: project)
+      expect(build(:board, :stage_testing)).to_not be_valid
     end
   end
 
-  context 'relations' do
-    it 'should belong to project' do
+  describe 'Board Relations/Assocation' do
+    it 'belong to project' do
       %w[In\ Progress Testing Done].each do |title|
         board = project.boards.create(title: title, description: 'Desc')
       end

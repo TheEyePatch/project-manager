@@ -13,13 +13,16 @@ export function BoardsContextProvider({ children }) {
   const [boards, setBoards] = useState([])
   const authCtx = useContext(AuthContext);
   const urlParams = useParams();
-  const handleBoards = async () => {
+  const handleBoards = async (params = {}) => {
     let boardResponse = await getBoards({
       token: authCtx.token,
-      project_id: urlParams.project_id 
+      params: {
+        project_id: urlParams.project_id,
+        ...params
+      }
     })
 
-    setBoards(boardResponse)
+    // setBoards(boardResponse)
     return boardResponse
   }
 

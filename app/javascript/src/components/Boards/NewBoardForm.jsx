@@ -39,15 +39,13 @@ function NewBoardForm ({ modalOpen, setModalOpen, project_id, token }) {
   const handleSubmit = () => {
     if(boardInput.title.length < 1) return setInputError({ title: true })
 
+    let params = { board: { title: boardInput.title }, project_id: project_id }
     postBoards({
       token: token,
-      project_id: project_id,
-      board: {
-        title: boardInput.title,
-      }
+      params: params
     }).then(res => {
       boardCtx.setBoards(boards => {
-        const newBoard = [...boards, res]
+        const newBoard = [...boards, res.board]
 
         return newBoard.sort((a, b) => a.position - b.position)
       })
