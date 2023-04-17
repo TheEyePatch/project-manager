@@ -23,6 +23,7 @@ function EditableContentV2 ({ innerHTML, attribute, submitEdit, cancelEdit, styl
   const handleSave = () => {
     const value = element.current;
     if(typeof(submitEdit) == 'function') submitEdit({value: value, attribute: attribute})
+    setContentStyle(style)
     setIsEditable(false)
   }
 

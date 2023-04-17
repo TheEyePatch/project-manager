@@ -14,6 +14,7 @@ import {
         } from '@mui/material'
 import { updateBoard, getBoard } from '../../api';
 import AuthContext from '../../store/AuthContext'
+import BoardContext from '../../store/BoardContext';
 
 function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
   const [boardInput, setBoardInput] = useState({
@@ -21,15 +22,14 @@ function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
     position: board.position,
   })
   const authCtx = useContext(AuthContext);
+  const boardCtx = useContext(BoardContext)
   const [inputError, setInputError] = useState({ title: false })
   const [boardPositions, setBoardPositions] = useState([])
   const token = authCtx.token
 
   useEffect(()  => {
-    getBoard({
-      board_id: board.id,
-      project_id: board.project_id
-    }).then(res => {
+    let params = { board_id: board.id, project_id: board.project_id }
+    getBoard({ params: params, token: token }).then(res => {
       setBoardPositions(res.board_positions)
     })
   }, [])
@@ -50,15 +50,23 @@ function UpdateBoardForm ({ board, modalOpen, setModalOpen, setCurrentBoard }) {
     if(boardInput.title.length < 1) {
       return setInputError({ title: true })
     }
-    let boardUpdateResponse = await updateBoard({
+    let params = {
       token: token,
-      board_id: board.id,
-      board: {
-        title: boardInput.title,
-        position: boardInput.position,
-      }
-    })
-    setCurrentBoard(boardUpdateResponse)
+      params: {
+        board_id: board.id,
+        board: {
+          title: boardInput.title,
+          position: boardInput.position,
+        }
+      },
+    }
+    const updateRes = await updateBoard(params)
+    setCurrentBoard(updateRes)
+
+    if(board.position != boardInput.position) {
+      const newBoards = await boardCtx.fetchBoards()
+      boardCtx.setBoards(newBoards)
+    }
 
     setModalOpen(false)
   }

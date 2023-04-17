@@ -83,18 +83,33 @@ export const getIndexTasks = async (params) => {
   }
 };
 
-export const postTask = async (params) => {
+export const postTask = async ({params, token}) => {
   try{
-    const response = await axios.post('/api/v1/tasks', params)
+    const response = await axios({
+      url: '/api/v1/tasks',
+      method: 'post',
+      headers: {
+        Authorization: token,
+      },
+      data: params
+    })
+
     return response.data
   } catch (error) {
     console.log(error)
   }
 }
 
-export const importTask = async (params) => {
+export const importTask = async ({params, token}) => {
   try {
-    const response = await axios.post('/api/v1/tasks/import_tasks', params)
+    const response = await axios({
+      url: '/api/v1/tasks/import_tasks',
+      method: 'post',
+      headers: {
+        Authorization: token,
+      },
+      data: params
+    })
     return response.data
   } catch (error) {
     console.log(error)
@@ -103,16 +118,23 @@ export const importTask = async (params) => {
 
 export const getTask = async (params) => {
   try {
-    const response = await axios.get(`/api/v1/tasks/${params.id}`, {params: params})
+    const response = await axios.get(`/api/v1/tasks/${params.task_id}`, {params: params})
     return response.data
   } catch (error) {
     console.log(error)
   }
 }
 
-export const UpdateTask = async (params) => {
+export const UpdateTask = async ({params, token}) => {
   try {
-    const response = await axios.put(`/api/v1/tasks/${params.task_id}`, params)
+    const response = await axios({
+      method: 'put',
+      url: `/api/v1/tasks/${params.task_id}`,
+      headers: {
+        Authorization: token
+      },
+      data: params
+    })
     return response.data
   } catch (error) {
     console.log(error)
@@ -188,9 +210,14 @@ export const deleteProject = async ({project_id, token}) => {
 
 // Boards
 
-export const getBoards = async (params) => {
+export const getBoards = async ({token, params}) => {
   try {
-    const response =  await axios.get('/api/v1/boards/', { params: params });
+    const response =  await axios.get('/api/v1/boards/', {
+      headers: {
+        Authorization: token,
+      },
+      params: params,
+    });
     return response.data;
   } catch (error) {
     console.log(error)
@@ -198,13 +225,16 @@ export const getBoards = async (params) => {
 }
 
 // MUST REQUIRE EXISTING PROJECT
-export const postBoards = async (params) => {
-  try {
-    const response = await axios.post('/api/v1/boards/', params)
-    return response.data
-  } catch (error) {
-    alert(error)
-  }
+export const postBoards = async ({params, token}) => {
+  const response = await axios({
+    method: 'post',
+    url: '/api/v1/boards/',
+    headers: {
+      Authorization: token
+    },
+    data: params
+  })
+  return response.data
 }
 
 export const postMultipleBoards = async (params) => {
@@ -216,21 +246,37 @@ export const postMultipleBoards = async (params) => {
   }
 }
 
-export const updateBoard = async (params) => {
-  try {
-    const response = await axios.put(`http://localhost:3000/api/v1/boards/${params.board_id}`, params)
-    return response.data
-  } catch (error) {
-    console.log(error)
-    alert(error)
-  }
+export const updateBoard = async ({params, token}) => {
+  const response = await axios({
+    method: 'put',
+    url: `/api/v1/boards/${params.board_id}`,
+    headers: {
+      Authorization: token
+    },
+    data: params
+  })
+  return response.data
 }
 
-export const getBoard = async (params) => {
-  try {
-    const response = await axios.get(`/api/v1/boards/${params.board_id}`, { params: params })
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+export const getBoard = async ({params, token}) => {
+  const response = await axios.get(`/api/v1/boards/${params.board_id}`, {
+    headers: {
+      Authorization: token
+    },
+    params: params
+  })
+  return response.data
+}
+
+// User Data
+
+export const getProjectMembers = async ({params, token}) => {
+  const response = await axios.get('/api/v1/users', {
+    headers: {
+      Authorization: token
+    },
+    params: params
+  })
+
+  return response.data
 }

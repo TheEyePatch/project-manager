@@ -6,7 +6,8 @@ class CreateTasks < ActiveRecord::Migration[6.0]
       t.integer :position
       t.bigint :board_id
       t.bigint :project_id, null: false
-      t.bigint :user_id
+      t.bigint :assignee_id
+      t.bigint :reporter_id
       t.bigint :sprint_id
       t.timestamps
     end

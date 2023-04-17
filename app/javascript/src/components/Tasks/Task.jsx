@@ -15,7 +15,7 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
   const handleClick = () => {
     getTask({
       token: token,
-      id: currentTask.id
+      task_id: task.id
     })
     .then(res => {
       setModalOpen(true)
@@ -28,7 +28,7 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
       <CardActionArea onClick={handleClick}>
         <CardContent >
           <Typography gutterBottom variant="h6">
-            {currentTask.title}
+            {currentTask?.title}
           </Typography>
           </CardContent>
       </CardActionArea>
