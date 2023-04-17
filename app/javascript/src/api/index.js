@@ -246,28 +246,26 @@ export const postMultipleBoards = async (params) => {
   }
 }
 
-export const updateBoard = async (params) => {
-  try {
-    const response = await axios.put(`http://localhost:3000/api/v1/boards/${params.board_id}`, params)
-    return response.data
-  } catch (error) {
-    console.log(error)
-    alert(error)
-  }
+export const updateBoard = async ({params, token}) => {
+  const response = await axios({
+    method: 'put',
+    url: `/api/v1/boards/${params.board_id}`,
+    headers: {
+      Authorization: token
+    },
+    data: params
+  })
+  return response.data
 }
 
 export const getBoard = async ({params, token}) => {
-  try {
-    const response = await axios.get(`/api/v1/boards/${params.board_id}`, {
-      headers: {
-        Authorization: token
-      },
-      params: params
-    })
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+  const response = await axios.get(`/api/v1/boards/${params.board_id}`, {
+    headers: {
+      Authorization: token
+    },
+    params: params
+  })
+  return response.data
 }
 
 // User Data

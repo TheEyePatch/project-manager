@@ -33,19 +33,24 @@ function BoardsCreateButton({ project_id, token }) {
         },
       }}
     >
+    {
+      modalOpen &&
       <NewTaskForm
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-          project_id={project_id}
-          token={token}
-        />
-
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        project_id={project_id}
+        token={token}
+      />
+    }
+    {
+      boardModalOpen &&
       <NewBoardForm
         modalOpen={boardModalOpen}
         setModalOpen={setBoardModalOpen}
         project_id={project_id}
         token={token}
       />
+    }
       <ButtonGroup size="large" aria-label="large button group" variant=  'contained'>
         {buttons}
       </ButtonGroup>
