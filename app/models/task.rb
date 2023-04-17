@@ -1,7 +1,8 @@
 class Task < ApplicationRecord
   belongs_to :board, counter_cache: true,  optional: true
   belongs_to :project
-  belongs_to :assignee, class_name: 'User', foreign_key: :user_id, optional: true
+  belongs_to :assignee, class_name: 'User', optional: true
+  belongs_to :reporter, class_name: 'User', optional: true
   acts_as_list scope: :board
 
   validates :title, presence: true

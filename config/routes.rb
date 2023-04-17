@@ -25,7 +25,7 @@ Rails.application.routes.draw do
         end
       end 
 
-      resources :tasks, only: %i[index show create update] do
+      resources :tasks, only: %i[index show create update], param: :task_id do
         collection do
           post :import_tasks
         end
@@ -38,6 +38,8 @@ Rails.application.routes.draw do
           post '/:project_id/create_multiple_boards', action: 'create_multiple_boards'
         end
       end
+
+      resources :users, only: %i[index]
 
       constraints(token: /[^\/]+/) do
         resources :sessions, only: %i[create destroy], param: :token

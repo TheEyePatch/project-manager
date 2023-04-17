@@ -13,5 +13,7 @@ FactoryBot.define do
     end
 
     sequence(:position)
+
+    association :project
   end
 end

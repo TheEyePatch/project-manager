@@ -9,7 +9,7 @@ RSpec.describe "Tasks", type: :request do
       sign_in_user
     end
 
-    it 'works' do
+    it 'returns SUCCESS with correct params' do
       get api_v1_tasks_path(project_id: project.id)
 
       expect(response).to have_http_status(200)
@@ -18,14 +18,14 @@ RSpec.describe "Tasks", type: :request do
   end
 
   describe 'POST /api/v1/tasks' do
+    let(:task) { build(:task, assignee: user) }
+    let(:reporter) { create(:random_user) }
     before do
       sign_in_user
       @token = response_body[:token]
     end
 
     it 'return SUCCESS with correct params' do
-      task = build(:task, assignee: user)
-      binding.pry
       post(api_v1_tasks_path,
         headers: {
           Authorization: @token,
@@ -41,7 +41,57 @@ RSpec.describe "Tasks", type: :request do
 
       expect(response).to have_http_status(200)
       expect(response_body[:task]).to be_present
+    end
+
+    it 'returns SUCCESS with assignee and reporter' do
+      post(api_v1_tasks_path,
+        headers: {
+          Authorization: @token,
+        },
+        params: {
+          project_id: project.id,
+          task: {
+            title: task.title,
+            description: task.description,
+            assignee_id: user.id,
+            reporter_id: reporter.id,
+          },
+        }
+      )
+
+      expect(response_body[:task]).to be_present
       expect(response_body.dig(:task, :id)).to be_present
+      expect(response_body.dig(:task, :assignee_id)).to eql(user.id)
+      expect(response_body.dig(:task, :reporter_id)).to eql(reporter.id)
+    end
+  end
+
+  describe 'PUT/PATCH /api/v1/tasks/:id' do
+    let(:task) { create(:random_task, project: project) }
+    let(:reporter) { create(:random_user) }
+
+    before do
+      sign_in_user
+      @token = response_body[:token]
+    end
+
+    it 'returns SUCCESS on title update' do
+      patch("/api/v1/tasks/#{task.id}",
+        headers: {
+          Authorization: @token,
+        },
+        params: {
+          project_id: project.id,
+          task: {
+            title: 'Update Task Title',
+            description: task.description,
+            assignee_id: user.id,
+            reporter_id: reporter.id,
+          },
+        }
+      )
+
+      expect(response_body.dig(:task, :title)).to eql('Update Task Title')
     end
   end
 end

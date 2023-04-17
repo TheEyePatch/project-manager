@@ -8,39 +8,53 @@ import {
           InputLabel,
           MenuItem,
           FormControl,
-          Select
+          Select,
+          TextField,
+          Autocomplete,
         } from '@mui/material'
 import { EditableContent, EditableContentV2 } from '../index';
 import AuthContext from "../../store/AuthContext";
-import { UpdateTask, getProject, getBoards } from '../../api'
+import { UpdateTask,  getProjectMembers } from '../../api'
 import BoardContext from "../../store/BoardContext";
 
 function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
   const authCtx = useContext(AuthContext)
   const boardCtx = useContext(BoardContext)
   const [statuses, setStatuses] = useState([])
+  const [refetchOnClose, setRefetchOnClose] = useState(false)
+  const [props, setProps] = useState({
+    options: [],
+    getOptionLabel: (option) => option.account
+  })
 
-  useEffect(() => {
-    setStatuses(boardCtx.boards)  
+  useEffect(() => { 
+    setStatuses(boardCtx.boards)
+    getProjectMembers({ params: { project_id: task.project_id }, token: authCtx.token })
+    .then(res => setProps(prev => {
+      return {
+        ...prev, options: res.participants
+      }
+    }))
   }, [task.id])
 
   const handleClose = () => {
+    if(refetchOnClose) {
+      boardCtx.fetchBoards()
+      .then(res => boardCtx.setBoards(res))
+    }
     setModalOpen(false)
   }
 
   const handleChange = async ({value, attribute}) => {
     let params = {task: { [attribute]: String(value)},  task_id: task.id }
-    const taskUpdateResponse = await UpdateTask({
+    console.log(params)
+    const updateResponse = await UpdateTask({
       params: params,
       token: authCtx.token,
     })
 
-    setTask(taskUpdateResponse)
-
-    if(attribute == 'board_id' || attribute == 'position'){
-      const boardUpdateResponse = await boardCtx.fetchBoards()
-      boardCtx.setBoards(boardUpdateResponse)
-    }
+    setTask(updateResponse.task)
+    if(attribute == 'board_id' || attribute == 'position') setRefetchOnClose(true)
   }
 
   const cancelEdit = ({value, attribute}) => {
@@ -65,7 +79,7 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
               borderBottom: '2px solid rgb(105,105,105)',
             }}
           >
-            {task.title}
+            {task?.title}
           </Typography>
         </EditableContent>
       </DialogTitle>
@@ -101,6 +115,7 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
               marginLeft: '15px',
               overflowY: 'hidden',
               fontFamily: 'Arial, Helvetica, sans-serif',
+              minHeight: '10rem',
             }}
           />
         </div>
@@ -138,6 +153,26 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
               }
             </Select>
           </FormControl>
+
+          <Autocomplete id="reporter_id" autoComplete includeInputInList
+            {...props}
+            sx={{ m: 1, minWidth: 160 }}
+            onChange={(e, val) => handleChange({value: val.id, attribute: 'reporter_id'})}
+            value={task.reporter}
+            renderInput={(params) => (
+              <TextField {...params} label="Reporter" variant="standard" />
+            )}
+          />
+
+          <Autocomplete id="assignee_id" autoComplete includeInputInList
+            {...props} 
+            sx={{ m: 1, minWidth: 160 }}
+            onChange={(e, val) => handleChange({value: val.id, attribute: 'assignee_id'})}
+            value={task.assignee}
+            renderInput={(params) => (
+              <TextField {...params} label="Assignee" variant="standard" />
+            )}
+          />
         </div>
       </DialogContent>
     </Dialog>  

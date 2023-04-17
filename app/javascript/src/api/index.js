@@ -118,7 +118,7 @@ export const importTask = async ({params, token}) => {
 
 export const getTask = async (params) => {
   try {
-    const response = await axios.get(`/api/v1/tasks/${params.id}`, {params: params})
+    const response = await axios.get(`/api/v1/tasks/${params.task_id}`, {params: params})
     return response.data
   } catch (error) {
     console.log(error)
@@ -268,4 +268,17 @@ export const getBoard = async ({params, token}) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+// User Data
+
+export const getProjectMembers = async ({params, token}) => {
+  const response = await axios.get('/api/v1/users', {
+    headers: {
+      Authorization: token
+    },
+    params: params
+  })
+
+  return response.data
 }

@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :participations
   has_many :participated_projects, through: :participations, source: :project
   has_one_attached :avatar
+  has_many :assigned_tasks, class_name: 'Task', foreign_key: :assignee_id
+  has_many :reported_tasks, class_name: 'Task', foreign_key: :reporter_id
 
   # Validation
   validates :email, presence: true, format: { with:  /(.+)@(.+)/, message: 'invalid format'}

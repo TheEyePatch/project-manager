@@ -18,7 +18,12 @@ class Api::V1::TasksController < Api::ApiController
   def update
     task = Task.find(params[:task_id])
     if task.update(task_params)
-      render json: task.as_json(methods: %i[positions])
+      render json: task.as_json(root: true,
+        include: {
+          reporter: { only: %i[id account] },
+          assignee: { only: %i[id account] }
+        },
+        methods: %i[positions])
     else
       render json: task.errors.full_messages, status: :unprocessable_entity
     end
@@ -34,9 +39,14 @@ class Api::V1::TasksController < Api::ApiController
   end
 
   def show
-    task = Task.find(params[:id])
+    task = Task.find(params[:task_id])
     if task.present?
-      render json: task.as_json(methods: %i[positions])
+      render json: task.as_json(
+        include: { 
+          reporter: { only: %i[id account] },
+          assignee: { only: %i[id account] }
+        }, 
+        methods: %i[positions])
     else
       render json: {}, status: :unprocessable_entity
     end
@@ -54,6 +64,8 @@ class Api::V1::TasksController < Api::ApiController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :board_id, :position)
+    params.require(:task).permit(
+      :title, :description, :board_id, :position, :assignee_id, :reporter_id
+    )
   end
 end
