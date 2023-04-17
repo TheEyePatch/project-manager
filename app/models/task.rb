@@ -9,7 +9,11 @@ class Task < ApplicationRecord
   validates :title, uniqueness: { scope: :project,
     message: 'should contain unique title per project'}
   validates :board_id, presence: true
-  before_validation :assign_board, on: :create
+  before_validation :assign_board, on: %i[create save]
+
+  # Scopes
+  scope :with_task_title, ->(title) { where(title: title) if title.present? }
+  scope :with_user_id, ->(assignee_id) { where(assignee_id: assignee_id) if assignee_id.present? }
 
   def assign_board
     return if self.board_id.present?

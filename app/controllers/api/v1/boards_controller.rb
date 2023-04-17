@@ -8,7 +8,7 @@ class Api::V1::BoardsController < Api::ApiController
     tasks = Task.where(board_id: boards.ids, project_id: params[:project_id])
                 .select(:id, :title, :board_id, :project_id)
                 .with_task_title(params[:task_title])
-                .with_user_id(params[:user_id])
+                .with_user_id(params[:assignee_id])
                 .order(position: :asc)
                 .group_by(&:board_id)
 

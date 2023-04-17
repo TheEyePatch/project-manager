@@ -11,6 +11,7 @@ class UserValidator < ActiveModel::Validator
 end
 
 class User < ApplicationRecord
+  attr_accessor :avatar_image_url
   include Rails.application.routes.url_helpers
   include Authentication
   # Include default devise modules. Others available are:
