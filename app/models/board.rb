@@ -3,6 +3,7 @@ class Board < ApplicationRecord
   belongs_to :project, counter_cache: true
   acts_as_list scope: :project
   validates :title, presence: true
+  validates :title, uniqueness: { scope: :project }
 
   ####### Callback ###########
 

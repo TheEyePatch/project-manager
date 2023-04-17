@@ -10,7 +10,8 @@ RSpec.describe Board, type: :model do
 
     it 'fails with non-unique title' do
       create(:board, :stage_testing, project: project)
-      expect(build(:board, :stage_testing)).to_not be_valid
+      board = build(:board, :stage_testing, project: project)
+      expect(board).to_not be_valid
     end
   end
 
