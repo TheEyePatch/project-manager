@@ -7,25 +7,24 @@ import {  TextField, InputAdornment, FormGroup, FormControlLabel, Popover, Check
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import BoardContext from '../../store/BoardContext';
-import { getProjectMembers } from '../../api';
+import UserContext from '../../store/UserContext';
 
 function BoardsHeader () {
   const params = useParams();
-  const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext)
   const boardCtx = useContext(BoardContext)
+  const userCtx = useContext(UserContext)
   const [filter, setFilter] = useState({
     task_title: '',
     user_id: '',
   });
-  const [members, setMembers] = useState([])
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedNames, setSelectedNames] = useState([])
 
   useEffect(() => {
-    getProjectMembers({params: {project_id: params.project_id}, token: authCtx.token})
+    userCtx.fetchProjectMembers({project_id: params.project_id})
     .then(res => {
-      setMembers(res.participants)
-      console.log(res.participants)
+      userCtx.setProjectMembers([...res.participants, res.owner])
     })
   }, [])
 
@@ -86,9 +85,9 @@ function BoardsHeader () {
             variant="outlined"
           />
         </form>
-        <AvatarGroup max={6} total={members.length} onClick={handleAvatar}>
+        <AvatarGroup max={6} total={userCtx.projectMembers.length} onClick={handleAvatar}>
         {
-          members?.map((member, index) => {
+          userCtx.projectMembers?.map((member, index) => {
             return (
               <Avatar key={member.id} alt={member.account} src={member.avatar_image_url}>
                 {member.account[0]}
@@ -110,7 +109,7 @@ function BoardsHeader () {
           {
             <MenuList style={{ display: 'fex',padding: '10px', maxHeight: '15rem', overflowY: 'auto'}}>
               {
-                members?.map(member => {
+                userCtx.projectMembers?.map(member => {
                   return (
                     <MenuItem key={member.id}>
                      <FormControlLabel

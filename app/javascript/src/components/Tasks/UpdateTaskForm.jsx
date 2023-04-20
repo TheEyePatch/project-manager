@@ -14,27 +14,23 @@ import {
         } from '@mui/material'
 import { EditableContent, EditableContentV2 } from '../index';
 import AuthContext from "../../store/AuthContext";
+import UserContext from "../../store/UserContext";
 import { UpdateTask,  getProjectMembers } from '../../api'
 import BoardContext from "../../store/BoardContext";
 
 function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
   const authCtx = useContext(AuthContext)
   const boardCtx = useContext(BoardContext)
+  const userCtx = useContext(UserContext)
   const [statuses, setStatuses] = useState([])
   const [refetchOnClose, setRefetchOnClose] = useState(false)
-  const [props, setProps] = useState({
-    options: [],
+  const props = {
+    options: userCtx.projectMembers,
     getOptionLabel: (option) => option.account
-  })
+  }
 
-  useEffect(() => { 
+  useEffect(() => {
     setStatuses(boardCtx.boards)
-    getProjectMembers({ params: { project_id: task.project_id }, token: authCtx.token })
-    .then(res => setProps(prev => {
-      return {
-        ...prev, options: res.participants
-      }
-    }))
   }, [task.id])
 
   const handleClose = () => {
