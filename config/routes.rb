@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root 'tasks#index'
-  get '/registrations', to: 'tasks#index'
-  get '/projects', to: 'tasks#index'
-  get '/boards/:project_id', to: 'tasks#index'
-  get '/profile', to: 'tasks#index'
+  root 'home#index'
+  get '/registrations', to: 'home#index'
+  get '/projects', to: 'home#index'
+  get '/boards/:project_id', to: 'home#index'
+  get '/profile', to: 'home#index'
 
   namespace :api, defaults: { format: :json } do
     # devise_for :users, controllers: { sessions: 'api/sessions' }
