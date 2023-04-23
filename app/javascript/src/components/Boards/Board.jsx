@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, IconButton } from '@mui/material';
 import { Task, UpdateBoardForm } from './../index';
-import { getIndexTasks } from '../../api';
 import BorderColorTwoToneIcon from '@mui/icons-material/BorderColorTwoTone';
 
 function Board ({ board, children, onDragEnter }) {
@@ -14,7 +13,7 @@ function Board ({ board, children, onDragEnter }) {
     <>
       <Box
         onDragEnter={onDragEnter}
-        item key={board.id}
+        key={board.id}
         sx={{ margin: '.5rem',
                 boxSizing: 'border-box',
                 p: '.5rem',
@@ -33,7 +32,7 @@ function Board ({ board, children, onDragEnter }) {
               color: 'text.primary',
               fontWeight:'bold'
             }}>
-            {currentBoard.title} ID: {currentBoard.id}
+            {currentBoard.title}
           </Typography>
           <IconButton onClick={handleEdit}>
             <BorderColorTwoToneIcon fontSize='small'/>

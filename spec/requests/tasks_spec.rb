@@ -7,10 +7,11 @@ RSpec.describe "Tasks", type: :request do
   describe "GET /api/v1/tasks" do
     before do
       sign_in_user
+      @token = response_body[:token]
     end
 
     it 'returns SUCCESS with correct params' do
-      get api_v1_tasks_path(project_id: project.id)
+      get api_v1_tasks_path,{headers: { Authorization: @token }}
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body).map{ |_1| _1['title'] }).to_not include('TaskTwo')

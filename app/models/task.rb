@@ -14,6 +14,18 @@ class Task < ApplicationRecord
   # Scopes
   scope :with_task_title, ->(title) { where(title: title) if title.present? }
   scope :with_user_id, ->(assignee_id) { where(assignee_id: assignee_id) if assignee_id.present? }
+  scope :with_project_id, ->(project_id) { where(project_id: project_id) if project_id.present? }
+
+  class << self
+    def join_boards_reporters
+      query = <<-SQL.squish
+        INNER JOIN boards ON boards.id = tasks.board_id
+        INNER JOIN users AS reporters ON reporters.id = tasks.reporter_id
+      SQL
+
+      joins(query)
+    end
+  end
 
   def assign_board
     return if self.board_id.present?
