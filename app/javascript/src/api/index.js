@@ -211,6 +211,17 @@ export const deleteProject = async ({project_id, token}) => {
   }
 }
 
+export const getAssignedProjects = async ({params, token}) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/projects/assigned_projects',
+    headers: { Authorization: token },
+    params: params
+  })
+
+  return response.data
+}
+
 // Boards
 
 export const getBoards = async ({token, params}) => {

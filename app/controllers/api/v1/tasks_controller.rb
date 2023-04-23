@@ -1,7 +1,7 @@
 class Api::V1::TasksController < Api::ApiController
   before_action :authenticate_user, only: %i[create import_tasks update]
 
-  PAGE_LIMIT = 5
+  PAGE_LIMIT = 10
 
   def index
     render json: {
@@ -105,13 +105,15 @@ class Api::V1::TasksController < Api::ApiController
 
   def task_summary
     @task_summary ||=
-      current_user.assigned_tasks.joins(:board)
+      current_user.assigned_tasks.joins(:board, :project)
                   .with_project_id(overview_project_id)
                   .select(
                   'COUNT(tasks.id) as task_count, ' \
                   'tasks.board_id as id, ' \
                   'tasks.board_id, ' \
+                  'tasks.project_id,' \
+                  'projects.name as project_name,' \
                   'boards.title as status'
-                  ).group('boards.title', :board_id)
+                  ).group('boards.title', 'projects.name', :board_id, :project_id)
   end
 end

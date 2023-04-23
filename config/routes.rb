@@ -31,7 +31,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :projects, only: %i[index show create update destroy], param: :project_id      
+      resources :projects, only: %i[index show create update destroy], param: :project_id do
+        collection do
+          get :assigned_projects
+        end
+      end   
 
       resources :boards, only: %i[index show create update destroy] do
         collection do
