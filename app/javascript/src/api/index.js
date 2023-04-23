@@ -74,13 +74,16 @@ export const inviteProjectUser = async ({params, token}) => {
 }
 
 // Tasks
-export const getIndexTasks = async (params) => {
-  try {
-    const response = await axios.get('/api/v1/tasks', {params: params})
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+export const getIndexTasks = async ({params, token}) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/tasks',
+    headers:{
+      Authorization: token,
+    },
+    params: params
+  })
+  return response.data
 };
 
 export const postTask = async ({params, token}) => {
@@ -206,6 +209,17 @@ export const deleteProject = async ({project_id, token}) => {
     console.log(error)
     console.log(params)
   }
+}
+
+export const getAssignedProjects = async ({params, token}) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/projects/assigned_projects',
+    headers: { Authorization: token },
+    params: params
+  })
+
+  return response.data
 }
 
 // Boards

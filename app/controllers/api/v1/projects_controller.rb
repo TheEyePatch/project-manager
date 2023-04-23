@@ -98,6 +98,16 @@ class Api::V1::ProjectsController < Api::ApiController
     render json: { project: project, deleted: true } if project.destroy
   end
 
+  def assigned_projects
+    projects =
+      current_user.assigned_tasks
+                  .joins(:project)
+                  .distinct
+                  .select('tasks.project_id as id, projects.name as project_name')
+
+    render json: { projects: projects }, status: :ok
+  end
+
   private
 
   def projects

@@ -10,8 +10,13 @@ class Api::V1::UsersController < Api::ApiController
       user.avatar_image_url = rails_blob_path(user.avatar) if user.avatar.attached?
     end
 
+    if project_owner.avatar.attached?
+      project_owner.avatar_image_url = rails_blob_path(project_owner.avatar)
+    end
+
     render json: {
       participants: participants.as_json(methods: %i[avatar_image_url]),
+      owner: project_owner.as_json(methods: %i[avatar_image_url]),
     }, status: :ok
   end
 
@@ -20,5 +25,9 @@ class Api::V1::UsersController < Api::ApiController
   def project
     @project ||=  Project.includes(:participants)
                          .find(params[:project_id])
+  end
+
+  def project_owner
+    @project_owner ||= project.owner
   end
 end

@@ -16,7 +16,6 @@ import {
 import { postTask, getProject, getProjectMembers } from '../../api';
 import AuthContext from '../../store/AuthContext';
 import BoardContext from '../../store/BoardContext';
-import { TaskOutlined } from '@mui/icons-material';
 
 function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
   //  Hooks
@@ -47,7 +46,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
         setProps(prev => {
           return {
             ...prev,
-            options: res.participants
+            options: [...res.participants, res.owner]
           }
         })
       )

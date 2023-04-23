@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
-import { importTask, getIndexTasks } from '../../api';
+import { importTask } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import BoardContext from '../../store/BoardContext'
 import { Container, Button, MenuItem, TextField } from '@mui/material';
