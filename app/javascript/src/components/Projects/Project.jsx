@@ -31,7 +31,7 @@ function Project({ project, handleOpenEdit }){
               <DeleteOutline/>
             </IconButton>
           }
-          title={project.name + ' ' + project.id}
+          title={project.name}
           subheader={`Owner: ${project.owner.account}`}
         />
         <CardContent>
