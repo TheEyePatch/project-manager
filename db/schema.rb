@@ -63,7 +63,6 @@ ActiveRecord::Schema.define(version: 2023_04_16_070328) do
     t.string "name", null: false
     t.string "description"
     t.bigint "owner_id"
-    t.integer "boards_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name", "owner_id"], name: "index_projects_on_name_and_owner_id", unique: true
