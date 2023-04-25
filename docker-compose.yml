@@ -2,7 +2,10 @@ version: "3"
 services:
   app:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    entrypoint: ./docker-rails.sh
+    environment:
+      RAILS_ENV: development
+      VITE_RUBY_HOST: vite
     ports:
       - 3000:3000
     volumes:
@@ -11,19 +14,16 @@ services:
       - db
       - vite
   vite:
-    image: node:16.0.0
-    entrypoint: /bin/bash
+    build: .
+    entrypoint: ./docker-vite.sh
     environment:
       DEBUG: '*vite*'
       RAILS_ENV: development
       VITE_RUBY_HOST: 0.0.0.0
-    working_dir: /project-manager/app/javascript
     ports:
       - "3036:3036"
     volumes:
-      - .:/project-manager/app
-    stdin_open: true
-    tty: true
+      - .:/project-manager
   db:
     image: postgres:15.2
     restart: always
