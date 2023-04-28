@@ -5,6 +5,9 @@ services:
     entrypoint: ./docker-rails.sh
     environment:
       VITE_RUBY_HOST: vite
+      REDIS_HOST: redis
+      REDIS_PORT: 6380
+      REDIS_DB: 0
     ports:
       - 3000:3000
     volumes:
@@ -12,6 +15,7 @@ services:
     depends_on:
       - db
       - vite
+      - redis
     tty: true
     stdin_open: true
   vite:
@@ -37,12 +41,9 @@ services:
   redis:
     image: redis:5.0
     restart: always
+    command: redis-server --port 6380
     ports:
-      - 6380:6379
-    environment:
-      REDIST_HOST: 0.0.0.0
-      REDIS_PORT: 6380
-      REDIS_DB: 0
+      - 6379:6379
     volumes:
       - redis:/data
 volumes:
