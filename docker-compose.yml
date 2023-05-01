@@ -1,7 +1,9 @@
 version: "3"
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     entrypoint: ./docker-rails.sh
     environment:
       VITE_RUBY_HOST: vite
@@ -19,7 +21,9 @@ services:
     tty: true
     stdin_open: true
   vite:
-    build: .
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     entrypoint: ./docker-vite.sh
     environment:
       DEBUG: '*vite*'
