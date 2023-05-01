@@ -31,6 +31,6 @@ module Api::V1::SessionHelper
   end
 
   def invite_token(user = current_user)
-    @invite_token ||= Rails.cache.fetch(user.email, expires_in: 24.hours)
+    @invite_token ||= Rails.cache.read(user.email)
   end
 end
