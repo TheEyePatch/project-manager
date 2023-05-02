@@ -6,6 +6,7 @@ services:
       dockerfile: dev.Dockerfile
     entrypoint: ./docker-rails.sh
     environment:
+      RAILS_ENV: 'development'
       VITE_RUBY_HOST: vite
       REDIS_HOST: redis
       REDIS_PORT: 6380
@@ -26,6 +27,7 @@ services:
       dockerfile: dev.Dockerfile
     entrypoint: ./docker-vite.sh
     environment:
+      RAILS_ENV: 'development'
       DEBUG: '*vite*'
       VITE_RUBY_HOST: 0.0.0.0
     ports:
