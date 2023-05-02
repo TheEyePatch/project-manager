@@ -104,19 +104,15 @@ export const postTask = async ({params, token}) => {
 }
 
 export const importTask = async ({params, token}) => {
-  try {
-    const response = await axios({
-      url: '/api/v1/tasks/import_tasks',
-      method: 'post',
-      headers: {
-        Authorization: token,
-      },
-      data: params
-    })
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
+  const response = await axios({
+    url: '/api/v1/tasks/import_tasks',
+    method: 'post',
+    headers: {
+      Authorization: token,
+    },
+    data: params
+  })
+  return response.data
 }
 
 export const getTask = async (params) => {
