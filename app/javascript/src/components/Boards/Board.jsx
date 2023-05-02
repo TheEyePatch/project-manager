@@ -12,6 +12,7 @@ function Board ({ board, children, onDragEnter }) {
   return (
     <>
       <Box
+        onDragOver={(e) => e.preventDefault()}
         onDragEnter={onDragEnter}
         key={board.id}
         sx={{ margin: '.5rem',

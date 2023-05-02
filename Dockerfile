@@ -11,10 +11,16 @@ RUN echo "NODE:" && node -v
 RUN echo "NPM:" && npm -v
 RUN echo "YARN:" && yarn --version
 
+ENV RAILS_ENV production
+
 RUN gem install bundler:1.17.2
 RUN yarn install --ignore-engines && bundle install
 RUN bundle exec vite install
 RUN yarn
 # RUN chmod +x docker-rails.sh && chmod +x docker-vite.sh
+RUN bin/vite build --mode production
+RUN RAILS_ENV=production bundle exec rake assets:precompile
+RUN bin/rails db:prepare
 
-CMD [ "bin/rails", "console" ]
+EXPOSE 3000
+CMD [ "bin/rails", "server", "-b", "0.0.0.0" ]

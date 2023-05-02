@@ -11,9 +11,5 @@ export default defineConfig({
         '.js': 'jsx' // https://github.com/vitejs/vite/discussions/3448
       }
     }
-  },
-  // server: {
-  //   host: true,
-  //   port: 3036,
-  // }
+  }
 })

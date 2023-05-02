@@ -1,10 +1,16 @@
 version: "3"
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     entrypoint: ./docker-rails.sh
     environment:
+      RAILS_ENV: 'development'
       VITE_RUBY_HOST: vite
+      REDIS_HOST: redis
+      REDIS_PORT: 6380
+      REDIS_DB: 0
     ports:
       - 3000:3000
     volumes:
@@ -12,12 +18,16 @@ services:
     depends_on:
       - db
       - vite
+      - redis
     tty: true
     stdin_open: true
   vite:
-    build: .
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     entrypoint: ./docker-vite.sh
     environment:
+      RAILS_ENV: 'development'
       DEBUG: '*vite*'
       VITE_RUBY_HOST: 0.0.0.0
     ports:
@@ -37,12 +47,9 @@ services:
   redis:
     image: redis:5.0
     restart: always
+    command: redis-server --port 6380
     ports:
-      - 6380:6379
-    environment:
-      REDIST_HOST: 0.0.0.0
-      REDIS_PORT: 6380
-      REDIS_DB: 0
+      - 6379:6379
     volumes:
       - redis:/data
 volumes:

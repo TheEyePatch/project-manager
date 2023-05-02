@@ -36,6 +36,7 @@ gem 'activerecord-import'
 gem 'vite_rails'
 gem 'acts_as_list'
 gem 'faker'
+gem "aws-sdk-s3", require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
