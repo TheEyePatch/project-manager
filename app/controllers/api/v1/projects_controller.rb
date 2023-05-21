@@ -53,20 +53,6 @@ class Api::V1::ProjectsController < Api::ApiController
 
   def update
     if project.valid? && project.update(project_params)
-      # map_board_ids = params[:boards].map { |board| board[:id] }
-      # removed_board_ids = project.boards.ids.filter { |board_id| !board_id.in?(map_board_ids) }
-
-      # Board.where(id: removed_board_ids).destroy_all
-      # boards = request.params[:boards].map do |board|
-      #   {
-      #     project_id: project.id,
-      #     title: board[:title],
-      #     description: board[:description],
-      #     position: board[:position],
-      #   }
-      # end
-
-      # Board.import boards, on_duplicate_key_ignore: true
 
       render json: {
         project: project.as_json(
