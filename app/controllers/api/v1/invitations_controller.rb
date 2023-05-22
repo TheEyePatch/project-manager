@@ -3,7 +3,6 @@ class Api::V1::InvitationsController < Api::ApiController
   before_action :init_participation, only: %i[project_invite]
 
   def project_invite
-    # TODO: Add Sidekiq for background worker
     InvitationMailer.with(
       email: params[:email],
       sender: current_user.email,

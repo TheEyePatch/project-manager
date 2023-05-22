@@ -11,6 +11,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6380
       REDIS_DB: 0
+      JOB_WORKER_URL: redis://redis:6380/0
     ports:
       - 3000:3000
     volumes:
@@ -20,6 +21,7 @@ services:
       - db
       - vite
       - redis
+      - sidekiq
     tty: true
     stdin_open: true
   vite:
@@ -54,6 +56,18 @@ services:
       - 6379:6379
     volumes:
       - redis:/data
+  sidekiq:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    environment:
+      JOB_WORKER_URL: redis://redis:6380/0
+    command:  bundle exec sidekiq
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/project-manager
 volumes:
   postgres:
   redis:
