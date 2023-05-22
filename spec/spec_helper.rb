@@ -13,6 +13,7 @@
 # it.
 #
 Dir['./spec/helpers/*.rb'].each { |file| require file }
+ENV['RAILS_ENV'] = 'test'
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
