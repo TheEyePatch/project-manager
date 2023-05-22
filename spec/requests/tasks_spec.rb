@@ -3,18 +3,40 @@ require 'rails_helper'
 RSpec.describe "Tasks", type: :request do
   let(:user) { create(:user) }
   let(:project) { create(:project, owner: user) }
+  let(:tasks) { create_list(:task, 5, :multiple_tasks, project: project, assignee: user) }
 
   describe "GET /api/v1/tasks" do
+    let(:task) { create(:random_task, project: project) }
+    let(:reporter) { create(:random_user) }
+    let(:memory_cache) { ActiveSupport::Cache.lookup_store(:memory_store) }
+    let(:cache) { Rails.cache }
     before do
+      allow(Rails).to receive(:cache).and_return(memory_cache)
+      Rails.cache.clear
       sign_in_user
       @token = response_body[:token]
     end
 
     it 'returns SUCCESS with correct params' do
+      patch("/api/v1/tasks/#{task.id}",
+        headers: {
+          Authorization: @token,
+        },
+        params: {
+          project_id: project.id,
+          task: {
+            title: 'Update Task Title',
+            description: task.description,
+            assignee_id: user.id,
+            reporter_id: reporter.id,
+          },
+        }
+      )
+
       get api_v1_tasks_path,{headers: { Authorization: @token }}
 
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body).map{ |_1| _1['title'] }).to_not include('TaskTwo')
+      expect(response_body[:tasks].map{ |_1| _1['title'] }).to_not include('TaskTwo')
     end
   end
 
