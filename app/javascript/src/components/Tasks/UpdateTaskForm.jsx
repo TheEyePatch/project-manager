@@ -15,7 +15,7 @@ import {
 import { EditableContent, EditableContentV2 } from '../index';
 import AuthContext from "../../store/AuthContext";
 import UserContext from "../../store/UserContext";
-import { UpdateTask,  getProjectMembers } from '../../api'
+import { UpdateTask, attachTaskImages } from '../../api'
 import BoardContext from "../../store/BoardContext";
 
 function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
@@ -56,6 +56,18 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
   const cancelEdit = ({value, attribute}) => {
     // Causes the title to r-render
     setTask(task)
+  }
+
+  const attachmentCallback = async (fileData) => {
+    let formData = new FormData()
+    formData.append('image', fileData, fileData.name)
+    const updateTaskResponse = await attachTaskImages({
+      data: formData,
+      token: authCtx.token,
+      task_id: task.id
+    })
+
+    return updateTaskResponse
   }
 
   return (
@@ -100,6 +112,7 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
 
           <EditableContentV2 
             innerHTML={task.description}
+            attachmentCallback={attachmentCallback}
             attribute={'description'} submitEdit={handleChange} cancelEdit={cancelEdit}
             style={{
               textDecoration: 'none',

@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 class Api::V1::TasksController < Api::ApiController
   before_action :authenticate_user, only: %i[create import_tasks update]
 
@@ -23,8 +25,16 @@ class Api::V1::TasksController < Api::ApiController
 
   def update
     task = Task.find(params[:task_id])
+    task.attach(params.dig(:task, :images)) if params.dig(:task, :images).present?
+
+    # TODO: Optimize filter for task images
+    doc = Nokogiri::HTML(task_params[:description])
+    deleted_images =  task.images.map { |img| rails_blob_path(img) } - doc.css('.editor-image').map { |img| img.attributes.values.last.value }
+
+    task.images.where(id: task.images.filter { |img| rails_blob_path(img).in?(deleted_images) } ).purge
     if task.update(task_params)
       Rails.cache.write("#{current_user.id}_recent_project", task.project_id)
+
       render json: task.as_json(root: true,
         include: {
           reporter: { only: %i[id account] },
@@ -34,6 +44,18 @@ class Api::V1::TasksController < Api::ApiController
     else
       render json: task.errors.full_messages, status: :unprocessable_entity
     end
+  end
+
+  def upload_files
+    task = Task.find(params[:task_id])
+    if params[:image]
+      task.images.attach(params[:image])
+      render json: {
+        image_url: rails_blob_path(task.images.last),
+        attachment_id: task.images.last.id
+      }
+    end
+
   end
 
   def import_tasks
