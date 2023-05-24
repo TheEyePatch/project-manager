@@ -32,6 +32,9 @@ Rails.application.routes.draw do
         collection do
           post :import_tasks
         end
+        member do
+          patch :upload_files
+        end
       end
 
       resources :projects, only: %i[index show create update destroy], param: :project_id do

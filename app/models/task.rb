@@ -4,6 +4,7 @@ class Task < ApplicationRecord
   belongs_to :assignee, class_name: 'User', optional: true
   belongs_to :reporter, class_name: 'User', optional: true
   acts_as_list scope: :board
+  has_many_attached :images
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :project,

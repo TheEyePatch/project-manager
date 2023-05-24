@@ -16,6 +16,9 @@ import {
 import { postTask, getProject, getProjectMembers } from '../../api';
 import AuthContext from '../../store/AuthContext';
 import BoardContext from '../../store/BoardContext';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import '../common/styles/EditableContent.css'
 
 function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
   //  Hooks
@@ -87,6 +90,8 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
 
   const handleSubmit = () => {
     let params = { task: taskInput, project_id: project_id }
+    if(taskInput.title.length < 1) return setInputErrors({title: true})
+
     postTask({params: params, token: authCtx.token})
     .then(res => {
       boardCtx.setBoards(oldBoard => {
@@ -153,13 +158,18 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
               sx={{ mt: 2, mb: 2, display: { md: 'flex' }, fontSize: '1rem',  fontWeight:'bold', color: 'F4F4F' }}>
               Description
             </Typography>
-            <TextField fullWidth multiline margin="dense" id="description"
-              error={inputErrors.description}
-              helperText={inputErrors.description ? "Incorrect entry." : null}
+            <ReactQuill
+              theme="snow"
               value={taskInput.description}
-              onChange={handleInput}
-              minRows={4}
+              onChange={(e) => setTaskProject(prev => {
+                return {
+                  ...prev,
+                  description: e
+                }
+              })}
+              error={inputErrors.description}
             />
+
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

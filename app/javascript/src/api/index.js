@@ -139,6 +139,20 @@ export const UpdateTask = async ({params, token}) => {
     console.log(error)
   }
 }
+
+export const attachTaskImages = async ({data, token, task_id}) => {
+  const response = await axios({
+    method: 'patch',
+    url: `/api/v1/tasks/${task_id}/upload_files`,
+    headers: {
+      Authorization: token
+    },
+    data: data
+  })
+
+  return response.data
+}
+
 // Projects
 
 export const getProjects = async ({params, token}) => {

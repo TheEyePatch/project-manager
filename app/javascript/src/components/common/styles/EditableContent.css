@@ -1,0 +1,9 @@
+.ql-container {
+    min-height: 5rem;
+}
+.editor-image {
+    max-width: 400px;
+}
+.ql-snow .ql-editor img {
+    max-width: 400px;
+}
