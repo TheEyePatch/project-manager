@@ -5,6 +5,7 @@ class Task < ApplicationRecord
   belongs_to :reporter, class_name: 'User', optional: true
   acts_as_list scope: :board
   has_many_attached :images
+  has_many :comments
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :project,

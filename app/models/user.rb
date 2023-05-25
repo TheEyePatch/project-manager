@@ -1,15 +1,3 @@
-class UserValidator < ActiveModel::Validator
-  def validate(record)
-    unless /(?<user>.+)@(?<host>.+)/.match(record.email)
-      record.errors.add :base, invalid_email
-    end
-  end
-
-  def invalid_email
-    'Invalid Email Format'
-  end
-end
-
 class User < ApplicationRecord
   attr_accessor :avatar_image_url
   include Rails.application.routes.url_helpers
@@ -26,6 +14,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :assigned_tasks, class_name: 'Task', foreign_key: :assignee_id
   has_many :reported_tasks, class_name: 'Task', foreign_key: :reporter_id
+  has_many :comments
 
   # Validation
   validates :email, presence: true, format: { with:  /(.+)@(.+)/, message: 'invalid format'}
