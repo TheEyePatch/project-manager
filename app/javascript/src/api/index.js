@@ -304,3 +304,21 @@ export const getProjectMembers = async ({params, token}) => {
 
   return response.data
 }
+
+
+// Comments
+
+export const createComment = async ({ task_id, params, token, image_ids}) => {
+  const response = await axios({
+    method: 'post',
+    url: '/api/v1/comments',
+    data: {
+      comment: params,
+      image_ids: image_ids,
+      task_id: task_id
+    },
+    headers: { Authorization: token }
+  })
+
+  return response
+}

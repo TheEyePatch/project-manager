@@ -20,7 +20,11 @@ class Api::V1::CommentsController <  Api::ApiController
       task.comments
           .build(comments_params.merge({user_id: current_user.id}))
 
-    if comment.valid?
+    if comment.valid? && comment.save
+      task.images
+          .where(id: params[:image_ids])
+          .update_all(record_type: comment.class.name, record_id: comment.id)
+
       render json: {
         comment: comment,
       }, status: :ok

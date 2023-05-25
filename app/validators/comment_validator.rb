@@ -15,6 +15,6 @@ class CommentValidator < ActiveModel::Validator
     Participation.where(
       user_id: @comment.user_id,
       project_id: @comment.task.project_id
-    ).exists?
+    ).exists? || @comment.task.project.owner_id == @comment.user_id
   end
 end

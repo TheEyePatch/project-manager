@@ -24,3 +24,7 @@ export { default as TasksTable } from './Tasks/TasksTable'
 export { default as EditableContent } from './common/EditableContent'
 export { default as EditableContentV2 } from './common/EditableContentV2'
 export { default as UserAvatar } from './common/UserAvatar'
+
+
+// Comment
+export { default as NewComment } from './Comment/NewComment'
