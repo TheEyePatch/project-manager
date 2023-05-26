@@ -28,3 +28,5 @@ export { default as UserAvatar } from './common/UserAvatar'
 
 // Comment
 export { default as NewComment } from './Comment/NewComment'
+export { default as Comments } from './Comment/Comments'
+export { default as Comment } from './Comment/Comment'

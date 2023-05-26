@@ -6,12 +6,19 @@ class Api::V1::CommentsController <  Api::ApiController
   def index
     comments =
       task.comments
+          .includes(user: [avatar_attachment: :blob])
           .with_last_comment_id(params[:last_comment_id])
           .limit(PAGE_LIMIT)
           .order(id: :desc)
 
     render json: {
-      comments: comments
+      total_comments_count: task.comments.count,
+      comments: comments.as_json(include: [{
+        user: {
+          only: %i[account],
+          methods: %i[avatar_url],
+        },
+      }])
     }, status: :ok
   end
 

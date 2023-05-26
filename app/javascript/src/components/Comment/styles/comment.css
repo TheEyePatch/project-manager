@@ -1,0 +1,52 @@
+.new-comment {
+    max-width: 35rem; 
+    min-height: 2rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.new-comment .quill .ql-toolbar {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+.new-comment .ql-container {
+    min-height: 2rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.editor-image {
+    max-width: 400px;
+}
+.ql-snow .ql-editor img {
+    max-width: 400px;
+}
+
+.comment {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    max-width: 35rem;
+    overflow-y: hidden;
+    border-radius: 1rem;
+}
+
+.comment .user-section {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 3rem;
+}
+
+.comment .user-section .user-account {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.comment .comment-body {
+    max-height: 4rem;
+    border-left: 5px solid rgb(120, 120, 120);
+    border-right: 5px solid rgb(120, 120, 120);
+    padding: .5rem;
+}

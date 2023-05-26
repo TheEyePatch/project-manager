@@ -3,7 +3,7 @@ import { createComment, attachTaskImages } from '../../api'
 import AuthContext from '../../store/AuthContext'
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill, { Quill } from 'react-quill';
-import './styles/NewComment.css'
+import './styles/comment.css'
 import { Button } from '@mui/material'
 
 const Image = Quill.import('formats/image');
@@ -76,11 +76,11 @@ function NewComment ({ task_id }) {
 
   const handleClose = () => {
     setShowButtons(false)
-    // setInput('')
+    setInput('')
   }
 
   return (
-  <div className='comment'>
+  <div className='new-comment'>
     <ReactQuill
       className={'comment-editor'}
       ref={quillRef}

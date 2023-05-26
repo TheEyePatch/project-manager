@@ -322,3 +322,16 @@ export const createComment = async ({ task_id, params, token, image_ids}) => {
 
   return response
 }
+
+export const getComments = async ({ task_id, last_comment_id }) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/comments',
+    params: {
+      task_id: task_id,
+      last_comment_id: last_comment_id
+    }
+  })
+
+  return response.data
+}

@@ -11,7 +11,7 @@ import {
           TextField,
           Autocomplete,
         } from '@mui/material'
-import { EditableContent, EditableContentV2, NewComment } from '../index';
+import { EditableContent, EditableContentV2, NewComment, Comments } from '../index';
 import AuthContext from "../../store/AuthContext";
 import UserContext from "../../store/UserContext";
 import { UpdateTask, attachTaskImages } from '../../api'
@@ -144,6 +144,8 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
             Comments
           </Typography>
           <NewComment task_id={task.id} />
+
+          <Comments task_id={task.id}/>
         </div>
         </div>
 
