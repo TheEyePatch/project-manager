@@ -1,6 +1,7 @@
 class Api::V1::ProjectsController < Api::ApiController
   before_action :authenticate_user
-  before_action :authenticate_project_owner, only: %i[update destroy]
+  before_action :authenticate_project_owner, only: %i[update destroy upload_image]
+
   PAGE_LIMIT = 8;
 
   def index
@@ -92,6 +93,17 @@ class Api::V1::ProjectsController < Api::ApiController
                   .select('tasks.project_id as id, projects.name as project_name')
 
     render json: { projects: projects }, status: :ok
+  end
+
+  def upload_image
+    if params[:image].present?
+      project.images.attach(params[:image])
+
+      render json: {
+        image_url: rails_blob_path(project.images.last),
+        attachment_id: project.images.last.id
+      }
+    end
   end
 
   private

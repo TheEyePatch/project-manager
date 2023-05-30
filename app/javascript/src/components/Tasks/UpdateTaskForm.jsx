@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import Typography from '@mui/material/Typography';
 import {
           Dialog,
-          DialogActions,
           DialogContent,
           DialogTitle,
           InputLabel,
@@ -12,7 +11,7 @@ import {
           TextField,
           Autocomplete,
         } from '@mui/material'
-import { EditableContent, EditableContentV2 } from '../index';
+import { EditableContent, EditableContentV2, NewComment, Comments } from '../index';
 import AuthContext from "../../store/AuthContext";
 import UserContext from "../../store/UserContext";
 import { UpdateTask, attachTaskImages } from '../../api'
@@ -71,7 +70,7 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
   }
 
   return (
-    <Dialog maxWidth={'md'} scroll={'paper'} open={modalOpen} onClose={handleClose}>
+    <Dialog maxWidth={'lg'} scroll={'paper'} open={modalOpen} onClose={handleClose}>
       <DialogTitle>
         <EditableContent attribute={'title'} submitEdit={handleChange} cancelEdit={cancelEdit}>
           <Typography
@@ -91,8 +90,8 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
           </Typography>
         </EditableContent>
       </DialogTitle>
-      <DialogContent dividers={true} style={{ maxHeight: '40rem', display: 'flex',}}>
-        <div>
+      <DialogContent dividers={true} style={{ maxHeight: '90vh', display: 'flex',}}>
+        <div style={{ overflowY: 'auto'}}>
           <Typography
             variant="h6"
             component="p"
@@ -102,7 +101,7 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
               color: '#173A5E',
               textDecoration: 'none',
               fontWeight:'bold',
-              minWidth: '20rem',
+              minWidth: '30rem',
               borderBottom: '1px solid rgb(105,105,105)',
               marginX: 3,
             }}
@@ -118,15 +117,35 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
               textDecoration: 'none',
               minWidth: '15rem',
               maxWidth: '30rem',
-              padding: '5px 5px 5px 5px',
+              padding: '5px',
               borderRadius: '5px',
               margin: '10px',
               marginLeft: '15px',
               overflowY: 'hidden',
-              fontFamily: 'Arial, Helvetica, sans-serif',
               minHeight: '10rem',
             }}
           />
+
+        <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
+          <Typography
+            variant="h6"
+            component="p"
+            sx={{
+              padding: '5px',
+              display: { md: 'flex' },
+              color: '#173A5E',
+              textDecoration: 'none',
+              fontWeight:'bold',
+              minWidth: '30rem',
+              borderBottom: '1px solid rgb(105,105,105)',
+              marginX: 3,
+            }}
+          >
+            Comments
+          </Typography>
+
+          <Comments task_id={task.id}/>
+        </div>
         </div>
 
         <div style={{ minWidth: '15rem'}}>

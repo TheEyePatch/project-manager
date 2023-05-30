@@ -54,6 +54,12 @@ Rails.application.routes.draw do
       constraints(token: /[^\/]+/) do
         resources :sessions, only: %i[create destroy], param: :token
       end
+
+      resources :comments do
+        member do
+          patch :upload_image
+        end
+      end
     end
   end
 end

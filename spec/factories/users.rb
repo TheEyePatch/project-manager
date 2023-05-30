@@ -3,6 +3,7 @@ require 'faker'
 FactoryBot.define do
   factory :user, aliases: %i[owner participants assignee] do
     email { 'eminence@shadow' }
+    token { Faker::Alphanumeric.alpha(number: 30) }
     first_name { 'Cid' }
     last_name { 'Kagenou' }
     account { 'shadow031' }

@@ -84,7 +84,7 @@ function Editor ({value, handleChange, handleSave, handleCancel, attachmentCallb
     imageInput.onchange = async () => {
       const file = imageInput.files[0]
       attachmentCallback(file).then(res => {
-        console.log(res)
+
         const fileUrl = res.image_url
         let quill = quillRef.current.getEditor()
         const range = quill.getSelection(true)
