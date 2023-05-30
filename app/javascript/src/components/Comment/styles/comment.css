@@ -27,7 +27,6 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     max-width: 35rem;
-    overflow-y: hidden;
     border-radius: 1rem;
 }
 
@@ -45,8 +44,20 @@
 }
 
 .comment .comment-body {
+    overflow-y: hidden;
     max-height: 4rem;
     border-left: 5px solid rgb(120, 120, 120);
     border-right: 5px solid rgb(120, 120, 120);
     padding: .5rem;
+    background-color: rgba(226, 226, 226, 0.194);
+}
+
+.comment .comment-body.active {
+    overflow-y: unset;
+    max-height: none;
+}
+
+.comment button {
+    margin-top: .5rem;
+    font-size: .7rem;
 }

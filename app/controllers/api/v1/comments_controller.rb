@@ -33,7 +33,12 @@ class Api::V1::CommentsController <  Api::ApiController
           .update_all(record_type: comment.class.name, record_id: comment.id)
 
       render json: {
-        comment: comment,
+        comment: comment.as_json(include: [{
+          user: {
+            only: %i[account],
+            methods: %i[avatar_url],
+          }
+        }]),
       }, status: :ok
     else
       render json: {}, status: :bad_request

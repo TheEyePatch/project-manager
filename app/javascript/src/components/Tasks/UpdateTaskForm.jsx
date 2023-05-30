@@ -143,7 +143,6 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
           >
             Comments
           </Typography>
-          <NewComment task_id={task.id} />
 
           <Comments task_id={task.id}/>
         </div>

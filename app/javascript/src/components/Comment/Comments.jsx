@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Comment } from '../index'
+import { NewComment, Comment } from '../index'
 import { getComments } from '../../api'
 import { Button } from '@mui/material'
 
@@ -34,6 +34,7 @@ function Comments ({ task_id }) {
 
   return (
     <>
+      <NewComment task_id={task_id} setComments={setComments} />
       {
         comments?.map(comment => {
           return <Comment key={comment.id} comment={comment} />

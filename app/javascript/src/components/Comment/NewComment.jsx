@@ -4,18 +4,19 @@ import AuthContext from '../../store/AuthContext'
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill, { Quill } from 'react-quill';
 import './styles/comment.css'
-import { Button } from '@mui/material'
+import { Button, Snackbar, Alert } from '@mui/material'
 
 const Image = Quill.import('formats/image');
 Image.className = 'editor-image';
 Quill.register(Image, true);
 
-function NewComment ({ task_id }) {
+function NewComment ({ task_id, setComments }) {
 
   const authCtx = useContext(AuthContext)
   const [input, setInput] = useState('')
   const [imageIds, setImageIds] = useState([])
   const [showButtons, setShowButtons] = useState(false)
+  const [alertOpen, setAlertOpen] = useState(false)
 
   const quillRef = useRef(null)
 
@@ -62,6 +63,15 @@ function NewComment ({ task_id }) {
     setInput(e)
     if(e.length > 0) setShowButtons(true)
   }
+
+  const handleClose = () => {
+    const promise = new Promise(resolve => {
+      resolve(setInput(''))
+    })
+
+    promise.then(() => setShowButtons(false))
+  }
+
   const handleSubmit = () => {
     createComment({ 
       params: { body: input },
@@ -69,33 +79,41 @@ function NewComment ({ task_id }) {
       task_id: task_id,
       token: authCtx.token,
     }).then(res => {
-      console.log(res)
-      setShowButtons(false)
+      setComments(prev => {
+        return [res.comment, ...prev]
+      })
+      handleClose()
+      setAlertOpen(true)
     })
   }
 
-  const handleClose = () => {
-    setShowButtons(false)
-    setInput('')
-  }
-
   return (
-  <div className='new-comment'>
-    <ReactQuill
-      className={'comment-editor'}
-      ref={quillRef}
-      theme="snow"
-      value={input}
-      onChange={handleInput}
-      modules={modules}
-    />
-      { showButtons && (
-        <div>
-          <Button onClick={handleSubmit}>Submit</Button>
-          <Button onClick={handleClose}>Cancel</Button>
-        </div>
-      )}
-  </div>
+    <>
+     {alertOpen &&(
+      <Snackbar open={alertOpen} autoHideDuration={5000} onClose={() => setAlertOpen(false)}>
+        <Alert onClose={ () => setAlertOpen(false)} severity="success" sx={{ width: '100%' }}>
+        Comment created
+        </Alert>
+      </Snackbar>
+     )}
+
+    <div className='new-comment'>
+      <ReactQuill
+        className={'comment-editor'}
+        ref={quillRef}
+        theme="snow"
+        value={input}
+        onChange={handleInput}
+        modules={modules}
+      />
+        { showButtons && (
+          <div>
+            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleClose}>Cancel</Button>
+          </div>
+        )}
+    </div>
+    </>
   )
 }
 

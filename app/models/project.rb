@@ -4,6 +4,7 @@ class Project < ApplicationRecord
   has_many :participations
   has_many :participants, through: :participations, source: :user
   has_many :boards
+  has_many_attached :images
 
   validates :name, presence: true, uniqueness: { scope: :owner_id }
 
