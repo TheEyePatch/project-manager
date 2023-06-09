@@ -41,6 +41,10 @@ Rails.application.routes.draw do
         collection do
           get :assigned_projects
         end
+
+        member do
+          patch :upload_image
+        end
       end   
 
       resources :boards, only: %i[index show create update destroy] do

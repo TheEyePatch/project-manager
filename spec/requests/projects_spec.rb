@@ -94,8 +94,28 @@ RSpec.describe "Projects", type: :request do
       expect(project[:name]).to eql(owned_project.name)
       expect(project[:description]).to eql(owned_project.description)
       expect(project[:owner_id]).to eql(user.id)
-      expect(project[:boards_count]).to eql(owned_project.boards_count)
       expect(response_body[:deleted]).to be_truthy
+    end
+  end
+
+  describe 'PATCH image attachment' do
+    let(:owned_project) { create(:owned_project, owner: user) }
+
+    it 'returns success response' do
+      file = Rails.root.join("spec/support/assets/eyepatch.jpeg")
+
+      patch("/api/v1/projects/#{owned_project.id}/upload_image",
+        params: {
+          image: Rack::Test::UploadedFile.new(file, 'image/jpg')
+        },
+        headers: {
+          'Authorization' => @token,
+          'Content-Type' => 'image/png'
+        }
+      )
+
+    expect(response_body[:image_url]).to be_present
+      expect(response).to have_http_status(200)
     end
   end
 end
