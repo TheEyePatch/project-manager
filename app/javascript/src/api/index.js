@@ -232,6 +232,17 @@ export const getAssignedProjects = async ({params, token}) => {
   return response.data
 }
 
+export const uploadProjectImage = async ({ data, project_id, token }) => {
+  const response = await axios ({
+    method: 'patch',
+    url: `/api/v1/projects/${project_id}/upload_image`,
+    headers: { Authorization: token },
+    data: data
+  })
+
+  return response
+}
+
 // Boards
 
 export const getBoards = async ({token, params}) => {
@@ -320,7 +331,7 @@ export const createComment = async ({ task_id, params, token, image_ids}) => {
     headers: { Authorization: token }
   })
 
-  return response
+  return response.data
 }
 
 export const getComments = async ({ task_id, last_comment_id }) => {

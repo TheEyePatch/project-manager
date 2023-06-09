@@ -4,6 +4,7 @@ RUN apt-get update -qq && apt-get install -y curl
 RUN curl -s https://deb.nodesource.com/setup_16.x | bash
 RUN apt-get install -y vim imagemagick nodejs postgresql-client build-essential && npm install --global yarn
 RUN yarn add react-quill
+RUN yarn add --dev jest
 
 RUN echo "NODE:" && node -v
 RUN echo "NPM:" && npm -v
