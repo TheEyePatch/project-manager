@@ -13,7 +13,7 @@ import {
           Select,
           Autocomplete,
         } from '@mui/material'
-import { postTask, getProject, getProjectMembers } from '../../api';
+import { postTask, getProjectMembers } from '../../api';
 import AuthContext from '../../store/AuthContext';
 import BoardContext from '../../store/BoardContext';
 import ReactQuill from 'react-quill';

@@ -33,5 +33,8 @@
   },
   "resolutions": {
     "postcss-preset-env": "^7.0.0"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }
