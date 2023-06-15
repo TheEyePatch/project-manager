@@ -9,7 +9,6 @@ class Api::V1::CommentsController <  Api::ApiController
           .includes(user: [avatar_attachment: :blob])
           .with_last_comment_id(params[:last_comment_id])
           .limit(PAGE_LIMIT)
-          .order(id: :desc)
 
     render json: {
       total_comments_count: task.comments.count,

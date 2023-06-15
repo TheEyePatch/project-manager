@@ -7,5 +7,5 @@ class Comment < ApplicationRecord
     CommentValidator.new(comment).validate
   end
 
-  scope :with_last_comment_id, ->(id) { where('id < ?', id) if id.present? }
+  scope :with_last_comment_id, ->(id) { order(id: :desc).where('id < ?', id) if id.present? }
 end
