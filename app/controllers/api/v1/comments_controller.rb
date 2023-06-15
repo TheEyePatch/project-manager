@@ -1,5 +1,5 @@
 class Api::V1::CommentsController <  Api::ApiController
-  before_action :authenticate_user, only: %i[create update]
+  before_action :authenticate_user
 
   PAGE_LIMIT = 5
 
@@ -61,10 +61,24 @@ class Api::V1::CommentsController <  Api::ApiController
     comment = Comment.find(params[:id])
 
     if params[:image].present?
-      comment.images.attach(params[:image]) 
+      comment.images.attach(params[:image])
+      latest_image = comment.images.order(id: :asc).last
+
       render json: {
-        image_url: rails_blob_path(comment.images.last),
-        attachment_id: comment.images.last.id
+        image_url: rails_blob_path(latest_image),
+        attachment_id: latest_image.id,
+      }
+    end
+  end
+
+  def destroy
+    comment = Comment.find(params[:id])
+    comment.destroy
+
+    if comment.destroyed?
+      render json: {
+        comment_id: comment.id,
+        deleted: comment.destroyed?,
       }
     end
   end
