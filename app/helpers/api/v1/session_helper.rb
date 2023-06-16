@@ -18,7 +18,7 @@ module Api::V1::SessionHelper
     render json: {
       message: 'Failed',
       errors: ['Invalid Token']
-    }, status: :bad_request
+    }, status: :unauthorized
   end
 
   def add_invited_user_to_project(user = current_user)

@@ -46,7 +46,7 @@ RSpec.describe "Comments", type: :request do
       end
 
       it 'returns failed response' do
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(401)
         expect(response_body[:comments]).to be_blank
         expect(response_body[:errors]).to include('Invalid Token')
       end
@@ -87,7 +87,7 @@ RSpec.describe "Comments", type: :request do
       end
 
       it 'returns failed response' do
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(401)
         expect(response_body[:errors]).to include('Invalid Token')
       end
     end
@@ -127,7 +127,7 @@ RSpec.describe "Comments", type: :request do
       end
 
       it 'returns failed response w/ invalid token' do
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(401)
         expect(response_body[:errors]).to include('Invalid Token')
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe "Comments", type: :request do
       end
 
       it 'returns failed response' do
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(401)
         expect(response_body[:image_url]).to be_blank
         expect(response_body[:errors]).to include('Invalid Token')
       end
@@ -203,7 +203,7 @@ RSpec.describe "Comments", type: :request do
       end
 
       it 'returns invalid token' do
-        expect(response).to have_http_status(400)
+        expect(response).to have_http_status(401)
         expect(response_body[:comment_id]).to be_blank
         expect(response_body[:errors]).to include('Invalid Token')
         expect(comments.count).to eql(@comments_count)
