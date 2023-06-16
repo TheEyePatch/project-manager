@@ -5,12 +5,19 @@ class Api::V1::ProjectsController < Api::ApiController
   PAGE_LIMIT = 8;
 
   def index
-    render json: {
-      projects: projects,
-      project_count: project_count,
-      page_limit: PAGE_LIMIT,
-      project_type: params[:project_type],
-    }, status: :ok
+    if params[:project_type]
+      render json: {
+        projects: projects,
+        project_count: project_count,
+        page_limit: PAGE_LIMIT,
+        project_type: params[:project_type],
+      }, status: :ok
+    else
+      render json: {
+        message: 'Failed',
+        errors: ['Missing project_type']
+      }, status: :bad_request
+    end
   end
 
   def show
@@ -48,7 +55,7 @@ class Api::V1::ProjectsController < Api::ApiController
       render json: {
         message: 'Failed',
         errors: new_project.errors.messages,
-      }, status: :unprocessable_entity
+      }, status: :bad_request
     end
   end
 
@@ -121,7 +128,9 @@ class Api::V1::ProjectsController < Api::ApiController
   end
 
   def project
-    @project ||= Project.includes({owner: { avatar_attachment: :blob }}, :participants).find(params[:project_id])              
+    @project ||=
+      Project.includes({owner: { avatar_attachment: :blob }}, :participants)
+             .find(params[:project_id])              
   end
 
   def project_params
