@@ -5,7 +5,7 @@ RSpec.describe "Boards", type: :request do
   let(:project) { create(:project, owner: user) }
   describe "GET /index" do
     before do
-      sign_in_user
+      sign_in(user)
       @token = response_body[:token]
     end
 
@@ -18,7 +18,7 @@ RSpec.describe "Boards", type: :request do
 
   describe 'POST /api/v1/boards' do
     before do
-      sign_in_user
+      sign_in(user)
       @token = response_body[:token]
     end
    

@@ -13,7 +13,7 @@ RSpec.describe "Tasks", type: :request do
     before do
       allow(Rails).to receive(:cache).and_return(memory_cache)
       Rails.cache.clear
-      sign_in_user
+      sign_in user
       @token = response_body[:token]
     end
 
@@ -44,7 +44,7 @@ RSpec.describe "Tasks", type: :request do
     let(:task) { build(:task, assignee: user) }
     let(:reporter) { create(:random_user) }
     before do
-      sign_in_user
+      sign_in user
       @token = response_body[:token]
     end
 
@@ -94,7 +94,7 @@ RSpec.describe "Tasks", type: :request do
     let(:reporter) { create(:random_user) }
 
     before do
-      sign_in_user
+      sign_in user
       @token = response_body[:token]
     end
 

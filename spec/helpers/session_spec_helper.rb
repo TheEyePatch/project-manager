@@ -1,5 +1,5 @@
 module SessionSpecHelper
-  def sign_in_user
+  def sign_in(user)
     post('/api/v1/sign_in',
       params: {
         sign_in: {

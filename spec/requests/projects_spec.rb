@@ -4,7 +4,7 @@ RSpec.describe "Projects", type: :request do
   let(:user) { create(:user) }
 
   before do
-    sign_in_user
+    sign_in(user)
     @token = response_body[:token]
   end
 
