@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe "Comments", type: :request do
   let(:user) { create(:random_user) }
   let(:project) do
+    Faker::App.unique.clear
+
     project = create(:project, owner: user)
     project.participants << user
 

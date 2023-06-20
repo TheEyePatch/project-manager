@@ -16,7 +16,7 @@ function Comments ({ task_id }) {
   }, [])
 
   const handleShowComments = () => {
-    getComments({ task_id: task_id, last_comment_id:  comments[comments.length - 1]?.id })
+    getComments({ task_id: task_id, last_comment_id:  comments[0]?.id })
     .then(res => {
       setComments(prev => [...prev, ...res.comments])
     })
