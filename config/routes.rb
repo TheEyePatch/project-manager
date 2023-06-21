@@ -17,7 +17,7 @@ Rails.application.routes.draw do
         post :sign_up, to: 'registrations#create'
         post :sign_in, to: 'sessions#create'
         post :sign_out, to: 'sessions#destroy'
-        get :profile, to: 'registrations#edit'
+        get :profile, to: 'registrations#show'
         patch :user, to: 'registrations#update'
       end
 

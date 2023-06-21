@@ -60,7 +60,7 @@ RSpec.describe "Session", type: %i[request session controller] do
     let(:user) { create(:user) }
 
     it 'returns successful sign_in' do
-      sign_in_user
+      sign_in(user)
 
       expect(response_body[:token]).to be_present
       expect(response_body[:account]).to eql(user.account)

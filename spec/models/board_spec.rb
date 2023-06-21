@@ -3,6 +3,24 @@ require 'rails_helper'
 RSpec.describe Board, type: :model do
   let(:project) { create(:project) }
   let(:owner) { project.owner }
+
+  context 'validations' do
+    subject { build(:board, :to_do) }
+
+    it { should validate_presence_of(:title) }
+
+    it do
+      should validate_uniqueness_of(:title)
+        .ignoring_case_sensitivity
+        .scoped_to(:project_id)
+    end
+  end
+
+  context 'associations' do
+    it { should have_many(:tasks).dependent(:delete_all) }
+    it { should belong_to(:project) }
+  end
+
   describe 'CREATE boards' do
     it 'not be valid without title' do
       expect(build(:board, title: nil)).to_not be_valid

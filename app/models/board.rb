@@ -3,7 +3,7 @@ class Board < ApplicationRecord
   belongs_to :project
   acts_as_list scope: :project
   validates :title, presence: true
-  validates :title, uniqueness: { scope: :project }
+  validates :title, uniqueness: { scope: :project_id }
 
   ####### Callback ###########
 

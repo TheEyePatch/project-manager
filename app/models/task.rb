@@ -8,7 +8,7 @@ class Task < ApplicationRecord
   has_many :comments
 
   validates :title, presence: true
-  validates :title, uniqueness: { scope: :project,
+  validates :title, uniqueness: { scope: :project_id,
     message: 'should contain unique title per project'}
   validates :board_id, presence: true
   before_validation :assign_board, on: %i[create save]
@@ -31,6 +31,8 @@ class Task < ApplicationRecord
 
   def assign_board
     return if self.board_id.present?
+
+    return if project.blank?
 
     return unless project.boards.exists?
 

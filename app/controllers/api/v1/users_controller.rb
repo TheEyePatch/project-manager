@@ -1,5 +1,6 @@
 class Api::V1::UsersController < Api::ApiController
   before_action :authenticate_user
+
   def index
     participants =
       project.participants

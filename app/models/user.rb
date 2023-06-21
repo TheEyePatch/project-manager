@@ -18,7 +18,7 @@ class User < ApplicationRecord
 
   # Validation
   validates :email, presence: true, format: { with:  /(.+)@(.+)/, message: 'invalid format'}
-  validates :account, presence: true, uniqueness: true
+  validates :account, presence: true, uniqueness: true, length: { in: (3..35), message: 'invalid character length (min: 3, max: 35)' }
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :password, confirmation: true

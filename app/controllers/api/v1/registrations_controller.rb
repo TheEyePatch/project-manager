@@ -5,6 +5,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   before_action :configure_update_params, only: %i[update]
   before_action :configure_register_params, only: %i[create]
   skip_before_action :authenticate_scope!
+  before_action :authenticate_user, only: %i[update show]
 
   def create
     user = User.new(sign_up_params)
@@ -28,7 +29,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def edit
+  def show
     if current_user.present?
       render json: json_current_user, status: :ok
     else
@@ -42,6 +43,11 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       Rails.cache.delete(request.headers[:Authorization])
 
       render json: json_current_user, status: :ok
+    else
+      render json: {
+        message: 'User update failed',
+        errors: current_user.errors.messages
+      }, status: :bad_request
     end
   end
 
