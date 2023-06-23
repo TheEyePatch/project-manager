@@ -8,16 +8,16 @@ class Api::V1::UsersController < Api::ApiController
              .select(:id, :email, :account)
 
     participants.each do |user|
-      user.avatar_image_url = rails_blob_path(user.avatar) if user.avatar.attached?
+      user.avatar_url = rails_blob_path(user.avatar) if user.avatar.attached?
     end
 
     if project_owner.avatar.attached?
-      project_owner.avatar_image_url = rails_blob_path(project_owner.avatar)
+      project_owner.avatar_url = rails_blob_path(project_owner.avatar)
     end
 
     render json: {
-      participants: participants.as_json(methods: %i[avatar_image_url]),
-      owner: project_owner.as_json(methods: %i[avatar_image_url]),
+      participants: participants.as_json(methods: %i[avatar_url]),
+      owner: project_owner.as_json(methods: %i[avatar_url]),
     }, status: :ok
   end
 

@@ -37,9 +37,6 @@ function BoardsHeader () {
   }
 
   const handleAvatar = (e) => setAnchorEl(e.currentTarget)
-  const fetchBoards = () => {
-    console.log(selectedNames)
-  }
 
   const handleSelectMember = (e, member) => {
     setSelectedNames(prev => {
@@ -89,7 +86,7 @@ function BoardsHeader () {
         {
           userCtx.projectMembers?.map((member, index) => {
             return (
-              <Avatar key={member.id} alt={member.account} src={member.avatar_image_url}>
+              <Avatar key={member.id} alt={member.account} src={member.avatar_url}>
                 {member.account[0]}
               </Avatar>
             )
