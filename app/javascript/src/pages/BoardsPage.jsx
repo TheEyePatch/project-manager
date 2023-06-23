@@ -4,13 +4,16 @@ import { Boards } from '../components/index'
 import { BoardsContextProvider } from "../store/BoardContext";
 import { Container } from '@mui/material';
 import { BoardsHeader } from '../components/index';
-import AuthContext from "../store/AuthContext";
-import { getBoards } from '../api/index'
+import SubHeaderContext from "../store/SubHeaderContext";
 
 
 function BoardsPage() {
 const params = useParams();
-const authCtx = useContext(AuthContext);
+const subHeaderCtx = useContext(SubHeaderContext)
+
+useEffect(() => {
+  subHeaderCtx.setProjectId(params.project_id)
+}, [])
 
   return (
     <BoardsContextProvider>
