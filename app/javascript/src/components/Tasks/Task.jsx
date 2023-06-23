@@ -1,12 +1,7 @@
-import React, { useContext, useState } from "react";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions } from '@mui/material';
+import React, { useState } from "react";
+import { CardActionArea, Card, CardContent, Typography } from '@mui/material';
 import { UpdateTaskForm } from './../index'
 import { getTask } from '../../api'
-import BoardContext from "../../store/BoardContext";
 
 function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
   const [modalOpen, setModalOpen] = useState(false)
