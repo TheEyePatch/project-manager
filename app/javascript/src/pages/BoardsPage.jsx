@@ -14,7 +14,7 @@ const authCtx = useContext(AuthContext);
 
   return (
     <BoardsContextProvider>
-      <section style={{ overflowY: 'auto', boxSizing: 'border-box', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: '#FDF5E6'}}>
+      <section style={{ overflowY: 'auto', boxSizing: 'border-box', paddingLeft: '180px', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: '#FDF5E6'}}>
         <BoardsHeader/>
         <Container>
           <Boards/>
