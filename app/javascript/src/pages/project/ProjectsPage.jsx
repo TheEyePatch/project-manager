@@ -19,7 +19,7 @@ function ProjectsPage () {
 
   return (
     <ProjectContextProvider>
-      <section style={{ overflowY: 'auto', boxSizing: 'border-box', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: '#FDF5E6'}}>
+      <section style={{ overflowY: 'auto', boxSizing: 'border-box', padding: '1rem', paddingLeft: '180px', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: '#FDF5E6'}}>
         <Container>
           <div style={{ 
             margin: '1rem 0 1rem',

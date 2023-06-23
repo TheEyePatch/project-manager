@@ -81,7 +81,7 @@ function Data({ tasks, setTasks, summary, setSummary }) {
   }, [])
 
   return (
-    <section style={{ zIndex: 0, overflowY: 'scroll', boxSizing: 'border-box', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: '#FDF5E6'}}>
+    <section style={{ zIndex: 0, overflowY: 'scroll', boxSizing: 'border-box', paddingLeft: '180px', paddingTop: '5rem', width: '100vw', height: '100vh',backgroundColor: '#FDF5E6'}}>
       <div style={{ boxSizing: 'border-box', display: 'flex', justifyContent: "space-around", alignItems: 'center'}}>
         <div style={{maxWidth: '60vw', minWidth: '30vw'}}>
           <Doughnut data={data}/>

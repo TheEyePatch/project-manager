@@ -1,7 +1,7 @@
 export { default as SignUpForm } from './Users/SignUpForm'
 export { default as LoginForm } from './Users/LoginForm'
 export { default as UpdateForm } from './Users/UpdateForm'
-export { default as Header } from './Header'
+export { default as Header } from './Headers/Header'
 export { default as Projects } from './Projects/Projects'
 export { default as Project } from './Projects/Project'
 export { default as NewProjectForm } from './Projects/NewProjectForm'

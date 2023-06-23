@@ -7,18 +7,17 @@
   border: 0px;
   border-radius: 5px;
   margin: 10px 0 10px;
+  padding: 5px;
 }
 
 td {
   padding-left: 1rem;
   padding-right: 1rem;
-  font-size: 15px;
+  font-size: 1rem;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .row-head td {
-  color: white;
-  background-color: #383d8b;
-  font-size: 1rem;
+  font-size: 1.5rem;
   padding: 1rem;
 }

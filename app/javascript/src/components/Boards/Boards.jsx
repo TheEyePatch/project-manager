@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState, useRef } from 'react';
 import { importTask } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import BoardContext from '../../store/BoardContext'
-import { Container, Button, MenuItem, TextField } from '@mui/material';
+import { Container } from '@mui/material';
 import { Board, Task } from './../index';
 
 const BOARDS_LENGTH = 3;
@@ -26,7 +26,7 @@ function Boards() {
 
   const handleDragStart = (e, params) => {
     selectedDragTask.current = params;
-    selectedNodeTask.current = e.target;
+    selectedNodeTask.current = e.currentTarget;
 
     selectedNodeTask.current.addEventListener('dragend', handleDragEnd)
     setTimeout(() => setDragging(true), 0)
@@ -66,6 +66,7 @@ function Boards() {
       const selectedTask = newBoard[selectedBoardIndex].tasks[selectedTaskIndex]
       const enteredTask = newBoard[selectedBoardIndex].tasks[params.taskIndex]
       newBoard[selectedBoardIndex].tasks.splice(selectedTaskIndex, 1)
+
       if(params.board_id == selectedBoardId) {
         newBoard[params.boardIndex].tasks.splice(params.taskIndex, 0, selectedTask)
         selectedDragTask.current = params
