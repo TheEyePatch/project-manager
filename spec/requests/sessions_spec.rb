@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Session", type: %i[request session controller] do
+RSpec.describe "Session", type: %i[request] do
   describe 'POST user' do
     let(:user) { build(:user) }
 
