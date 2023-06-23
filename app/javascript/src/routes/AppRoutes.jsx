@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
 import { Home, SignUpPage, BoardsPage, ProfilePage, ProjectsPage } from '../pages';
 import { Header, Projects, Boards } from '../components';
 import { destroyUserSession } from '../api/index'
 import AuthContext from '../store/AuthContext';
+import MembersPage from "../pages/members/MembersPage";
+import { SubHeaderContextProvider } from '../store/SubHeaderContext'
 
 
 function AppRoutes(){
@@ -15,7 +17,8 @@ function AppRoutes(){
   }
 
   return (
-    <Router>
+    <SubHeaderContextProvider>
+      <Router>
         <div className="App-header">
           {
             authContext.loggedIn && <Header logoutHandler={logoutHandler}/>
@@ -33,6 +36,7 @@ function AppRoutes(){
                   <Route path='/boards/:project_id' element={ <BoardsPage/> }></Route>
                   <Route exact path="/projects" element={ <ProjectsPage/> }></Route>
                   <Route exact path="/profile" element={ <ProfilePage/> }></Route>
+                  <Route exact path='/members' element={ <MembersPage/> }></Route>
                   <Route path='*' element={<Navigate to="/" replace />}></Route>
                 </> )
               }
@@ -40,8 +44,9 @@ function AppRoutes(){
               { !authContext.loggedIn && <Route path='*' element={<Navigate to="/registrations" replace />}></Route> }
             </Routes>
           </section>
-       </div>
-    </Router>
+        </div>
+      </Router>
+    </SubHeaderContextProvider>
   )
 }
 

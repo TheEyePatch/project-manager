@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom'
 import UserContext from '../../store/UserContext';
 import AuthContext from '../../store/AuthContext';
 import { UserAvatar } from '../index';
+import SubHeader from './SubHeader';
 
 const pages = [ 
   {text: 'home', component: <HomeOutlinedIcon/>},
@@ -139,6 +140,7 @@ function Header(){
               </ListItem>
             ))}
           </List>
+          <SubHeader/>
         </Box>
       </Drawer>
     </Box>

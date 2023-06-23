@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/projects', to: 'home#index'
   get '/boards/:project_id', to: 'home#index'
   get '/profile', to: 'home#index'
+  get '/members', to: 'home#index'
 
   namespace :api, defaults: { format: :json } do
     # devise_for :users, controllers: { sessions: 'api/sessions' }
