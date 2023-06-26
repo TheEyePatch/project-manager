@@ -21,6 +21,7 @@ export function AuthContextProvider(props) {
 
   const logoutHandler = () => {
     sessionStorage.removeItem('session_token');
+    sessionStorage.removeItem('subHeaderProjectId')
     setToken(null);
     destroyUserSession(token)
   }
