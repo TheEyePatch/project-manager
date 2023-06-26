@@ -33,10 +33,10 @@ function AppRoutes(){
               { authContext.loggedIn && (
                 <>
                   <Route exact path='/' element={< Home />}></Route>
-                  <Route path='/boards/:project_id' element={ <BoardsPage/> }></Route>
+                  <Route path='/projects/:project_id/boards' element={ <BoardsPage/> }></Route>
                   <Route exact path="/projects" element={ <ProjectsPage/> }></Route>
                   <Route exact path="/profile" element={ <ProfilePage/> }></Route>
-                  <Route exact path='/members' element={ <MembersPage/> }></Route>
+                  <Route exact path='/projects/:project_id/members' element={ <MembersPage/> }></Route>
                   <Route path='*' element={<Navigate to="/" replace />}></Route>
                 </> )
               }

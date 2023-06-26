@@ -40,7 +40,7 @@ function Project({ project, handleOpenEdit }){
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size='small' onClick={() => navigate(`/boards/${project.id}`)}>
+          <Button size='small' onClick={() => navigate(`/projects/${project.id}/boards`)}>
             View
           </Button>
           <Button size='small' onClick={(e) => handleOpenEdit(project)}>
