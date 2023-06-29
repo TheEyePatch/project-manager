@@ -1,5 +1,5 @@
 class Task < ApplicationRecord
-  prepend Notifiable
+  include Notifiable
 
   attr_accessor :current_user
 
@@ -18,9 +18,6 @@ class Task < ApplicationRecord
     message: 'should contain unique title per project'}
   validates :board_id, presence: true
   before_validation :assign_board, on: %i[create save]
-
-  # Callbacks
-  after_create :notify_task_users
 
   # Scopes
   scope :with_task_title, ->(title) { where(title: title) if title.present? }

@@ -79,4 +79,44 @@ RSpec.describe Task, type: :model do
       end
     end
   end
+
+  context 'with update' do
+    context 'when assignee is current user' do
+      let(:rand_user) { create(:user, :random_non_unique_creds, account: 'rand_acct') }
+      let(:task) { create(:task, title: 'Add Notif', assignee: user, reporter: rand_user, current_user: user) }
+
+      before do
+        task
+        task.update(title: 'Updated Title')
+      end
+
+      it 'creates notification for reporter' do
+        expect(rand_user.notifications).to be_present
+        expect(rand_user.notifications.last[:message]).to eql("#{user.account} updated title of task #{task.title}")
+      end
+
+      it 'does not create notification for assignee(current_user)'do
+        expect(user.notifications).to be_empty
+      end
+    end
+
+    context 'when reporter is current user' do
+      let(:rand_user) { create(:user, :random_non_unique_creds, account: 'rand_acct') }
+      let(:task) { create(:task, title: 'Add Notif', assignee: rand_user, reporter: user, current_user: user) }
+
+      before do
+        task
+        task.update(title: 'Updated Title')
+      end
+
+      it 'creates notification for assignee' do
+        expect(rand_user.notifications).to be_present
+        expect(rand_user.notifications.last[:message]).to eql("#{user.account} updated title of task #{task.title}")
+      end
+
+      it 'does not create notification for reporter(current_user)'do
+        expect(user.notifications).to be_empty
+      end
+    end
+  end
 end
