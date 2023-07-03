@@ -1,14 +1,43 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/AuthContext";
 import UserContext from '../../store/UserContext';
-import { getNotifications } from '../../api/index'
+import { getNotifications, updateNotifications } from '../../api/index'
 
-import { Menu, MenuItem } from '@mui/material'
+import { Menu, MenuItem, Badge } from '@mui/material'
 import { Link } from 'react-router-dom'
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
 import consumer from "../../../channels/consumer";
+
+const menuItem = (item, token, setNotifications) => {
+  const handleClick = () => { 
+    updateNotifications({
+      token: token,
+      notif_id: item.id,
+      params: { viewed: true }})
+    .then(res => {
+      setNotifications(prev => {
+        let collection = prev.map(item => item.id)
+        let index = collection.indexOf(res.notification.id)
+        prev.splice(index, 1)
+  
+        let newCollection = prev.map(item => item)
+
+        return newCollection
+      })
+    })
+  }
+
+  return (
+    <Link onClick={handleClick} key={item.id} to={'/projects/1/boards'} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <MenuItem divider key={item.id} sx={{whiteSpace: 'normal'}}>
+        {item.message}
+      </MenuItem>
+    </Link>
+  )
+}
+
 
 function NotifBell({recepient}) {
   // Hooks
@@ -49,22 +78,11 @@ function NotifBell({recepient}) {
     });
   }, [userCtx.currentUser.account])
   
-  if(notifications.length < 1) return <NotificationsNoneOutlinedIcon />
-
-  const menuItem = (item) => {
-    return (
-      <Link key={item.id} to={'/projects/1/boards'} style={{ textDecoration: 'none', color: 'inherit' }}>
-        <MenuItem divider key={item.id} sx={{whiteSpace: 'normal'}}>
-          {item.path}
-          {item.message}
-        </MenuItem>
-      </Link>
-    )
-  }
+  if(notifications.length < 1) return <NotificationsNoneOutlinedIcon style={{ fontSize: '2.5rem'}} />
 
   return (
-    <>
-      <NotificationsRoundedIcon onClick={handleBell} />
+    <Badge variant='dot' color="secondary">
+      <NotificationsRoundedIcon style={{ fontSize: '2.5rem'}} onClick={handleBell} />
       <Menu
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right'}}
         transformOrigin={{vertical: 'top', horizontal: 'right'}}
@@ -79,10 +97,10 @@ function NotifBell({recepient}) {
         }}
       >
         {
-          notifications.map(item => menuItem(item))
+          notifications.map(item => menuItem(item, authCtx.token, setNotifications))
         }
       </Menu>
-    </>
+    </Badge>
   )
 
 }
