@@ -62,7 +62,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :notifications, only: %i[index]
+      resources :notifications, only: %i[index update], param: :notification_id
     end
   end
 end

@@ -10,4 +10,27 @@ class Api::V1::NotificationsController < Api::ApiController
       notifications: notifications,
     }, status: :ok
   end
+
+  def update
+    notification =
+      current_user.notifications.find(params[:notification_id])
+
+      
+    if notification.update(notif_params)
+      render json: {
+        notification: notification.reload,
+      }, status: :ok
+    else
+      render json: {
+        message: 'Bad Request',
+      }, status: :bad_request
+    end
+  end
+
+
+  private
+
+  def notif_params
+    params.require(:notification).permit(:path, :viewed, :message)
+  end
 end

@@ -347,3 +347,19 @@ export const getNotifications = async ({ token }) => {
 
   return response.data
 }
+
+export const updateNotifications = async ({ token, notif_id, params }) => {
+  const response = await axios({
+    method: 'patch',
+    url: `/api/v1/notifications/${notif_id}`,
+    headers: { 
+      Authorization: token,
+      'Content-Type': 'application/json'
+    },
+    data: {
+      notification: params
+    }
+  })
+
+  return response.data
+}
