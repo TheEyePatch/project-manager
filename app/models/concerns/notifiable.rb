@@ -21,9 +21,16 @@ module Notifiable
         "#{current_user.account} updated #{changes.join(' ,')} of task #{title}"
       end
     
-    notifications.create(
+    notification = notifications.create(
       message: message,
-      recipient: recipient
+      recipient: recipient,
+      path: "projects/#{project_id}/boards"
     )
+
+    ActionCable.server
+               .broadcast(
+                  "notification_channel_#{recipient.account}",
+                  notification
+                )
   end
 end
