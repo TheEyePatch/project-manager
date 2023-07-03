@@ -10,6 +10,7 @@ RSpec.describe "Tasks", type: :request do
     let(:reporter) { create(:random_user) }
     let(:memory_cache) { ActiveSupport::Cache.lookup_store(:memory_store) }
     let(:cache) { Rails.cache }
+
     before do
       allow(Rails).to receive(:cache).and_return(memory_cache)
       Rails.cache.clear

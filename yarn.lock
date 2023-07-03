@@ -7784,18 +7784,18 @@ vendors@^1.0.0:
   resolved "https://registry.npmjs.org/vendors/-/vendors-1.0.4.tgz"
   integrity sha512-/juG65kTL4Cy2su4P8HjtkTxk6VmJDiOPBufWniqQ6wknac6jNiXS9vU+hO3wgusiyqWlzTbVHi0dyJqRONg3w==
 
-vite-plugin-ruby@^3.1.2:
+vite-plugin-ruby@^3.2.0:
   version "3.2.2"
-  resolved "https://registry.npmjs.org/vite-plugin-ruby/-/vite-plugin-ruby-3.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/vite-plugin-ruby/-/vite-plugin-ruby-3.2.2.tgz#a174bc435b11350cfcb1b976342ca740d0bcaed2"
   integrity sha512-cuHG1MajRWPR8YdfF6lvgsQRnKFEBRwZF//asFbRiI1psacxB5aPlHSvYZYxAu5IflrAa0MdR0HxEq+g98M3iQ==
   dependencies:
     debug "^4.3.4"
     fast-glob "^3.2.12"
 
-vite@^4.0.0:
-  version "4.3.4"
-  resolved "https://registry.npmjs.org/vite/-/vite-4.3.4.tgz"
-  integrity sha512-f90aqGBoxSFxWph2b39ae2uHAxm5jFBBdnfueNxZAT1FTpM13ccFQExCaKbR2xFW5atowjleRniQ7onjJ22QEg==
+vite@^4.3.0:
+  version "4.3.9"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.3.9.tgz#db896200c0b1aa13b37cdc35c9e99ee2fdd5f96d"
+  integrity sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==
   dependencies:
     esbuild "^0.17.5"
     postcss "^8.4.23"

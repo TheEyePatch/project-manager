@@ -335,3 +335,31 @@ export const getComments = async ({ task_id, last_comment_id }) => {
 
   return response.data
 }
+
+// Notifications
+
+export const getNotifications = async ({ token }) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/notifications',
+    headers: { Authorization: token }
+  })
+
+  return response.data
+}
+
+export const updateNotifications = async ({ token, notif_id, params }) => {
+  const response = await axios({
+    method: 'patch',
+    url: `/api/v1/notifications/${notif_id}`,
+    headers: { 
+      Authorization: token,
+      'Content-Type': 'application/json'
+    },
+    data: {
+      notification: params
+    }
+  })
+
+  return response.data
+}

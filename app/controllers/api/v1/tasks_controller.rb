@@ -14,7 +14,7 @@ class Api::V1::TasksController < Api::ApiController
   end
   
   def create
-    task = project.tasks.build(task_params)
+    task = project.tasks.build(task_params.merge({ current_user: current_user }))
 
     if task.valid? && task.save
       render json: task.as_json(root: true), status: :ok
@@ -32,7 +32,7 @@ class Api::V1::TasksController < Api::ApiController
     deleted_images =  task.images.map { |img| rails_blob_path(img) } - doc.css('.editor-image').map { |img| img.attributes.values.last.value }
 
     task.images.where(id: task.images.filter { |img| rails_blob_path(img).in?(deleted_images) } ).purge
-    if task.update(task_params)
+    if task.update(task_params.merge({ current_user: current_user }))
       Rails.cache.write("#{current_user.id}_recent_project", task.project_id)
 
       render json: task.as_json(root: true,
@@ -61,7 +61,7 @@ class Api::V1::TasksController < Api::ApiController
   def import_tasks
     task = Task.find(params.dig(:task, :id))
     old_board_id = task.board_id
-    if task.update(task_params)
+    if task.update(task_params.merge({ current_user: current_user }))
       Rails.cache.write("#{current_user.id}_recent_project", task.project_id)
       Board.update_counters(old_board_id, tasks_count: -1, touch: true)
       Board.update_counters(task_params[:board_id], tasks_count: 1, touch: true)

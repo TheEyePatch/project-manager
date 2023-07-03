@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_23_035836) do
+ActiveRecord::Schema.define(version: 2023_06_29_034058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,19 @@ ActiveRecord::Schema.define(version: 2023_05_23_035836) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["task_id"], name: "index_comments_on_task_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "notifiable_type", null: false
+    t.bigint "notifiable_id", null: false
+    t.bigint "recipient_id", null: false
+    t.boolean "viewed", default: false, null: false
+    t.json "message"
+    t.text "path"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
+    t.index ["recipient_id"], name: "index_notifications_on_recipient_id"
   end
 
   create_table "participations", force: :cascade do |t|

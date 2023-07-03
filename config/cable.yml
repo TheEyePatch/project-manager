@@ -1,5 +1,7 @@
 development:
-  adapter: async
+  adapter: redis
+  url: <%= ENV.fetch("ACTION_CABLE_URL") %>
+  channel_prefix: task_master_dev
 
 test:
   adapter: test

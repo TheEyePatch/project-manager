@@ -61,6 +61,8 @@ Rails.application.routes.draw do
           patch :upload_image
         end
       end
+
+      resources :notifications, only: %i[index update], param: :notification_id
     end
   end
 end

@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :assigned_tasks, class_name: 'Task', foreign_key: :assignee_id
   has_many :reported_tasks, class_name: 'Task', foreign_key: :reporter_id
   has_many :comments
+  has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
 
   # Validation
   validates :email, presence: true, format: { with:  /(.+)@(.+)/, message: 'invalid format'}

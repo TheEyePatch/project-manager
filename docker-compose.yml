@@ -12,6 +12,7 @@ services:
       REDIS_PORT: 6380
       REDIS_DB: 0
       JOB_WORKER_URL: redis://redis:6380/0
+      ACTION_CABLE_URL: redis://redis:6380/1
     ports:
       - 3000:3000
     volumes:
@@ -33,6 +34,7 @@ services:
       RAILS_ENV: 'development'
       DEBUG: '*vite*'
       VITE_RUBY_HOST: 0.0.0.0
+      ACTION_CABLE_URL: redis://redis:6380/1
     ports:
       - "3036:3036"
     volumes:
@@ -62,6 +64,7 @@ services:
       dockerfile: dev.Dockerfile
     environment:
       JOB_WORKER_URL: redis://redis:6380/0
+      ACTION_CABLE_URL: redis://redis:6380/1
     command:  bundle exec sidekiq
     depends_on:
       - db

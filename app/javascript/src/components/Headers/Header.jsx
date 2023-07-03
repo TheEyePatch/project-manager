@@ -14,7 +14,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from '@mui/material'
 
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
@@ -24,7 +24,7 @@ import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumb
 import { Link } from 'react-router-dom'
 import UserContext from '../../store/UserContext';
 import AuthContext from '../../store/AuthContext';
-import { UserAvatar } from '../index';
+import { UserAvatar, NotifBell } from '../index';
 import SubHeader from './SubHeader';
 
 const pages = [ 
@@ -59,6 +59,7 @@ function Header(){
     userCtx.fetchCurrentUser()
            .then(res => {
             userCtx.setCurrentUser(res)
+            
           }).catch(err => {
             authCtx.logout()
           })
@@ -97,8 +98,9 @@ function Header(){
             </div>
 
             {/* User Settings */}
-            <div>
-              <Box sx={{ flexGrow: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <NotifBell recepient={userCtx.currentUser.account}/>
+              <Box sx={{ flexGrow: 0, marginLeft: '.5rem' }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     { userCtx.currentUser.account && <UserAvatar user={userCtx.currentUser} size='small' height='3rem' fontSize='2rem'/> }

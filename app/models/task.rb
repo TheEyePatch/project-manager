@@ -1,4 +1,8 @@
 class Task < ApplicationRecord
+  include Notifiable
+
+  attr_accessor :current_user
+
   belongs_to :board, counter_cache: true,  optional: true
   belongs_to :project
   belongs_to :assignee, class_name: 'User', optional: true
@@ -6,6 +10,8 @@ class Task < ApplicationRecord
   acts_as_list scope: :board
   has_many_attached :images
   has_many :comments
+
+  has_many :notifications, as: :notifiable
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :project_id,
