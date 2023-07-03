@@ -335,3 +335,15 @@ export const getComments = async ({ task_id, last_comment_id }) => {
 
   return response.data
 }
+
+// Notifications
+
+export const getNotifications = async ({ token }) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/notifications',
+    headers: { Authorization: token }
+  })
+
+  return response.data
+}
