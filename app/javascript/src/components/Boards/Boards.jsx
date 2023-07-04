@@ -22,7 +22,7 @@ function Boards() {
       res.length > BOARDS_LENGTH ? setContent('start') : setContent('center')
       boardCtx.setBoards(res)
     })
-  }, [])
+  }, [boardCtx.project_id])
 
   const handleDragStart = (e, params) => {
     selectedDragTask.current = params;
