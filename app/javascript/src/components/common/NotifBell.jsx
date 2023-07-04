@@ -30,8 +30,8 @@ const menuItem = (item, token, setNotifications) => {
   }
 
   return (
-    <Link onClick={handleClick} key={item.id} to={'/projects/1/boards'} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <MenuItem divider key={item.id} sx={{whiteSpace: 'normal'}}>
+    <Link onClick={handleClick} key={item.id} to={item.path} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <MenuItem divider key={item.id} sx={{whiteSpace: 'normal', paddingTop: 3, paddingBottom: 3}}>
         {item.message}
       </MenuItem>
     </Link>
@@ -82,7 +82,7 @@ function NotifBell({recepient}) {
 
   return (
     <Badge variant='dot' color="secondary">
-      <NotificationsRoundedIcon style={{ fontSize: '2.5rem'}} onClick={handleBell} />
+      <NotificationsRoundedIcon style={{ fontSize: '2rem'}} onClick={handleBell} />
       <Menu
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right'}}
         transformOrigin={{vertical: 'top', horizontal: 'right'}}

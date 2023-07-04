@@ -99,8 +99,9 @@ function Header(){
 
             {/* User Settings */}
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <NotifBell recepient={userCtx.currentUser.account}/>
-              <Box sx={{ flexGrow: 0, marginLeft: '.5rem' }}>
+              <Link style={{ textDecoration: 'none', color: 'inherit' }}><NotifBell recepient={userCtx.currentUser.account}/></Link>
+
+              <Box sx={{ flexGrow: 0, marginLeft: '1rem' }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     { userCtx.currentUser.account && <UserAvatar user={userCtx.currentUser} size='small' height='3rem' fontSize='2rem'/> }

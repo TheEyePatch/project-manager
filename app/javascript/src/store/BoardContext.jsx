@@ -5,6 +5,7 @@ import { getBoards } from '../api'
 
 const BoardContext = React.createContext({
   boards: [],
+  project_id: null,
   fetchBoards: () => {},
   setBoards: () => {},
 })
@@ -30,6 +31,7 @@ export function BoardsContextProvider({ children }) {
   const boardContextValue = {
     boards: boards,
     fetchBoards: handleBoards,
+    project_id: urlParams.project_id,
     setBoards: setBoards
   }
 

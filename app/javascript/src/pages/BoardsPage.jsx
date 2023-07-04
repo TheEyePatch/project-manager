@@ -13,7 +13,7 @@ const subHeaderCtx = useContext(SubHeaderContext)
 
 useEffect(() => {
   subHeaderCtx.setProjectId(params.project_id)
-}, [])
+}, [params.project_id])
 
   return (
     <BoardsContextProvider>
