@@ -5,6 +5,7 @@ RSpec.describe Task, type: :model do
   let(:project) { board.project }
   let(:user) { create(:user, email: 'luffy@strawhat.com', account: 'luffy25') }
   let(:tasks) { create_list(:task, 5, :multiple_tasks, project: project, assignee: user) }
+  let(:action_cable) { ActionCable.server }
 
   context 'validations' do
     subject { build(:task) }
@@ -33,11 +34,7 @@ RSpec.describe Task, type: :model do
     it { should have_many_attached(:images) }
   end
 
-  context 'create' do
-    it 'should not be valid without title' do
-      expect(project.tasks.build).not_to be_valid
-    end
-
+  context '#create' do
     it 'should valid with correct params' do
       task = build(:task, board: board, assignee: user)
       expect(task).to be_valid
@@ -80,7 +77,7 @@ RSpec.describe Task, type: :model do
     end
   end
 
-  context 'with update' do
+  context '#update' do
     context 'when assignee is current user' do
       let(:rand_user) { create(:user, :random_non_unique_creds, account: 'rand_acct') }
       let(:task) { create(:task, title: 'Add Notif', assignee: user, reporter: rand_user, current_user: user) }
@@ -97,6 +94,12 @@ RSpec.describe Task, type: :model do
 
       it 'does not create notification for assignee(current_user)'do
         expect(user.notifications).to be_empty
+      end
+
+      it 'sends a broadcast to Action Cable' do
+        expect(action_cable).to receive(:broadcast)
+
+        task.update(title: 'Updated Title')
       end
     end
 
@@ -116,6 +119,12 @@ RSpec.describe Task, type: :model do
 
       it 'does not create notification for reporter(current_user)'do
         expect(user.notifications).to be_empty
+      end
+
+      it 'sends a broadcast to Action Cable' do
+        expect(action_cable).to receive(:broadcast)
+
+        task.update(title: 'Updated Title')
       end
     end
   end

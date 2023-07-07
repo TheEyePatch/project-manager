@@ -320,7 +320,7 @@ export const createComment = async ({ task_id, params, token, image_ids}) => {
     headers: { Authorization: token }
   })
 
-  return response
+  return response.data
 }
 
 export const getComments = async ({ task_id, last_comment_id }) => {

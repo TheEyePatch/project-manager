@@ -9,6 +9,8 @@ module Notifiable
     recipient = ([assignee, reporter] - [current_user]).last
     return unless recipient
 
+    return unless current_user
+
     changes = []
     attributes.except('updated_at').keys.each do |attr|
       changes << attr.sub('_id', '') if send("#{attr}_previously_changed?".to_sym)
