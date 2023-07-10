@@ -17,7 +17,10 @@ class Task < ApplicationRecord
   validates :title, uniqueness: { scope: :project_id,
     message: 'should contain unique title per project'}
   validates :board_id, presence: true
+
+  # Callbacks
   before_validation :assign_board, on: %i[create save]
+  before_validation :check_project_prefix, on: %i[create]
 
   # Scopes
   scope :with_task_title, ->(title) { where(title: title) if title.present? }
@@ -47,5 +50,20 @@ class Task < ApplicationRecord
 
   def positions
     board.tasks.pluck :position
+  end
+
+  def check_project_prefix
+    return if project.blank?
+
+    if project.tag_prefix.nil?
+      project.update(tag_prefix: SecureRandom.alphanumeric(5).upcase) 
+    end
+
+    query = "CREATE SEQUENCE IF NOT EXISTS task_tag_#{project.tag_prefix.downcase}_seq INCREMENT 1 START 1"
+    ActiveRecord::Base.connection.execute(query)
+
+    id = ActiveRecord::Base.connection.execute("SELECT nextval('task_tag_#{project.tag_prefix.downcase}_seq')")
+
+    self.tag = "#{project.tag_prefix}-#{id.first['nextval']}"
   end
 end

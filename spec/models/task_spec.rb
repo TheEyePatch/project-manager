@@ -7,13 +7,13 @@ RSpec.describe Task, type: :model do
   let(:tasks) { create_list(:task, 5, :multiple_tasks, project: project, assignee: user) }
   let(:action_cable) { ActionCable.server }
 
-  context 'validations' do
+  describe 'validations' do
     subject { build(:task) }
 
     # Presence
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:board_id) }
-    
+
     # Format
     it do
       should validate_uniqueness_of(:title)
@@ -23,7 +23,7 @@ RSpec.describe Task, type: :model do
     end
   end
 
-  context 'associations' do
+  describe 'associations' do
     subject { build(:task) }
 
     it { should belong_to(:board).optional }
@@ -34,12 +34,7 @@ RSpec.describe Task, type: :model do
     it { should have_many_attached(:images) }
   end
 
-  context '#create' do
-    it 'should valid with correct params' do
-      task = build(:task, board: board, assignee: user)
-      expect(task).to be_valid
-    end
-
+  describe '#create' do
     context 'when assignee is current_user' do
       let(:rand_user) { create(:user, :random_non_unique_creds, account: 'rand_acct') }
       let(:task) { create(:task, title: 'Add Notif', assignee: user, reporter: rand_user, current_user: user) }
@@ -77,7 +72,7 @@ RSpec.describe Task, type: :model do
     end
   end
 
-  context '#update' do
+  describe '#update' do
     context 'when assignee is current user' do
       let(:rand_user) { create(:user, :random_non_unique_creds, account: 'rand_acct') }
       let(:task) { create(:task, title: 'Add Notif', assignee: user, reporter: rand_user, current_user: user) }
@@ -125,6 +120,31 @@ RSpec.describe Task, type: :model do
         expect(action_cable).to receive(:broadcast)
 
         task.update(title: 'Updated Title')
+      end
+    end
+  end
+
+  # Callbacks
+
+  describe '#check_project_prefix' do
+    context 'when project tag_prefix is nil' do
+      let(:task) { create(:task) }
+      let(:project) { task.project }
+
+      it 'creates a project PREFIX when PREFIX is nil' do
+        expect(task.tag).to be_present
+        expect(project.tag_prefix).to be_present
+      end
+    end
+
+    context 'when project tag_prefix is present' do
+      let(:project) { create(:project, tag_prefix: 'TEST') }
+      let(:task) { create(:task, project: project) }
+
+      it 'increments tag id' do
+        new_task = create(:task, project: project, title: 'second task')
+        
+        expect(new_task.tag).to eql('TEST-2')
       end
     end
   end

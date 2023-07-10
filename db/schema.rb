@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_29_034058) do
+ActiveRecord::Schema.define(version: 2023_07_07_053455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2023_06_29_034058) do
     t.bigint "owner_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "tag_prefix"
     t.index ["name", "owner_id"], name: "index_projects_on_name_and_owner_id", unique: true
   end
 
@@ -112,7 +113,9 @@ ActiveRecord::Schema.define(version: 2023_06_29_034058) do
     t.bigint "sprint_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "tag"
     t.index ["project_id", "assignee_id"], name: "index_tasks_on_project_id_and_assignee_id"
+    t.index ["project_id", "tag"], name: "index_tasks_on_project_id_and_tag", unique: true
     t.index ["project_id", "title"], name: "index_tasks_on_project_id_and_title", unique: true
   end
 
