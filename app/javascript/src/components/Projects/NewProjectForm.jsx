@@ -12,7 +12,6 @@ import {
 import { postProject } from '../../api/index'
 import AuthContext from '../../store/AuthContext'
 import ProjectContext from '../../store/ProjectContext';
-import UserContext from '../../store/UserContext';
 
 function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, page }) {
   const authCtx = useContext(AuthContext)
@@ -20,10 +19,12 @@ function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, p
   const [projectInput, setProjectIntput] = useState({
     name: '',
     description: '',
+    tag_prefix: '',
   })
   const [inputErrors, setInputErrors] = useState({
     name: {invalid: false, message: ''},
     description: {invalid: false, message: ''},
+    tag_prefix: {invalid: false, message: ''}
   })
 
   const handleInput = (e) => {
@@ -39,12 +40,14 @@ function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, p
     setModalOpen(false);
     setProjectIntput({
       name: '',
-      description: ''
+      description: '',
+      tag_prefix: '',
     })
 
     setInputErrors({
       name: {invalid: false, message: ''},
-      description: {invalid: false, message: ''}
+      description: {invalid: false, message: ''},
+      tag_prefix: {invalid: false, message: ''}
     })
   }
 
@@ -62,7 +65,7 @@ function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, p
       })
 
       setModalOpen(false)
-      setProjectIntput({ name: '', description: '' })
+      setProjectIntput({ name: '', description: '', tag_prefix: '' })
     }).catch(res => {
       let errors = res.response.data.errors
       setInputErrors(prev => {
@@ -121,6 +124,19 @@ function NewProjectForm({ modalOpen, setModalOpen, projectType, inProjectPage, p
           variant="standard"
           multiline
           minRows={4}
+        />
+
+        <TextField
+          error={inputErrors.tag_prefix.invalid}
+          helperText={inputErrors.tag_prefix.message}
+          autoFocus
+          margin="dense"
+          id="tag_prefix"
+          label="Prefix"
+          value={projectInput.tag_prefix}
+          onChange={handleInput}
+          fullWidth
+          variant="standard"
         />
       </DialogContent>
       <DialogActions>

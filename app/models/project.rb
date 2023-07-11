@@ -26,7 +26,7 @@ class Project < ApplicationRecord
   end
 
   def generate_tag_prefix
-    return if tag_prefix
+    return if tag_prefix.present?
 
     self.tag_prefix = SecureRandom.alphanumeric(5).upcase
   end

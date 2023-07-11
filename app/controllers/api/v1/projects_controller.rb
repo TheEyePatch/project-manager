@@ -134,7 +134,7 @@ class Api::V1::ProjectsController < Api::ApiController
   end
 
   def project_params
-    params.require(:project).permit(:name, :description)
+    params.require(:project).permit(:name, :description, :tag_prefix)
   end
 
   def project_count

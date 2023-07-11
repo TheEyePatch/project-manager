@@ -91,6 +91,10 @@ RSpec.describe "Projects", type: :request do
       it 'creates new project', skip_before: true do
         expect { post_project(@token, owned_project) }.to change(Project, :count).by(1)
       end
+
+      it 'has value on tag_prefix' do
+        expect(response_body.dig(:project, :tag_prefix)).to eql('TEST') 
+      end
     end
 
     context 'when user token invalid' do
@@ -161,7 +165,8 @@ RSpec.describe "Projects", type: :request do
       },
       params: {
         name: project&.name,
-        description: project&.description
+        description: project&.description,
+        tag_prefix: project&.tag_prefix,
       }.to_json
     )
   end

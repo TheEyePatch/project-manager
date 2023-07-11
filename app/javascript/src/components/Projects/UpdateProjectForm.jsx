@@ -71,11 +71,13 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
   const userCtx = useContext(UserContext)
   const [projectInput, setProjectIntput] = useState({
     name: '',
-    description: ''
+    description: '',
+    tag_prefix: ''
   })
   const [inputErrors, setInputErrors] = useState({
     name: {invalid: false, message: ''},
     description: {invalid: false, message: ''},
+    tag_prefix: { invalid: false, message: '' }
   })
   const [project, setProject] = useState({})
 
@@ -85,7 +87,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
       setProject(res.project)
       setProjectIntput({
         name: res.project.name,
-        description: res.project.description
+        description: res.project.description,
+        tag_prefix: res.project.tag_prefix,
       })
     })
   }, [project_id])
@@ -100,7 +103,8 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
     setModalOpen(false);
     setInputErrors({
       name: {invalid: false, message: ''},
-      description: {invalid: false, message: ''}
+      description: {invalid: false, message: ''},
+      tag_prefix: {invalid: false, message: ''}
     })
   }
 
@@ -171,6 +175,16 @@ function UpdateProjectForm ({ modalOpen, setModalOpen, project_id }) {
             fullWidth multiline minRows={4}
             InputProps={{
               readOnly: project.owner?.email != userCtx.currentUser.email,
+            }}
+          />
+
+          <TextField
+            autoFocus margin="dense" id="tag_prefix" label="Prefix" variant="standard"
+            value={projectInput.tag_prefix} onChange={handleInput}
+            error={inputErrors.tag_prefix.invalid}
+            helperText={inputErrors.tag_prefix.message}
+            InputProps={{
+              readOnly: project.owner?.email != userCtx.currentUser.email
             }}
           />
         </div>

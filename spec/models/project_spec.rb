@@ -21,9 +21,9 @@ RSpec.describe Project, type: :model do
   # Callbacks
   describe '#generate_tag_prefix' do
     context 'when tag_prefix is nil' do
-      subject { create(:project) }
+      subject { create(:project, tag_prefix: nil) }
 
-      it 'generates a random value' do
+      it 'generates a random value' do 
         expect(subject.tag_prefix).to be_present
         expect(subject.tag_prefix.length).to eql(5)
       end
