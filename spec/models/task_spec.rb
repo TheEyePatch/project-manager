@@ -141,9 +141,14 @@ RSpec.describe Task, type: :model do
       let(:project) { create(:project, tag_prefix: 'TEST') }
       let(:task) { create(:task, project: project) }
 
-      it 'increments tag id' do
+      before { task }
+
+      it 'creates a tag using existing tag_prefix' do
+        expect(task.tag).to eql('TEST-1')
+      end
+
+      it 'increments tag by 1' do
         new_task = create(:task, project: project, title: 'second task')
-        
         expect(new_task.tag).to eql('TEST-2')
       end
     end
