@@ -26,6 +26,7 @@ class Task < ApplicationRecord
   scope :with_task_title, ->(title) { where(title: title) if title.present? }
   scope :with_user_id, ->(assignee_id) { where(assignee_id: assignee_id) if assignee_id.present? }
   scope :with_project_id, ->(project_id) { where(project_id: project_id) if project_id.present? }
+  scope :with_tag, -> (tag) { where(tag: tag) if tag.present? }
 
   class << self
     def join_boards_reporters
