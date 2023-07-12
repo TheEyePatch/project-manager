@@ -32,9 +32,7 @@ function BoardsHeader () {
   const handleSearch = (e) => {
     e.preventDefault()
 
-    boardCtx.fetchBoards(filter)
-    .then(res => boardCtx.setBoards(res)
-    )
+    boardCtx.fetchBoards(filter).then(res => boardCtx.setBoards(res))
   }
 
   const handleAvatar = (e) => setAnchorEl(e.currentTarget)
@@ -82,7 +80,7 @@ function BoardsHeader () {
                 ),
               }}
               variant="outlined"
-              
+              placeholder='New task'
             />
 
             <TextField
@@ -98,7 +96,7 @@ function BoardsHeader () {
                 ),
               }}
               variant="outlined"
-              
+              placeholder='PRJT-1'
             />
 
             <input hidden type="submit" value="Submit" />
