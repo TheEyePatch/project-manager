@@ -79,15 +79,21 @@ RSpec.describe "Projects", type: :request do
     let(:owned_project) { build(:owned_project, owner: user) }
 
     context 'when user logged in' do
-      it 'returns success response' do
-        post_project(@token, owned_project)
+      before do |example|
+        post_project(@token, owned_project) unless example.metadata[:skip_before]
+      end
 
+      it 'returns success response' do
         expect(response).to have_http_status(200)
         expect(response_body.dig(:project, :name)).to eql(owned_project.name)
       end
 
-      it 'creates new project' do
+      it 'creates new project', skip_before: true do
         expect { post_project(@token, owned_project) }.to change(Project, :count).by(1)
+      end
+
+      it 'has value on tag_prefix' do
+        expect(response_body.dig(:project, :tag_prefix)).to eql('TEST') 
       end
     end
 
@@ -159,7 +165,8 @@ RSpec.describe "Projects", type: :request do
       },
       params: {
         name: project&.name,
-        description: project&.description
+        description: project&.description,
+        tag_prefix: project&.tag_prefix,
       }.to_json
     )
   end

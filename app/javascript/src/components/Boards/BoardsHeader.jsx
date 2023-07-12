@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { BoardsCreateButton } from '../index'
 import AuthContext from '../../store/AuthContext'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import {  TextField, InputAdornment, FormGroup, FormControlLabel, Popover, Checkbox, MenuItem, ListItemText, MenuList } from '@mui/material';
+import {  TextField, InputAdornment, FormControlLabel, Popover, Checkbox, MenuItem, MenuList, Stack } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import BoardContext from '../../store/BoardContext';
@@ -17,6 +17,7 @@ function BoardsHeader () {
   const [filter, setFilter] = useState({
     task_title: '',
     user_id: '',
+    tag: ''
   });
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedNames, setSelectedNames] = useState([])
@@ -31,9 +32,7 @@ function BoardsHeader () {
   const handleSearch = (e) => {
     e.preventDefault()
 
-    boardCtx.fetchBoards(filter)
-    .then(res => boardCtx.setBoards(res)
-    )
+    boardCtx.fetchBoards(filter).then(res => boardCtx.setBoards(res))
   }
 
   const handleAvatar = (e) => setAnchorEl(e.currentTarget)
@@ -67,20 +66,41 @@ function BoardsHeader () {
     <div style={{ padding: '1rem', margin: '1rem', display: 'flex', justifyContent: 'space-around'}}>
       <div style={{ display: 'flex', alignItems: 'flex-end', minWidth: '25vw' }}>
         <form onSubmit={handleSearch} style={{ marginRight: '1rem', marginLeft: '1rem' }}>
-          <TextField
-            id="task_title"
-            label="Search Task Name"
-            value={filter.task_name}
-            onChange={(e) => setFilter(prev => { return { ...prev, task_title: e.target.value } })}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchOutlinedIcon />
-                </InputAdornment>
-              ),
-            }}
-            variant="outlined"
-          />
+          <Stack direction='row' spacing={2}>
+            <TextField
+              id="task_title"
+              label="Search Task Name"
+              value={filter.task_name}
+              onChange={(e) => setFilter(prev => { return { ...prev, task_title: e.target.value } })}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchOutlinedIcon />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              placeholder='New task'
+            />
+
+            <TextField
+              id='tag'
+              label='Tag'
+              value={filter.tag}
+              onChange={(e) => setFilter(prev => { return { ...prev, tag: e.target.value } })}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchOutlinedIcon />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              placeholder='PRJT-1'
+            />
+
+            <input hidden type="submit" value="Submit" />
+          </Stack>
         </form>
         <AvatarGroup max={6} total={userCtx.projectMembers.length} onClick={handleAvatar}>
         {
