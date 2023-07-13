@@ -35,7 +35,6 @@ function BoardsHeader () {
     const tasksData = await getIndexTasks(filter)
     const tasks = tasksData.tasks
 
-    console.log(tasks)
     boardCtx.setBoards(prev => {
       const boards = prev.map(board => {
        board.tasks = tasks[board.id]
@@ -67,15 +66,15 @@ function BoardsHeader () {
     })
 
     if(e.currentTarget.checked) {
-      boardCtx.fetchBoards({assignee_id: [...selectedNames, member.id]})
-      .then(res => boardCtx.setBoards(res))
+      const params = {...filter, assignee_id: [...selectedNames, member.id]}
+      filterTasks({params: params, token: authCtx.token})
     } else {
-      const newArr = Array.from(selectedNames)
-      const index = newArr.indexOf(member.id)
-      newArr.splice(index, 1)
+      const nameMap = Array.from(selectedNames)
+      const index = nameMap.indexOf(member.id)
+      const params = {...filter, assignee_id: nameMap}
 
-      boardCtx.fetchBoards({assignee_id: newArr})
-      .then(res => boardCtx.setBoards(res))
+      nameMap.splice(index, 1)
+      filterTasks({params: params, token: authCtx.token})
     }
   }
 

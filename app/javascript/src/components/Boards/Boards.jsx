@@ -34,12 +34,13 @@ function Boards() {
     boards.length > BOARDS_LENGTH ? setContent('start') : setContent('center')
 
     const boardMap = boards.map(board => {
-      board.tasks = tasks[board.id]
+      board.tasks = tasks[board.id] || []
       return board
     })
 
     boardCtx.setBoards(boardMap)
   }
+
   useEffect(() => {
     combineData()
   }, [boardCtx.project_id])
