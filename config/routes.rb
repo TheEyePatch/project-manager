@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       resources :tasks, only: %i[index show create update], param: :task_id do
         collection do
           post :import_tasks
+          get :summary
         end
         member do
           patch :upload_files
