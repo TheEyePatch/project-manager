@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
-import { importTask } from '../../api';
+import { importTask, getIndexTasks } from '../../api';
 import AuthContext from '../../store/AuthContext'
 import BoardContext from '../../store/BoardContext'
 import { Container } from '@mui/material';
@@ -17,11 +17,31 @@ function Boards() {
   const selectedNodeTask = useRef();
   const importTaskParam = useRef({});
 
-  useEffect(() => {
-    boardCtx.fetchBoards().then(res => {
-      res.length > BOARDS_LENGTH ? setContent('start') : setContent('center')
-      boardCtx.setBoards(res)
+  const fetchBoards = async () => {
+    const boardsData = await boardCtx.fetchBoards()
+    return boardsData.boards
+  }
+
+  const fetchTasks = async () => {
+    const tasksData = await getIndexTasks({ params: { project_id: boardCtx.project_id}, token: authCtx.token  })
+    return tasksData.tasks
+  }
+
+  const combineData = async () => {
+    const boards = await fetchBoards()
+    const tasks = await fetchTasks()
+
+    boards.length > BOARDS_LENGTH ? setContent('start') : setContent('center')
+
+    const boardMap = boards.map(board => {
+      board.tasks = tasks[board.id]
+      return board
     })
+
+    boardCtx.setBoards(boardMap)
+  }
+  useEffect(() => {
+    combineData()
   }, [boardCtx.project_id])
 
   const handleDragStart = (e, params) => {
