@@ -1,11 +1,17 @@
 require 'nokogiri'
 
 class Api::V1::TasksController < Api::ApiController
-  before_action :authenticate_user, only: %i[create import_tasks update]
+  before_action :authenticate_user
 
   PAGE_LIMIT = 10
 
   def index
+    render json: {
+      tasks: tasks.group_by(&:board_id)
+    }, status: :ok
+  end
+
+  def summary
     render json: {
       tasks: recent_tasks,
       task_summary: task_summary,
@@ -123,6 +129,16 @@ class Api::V1::TasksController < Api::ApiController
                     'reporters.account as reporter_account,' \
                     'boards.title as board_title'
                   ).offset(offset).limit(PAGE_LIMIT)
+  end
+
+  def tasks
+    @tasks ||=
+      project.tasks
+             .select(:id, :title, :board_id, :project_id, :tag)
+             .with_task_title(params[:task_title])
+             .with_tag(params[:tag])
+             .with_user_id(params[:assignee_id])
+             .order(position: :asc)
   end
 
   def task_summary

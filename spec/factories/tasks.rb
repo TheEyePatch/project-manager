@@ -7,7 +7,7 @@ FactoryBot.define do
     sequence(:position)
 
     trait :multiple_tasks do
-      sequence(:title) { |title_num| "Task Number #{title_num}" }
+      sequence(:title) { |num| "Task Number #{num}" }
     end
 
     trait :random_title do

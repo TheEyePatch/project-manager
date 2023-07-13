@@ -14,7 +14,7 @@ import {
 import { EditableContent, EditableContentV2, NewComment, Comments } from '../index';
 import AuthContext from "../../store/AuthContext";
 import UserContext from "../../store/UserContext";
-import { UpdateTask, attachTaskImages } from '../../api'
+import { UpdateTask, attachTaskImages, getIndexTasks } from '../../api'
 import BoardContext from "../../store/BoardContext";
 
 function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
@@ -34,15 +34,25 @@ function UpdateTaskForm ({ task, modalOpen, setModalOpen, setTask }){
 
   const handleClose = () => {
     if(refetchOnClose) {
-      boardCtx.fetchBoards()
-      .then(res => boardCtx.setBoards(res))
+      const params = { project_id: boardCtx.project_id }
+      getIndexTasks({params: params, token: authCtx.token})
+      .then(res => {
+        boardCtx.setBoards(prev => {
+          const boards = prev.map(board => {
+            board.tasks = res.tasks[board.id] || []
+            return board
+          })
+
+          return boards
+        })
+      })
     }
+
     setModalOpen(false)
   }
 
   const handleChange = async ({value, attribute}) => {
     let params = {task: { [attribute]: String(value)},  task_id: task.id }
-    console.log(params)
     const updateResponse = await UpdateTask({
       params: params,
       token: authCtx.token,

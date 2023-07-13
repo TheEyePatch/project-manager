@@ -5,7 +5,51 @@ RSpec.describe "Tasks", type: :request do
   let(:project) { create(:project, owner: user) }
   let(:tasks) { create_list(:task, 5, :multiple_tasks, project: project, assignee: user) }
 
-  describe "GET /api/v1/tasks" do
+  describe 'GET /api/v1/tasks' do
+    after { FactoryBot.reload }
+
+    context "when user is not logged in" do
+      before { get api_v1_tasks_path }
+
+      it 'returns invalid token' do
+        expect(response).to have_http_status(401)
+        expect(response_body[:errors].map(&:downcase)).to include('invalid token')
+      end
+    end
+
+    context 'when user is logged in' do
+      before do
+        sign_in(user)
+        @token = response_body[:token]
+        tasks
+      end
+
+      context 'with correct params' do
+        it 'returns all tasks' do
+          get_tasks params: {project_id: project.id}, headers: { Authorization: @token }
+
+          expect(response).to have_http_status(200)
+          expect(response_body[:tasks]).to be_present
+        end
+
+        it 'filters a task using tag' do
+          get_tasks params: {project_id: project.id, tag: 'TEST-1'}, headers: { Authorization: @token }
+
+          expect(response_body[:tasks].values.flatten!.count).to eql(1)
+          expect(response_body[:tasks].values.flatten!.map { |task| task[:tag] }.first).to eql('TEST-1')
+        end
+
+        it 'filters a task using title' do
+          get_tasks params: {project_id: project.id, task_title: 'Task Number 1'}, headers: { Authorization: @token }
+
+          expect(response_body[:tasks].values.flatten!&.count).to eql(1)
+          expect(response_body[:tasks].values.flatten!.map { |task| task[:title] }.first).to eql('Task Number 1')
+        end
+      end
+    end
+  end
+
+  describe "GET /api/v1/tasks/summary" do
     let(:task) { create(:random_task, project: project) }
     let(:reporter) { create(:random_user) }
     let(:memory_cache) { ActiveSupport::Cache.lookup_store(:memory_store) }
@@ -34,10 +78,10 @@ RSpec.describe "Tasks", type: :request do
         }
       )
 
-      get api_v1_tasks_path,{headers: { Authorization: @token }}
+      get summary_api_v1_tasks_path,{headers: { Authorization: @token }}
 
       expect(response).to have_http_status(200)
-      expect(response_body[:tasks].map{ |_1| _1['title'] }).to_not include('TaskTwo')
+      expect(response_body[:tasks].map{ |_1| _1[:title] }).to include('Update Task Title')
     end
   end
 
@@ -117,5 +161,15 @@ RSpec.describe "Tasks", type: :request do
 
       expect(response_body.dig(:task, :title)).to eql('Update Task Title')
     end
+  end
+
+
+  # Methods
+
+  def get_tasks(params: {}, headers: {})
+    get api_v1_tasks_path, {
+      headers: headers,
+      params: params
+    }
   end
 end

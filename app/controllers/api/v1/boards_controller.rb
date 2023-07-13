@@ -2,22 +2,11 @@ class Api::V1::BoardsController < Api::ApiController
   before_action :authenticate_user, only: %i[create update show]
 
   def index
-    boards = Board.where(project_id: params[:project_id])
-                  .order(position: :asc)
+    boards = project.boards
+                    .select(:id, :title, :project_id, :position)
+                    .order(position: :asc)
 
-    tasks = Task.where(board_id: boards.ids, project_id: params[:project_id])
-                .select(:id, :title, :board_id, :project_id, :tag)
-                .with_task_title(params[:task_title])
-                .with_user_id(params[:assignee_id])
-                .with_tag(params[:tag])
-                .order(position: :asc)
-                .group_by(&:board_id)
-
-    json_boards = boards.as_json.each do |board|
-      board['tasks'] = tasks[board['id']] || []
-    end
-
-    render json: json_boards, status: :ok
+    render json: { boards: boards }, status: :ok
   end
 
   def show

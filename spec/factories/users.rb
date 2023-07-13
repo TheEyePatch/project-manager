@@ -21,7 +21,7 @@ FactoryBot.define do
     trait :random_credentials do
       first_name { Faker::Name.unique.first_name }
       last_name { Faker::Name.last_name   }
-      account { first_name }
+      account { first_name.downcase + SecureRandom.alphanumeric(2) }
       email { "#{account}@email.com" }
     end
 

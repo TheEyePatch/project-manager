@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import BoardContext from '../../store/BoardContext';
 import UserContext from '../../store/UserContext';
+import { getIndexTasks } from '../../api'
 
 function BoardsHeader () {
   const params = useParams();
@@ -17,7 +18,8 @@ function BoardsHeader () {
   const [filter, setFilter] = useState({
     task_title: '',
     user_id: '',
-    tag: ''
+    tag: '',
+    project_id: params.project_id
   });
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedNames, setSelectedNames] = useState([])
@@ -29,10 +31,24 @@ function BoardsHeader () {
     })
   }, [])
 
+  const filterTasks = async (filter) => {
+    const tasksData = await getIndexTasks(filter)
+    const tasks = tasksData.tasks
+
+    boardCtx.setBoards(prev => {
+      const boards = prev.map(board => {
+       board.tasks = tasks[board.id]
+       return board
+      })
+
+      return boards
+    })
+  }
+
   const handleSearch = (e) => {
     e.preventDefault()
 
-    boardCtx.fetchBoards(filter).then(res => boardCtx.setBoards(res))
+    filterTasks({params: filter, token: authCtx.token})
   }
 
   const handleAvatar = (e) => setAnchorEl(e.currentTarget)
@@ -50,15 +66,15 @@ function BoardsHeader () {
     })
 
     if(e.currentTarget.checked) {
-      boardCtx.fetchBoards({assignee_id: [...selectedNames, member.id]})
-      .then(res => boardCtx.setBoards(res))
+      const params = {...filter, assignee_id: [...selectedNames, member.id]}
+      filterTasks({params: params, token: authCtx.token})
     } else {
-      const newArr = Array.from(selectedNames)
-      const index = newArr.indexOf(member.id)
-      newArr.splice(index, 1)
+      const nameMap = Array.from(selectedNames)
+      const index = nameMap.indexOf(member.id)
+      const params = {...filter, assignee_id: nameMap}
 
-      boardCtx.fetchBoards({assignee_id: newArr})
-      .then(res => boardCtx.setBoards(res))
+      nameMap.splice(index, 1)
+      filterTasks({params: params, token: authCtx.token})
     }
   }
 
