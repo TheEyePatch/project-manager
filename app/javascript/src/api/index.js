@@ -153,6 +153,17 @@ export const attachTaskImages = async ({data, token, task_id}) => {
   return response.data
 }
 
+export const getTaskSummary = async ({params, token}) => {
+  const response = await axios({
+    method: 'get',
+    url: '/api/v1/tasks/summary',
+    headers: { Authorization: token },
+    params: params
+  })
+
+  return response.data
+}
+
 // Projects
 
 export const getProjects = async ({params, token}) => {

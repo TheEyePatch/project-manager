@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { TasksTable } from '../components/index'
-import { getIndexTasks, getAssignedProjects } from '../api/index'
+import { getTaskSummary, getAssignedProjects } from '../api/index'
 import AuthContext from "../store/AuthContext";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -15,7 +15,7 @@ function Home(){
   const authCtx = useContext(AuthContext)
 
   useEffect(() => {
-    getIndexTasks({token: authCtx.token})
+    getTaskSummary({token: authCtx.token})
     .then(res => {
       setTasks(res.tasks)
       setSummary(res.task_summary)
@@ -41,7 +41,7 @@ function Data({ tasks, setTasks, summary, setSummary }) {
     if(!val) return
 
     setProjectInput(val)
-    getIndexTasks({params: {project_id: val.id},token: authCtx.token})
+    getTaskSummary({params: {project_id: val.id}, token: authCtx.token})
     .then(res => {
       setTasks(res.tasks)
       setSummary(res.task_summary)
