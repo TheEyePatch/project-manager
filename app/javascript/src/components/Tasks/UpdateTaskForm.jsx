@@ -11,7 +11,7 @@ import {
           TextField,
           Autocomplete,
         } from '@mui/material'
-import { EditableContent, EditableContentV2, NewComment, Comments } from '../index';
+import { EditableContent, EditableContentV2, Comments } from '../index';
 import AuthContext from "../../store/AuthContext";
 import UserContext from "../../store/UserContext";
 import { UpdateTask, attachTaskImages, getIndexTasks } from '../../api'

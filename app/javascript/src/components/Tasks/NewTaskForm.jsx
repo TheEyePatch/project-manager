@@ -12,13 +12,17 @@ import {
           FormControl,
           Select,
           Autocomplete,
+          Divider
         } from '@mui/material'
-import { postTask, getProject, getProjectMembers } from '../../api';
+import { postTask, getProjectMembers } from '../../api';
 import AuthContext from '../../store/AuthContext';
 import BoardContext from '../../store/BoardContext';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '../common/styles/EditableContent.css'
+
+const AUTO_COMPLETE = ['reporter_id', 'assignee_id']
+const DATE_FIELD = ['start_date', 'end_date']
 
 function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
   //  Hooks
@@ -33,6 +37,8 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
     position: '',
     assignee_id: '',
     reporter_id: '',
+    start_date: '',
+    end_date: ''
   })
   const authCtx = useContext(AuthContext);
   const boardCtx = useContext(BoardContext)
@@ -128,6 +134,18 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
       }
     })
   }
+
+  const handleDate = (e) => {
+    setTaskProject(prev => {
+      let field = e.currentTarget
+      let dateTime = field.id == 'start_date' ? new Date(`${field.value} 00:00:00`) : new Date(`${field.value} 23:59:59`)
+
+      return {
+        ...prev, [field.id]: dateTime
+      }
+    })
+  }
+
   return (
     <Dialog maxWidth={'md'} open={modalOpen} onClose={handleClose}>
       <DialogTitle>
@@ -143,7 +161,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
             Create Task
         </Typography>
       </DialogTitle>
-      <div style={{ maxHeight: '40rem', display: 'flex',}}>
+      <div style={{ maxHeight: '40rem', display: 'flex', padding: '1rem'}}>
         <div style={{ overflowY:  'auto', minWidth: '30rem',}}>
           <DialogContent>
             <TextField autoFocus id="title" margin="dense" label="Title" fullWidth variant="standard"
@@ -171,7 +189,7 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
             />
 
           </DialogContent>
-          <DialogActions>
+          <DialogActions style={{ marginTop: '1rem' }}>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit}>Submit</Button>
           </DialogActions>
@@ -193,23 +211,44 @@ function NewTaskForm({ modalOpen, setModalOpen, project_id }) {
               }
             </Select>
 
-            <Autocomplete id="reporter_id" autoComplete includeInputInList
-              {...props}
-              sx={{ m: 1, minWidth: 160 }}
-              onChange={handleAutocomplete}
-              renderInput={(params) => (
-                <TextField {...params} label="Reporter" variant="standard" />
-              )}
-            />
+            {
+              AUTO_COMPLETE.map(component => {
+                let label = component.replace('_id', '').replace(component[0], component[0].toUpperCase())
 
-            <Autocomplete id="assignee_id" autoComplete includeInputInList
-              {...props} 
-              sx={{ m: 1, minWidth: 160 }}
-              onChange={handleAutocomplete}
-              renderInput={(params) => (
-                <TextField {...params} label="Assignee" variant="standard" />
-              )}
-            />
+                return (
+                  <Autocomplete
+                    key={component} id={component} autoComplete includeInputInList
+                    {...props}
+                    sx={{ m: 1, minWidth: 160 }}
+                    onChange={handleAutocomplete}
+                    renderInput={(params) => <TextField {...params} label={label} variant="standard" />}
+                  />
+                )
+              })
+            }
+
+            <Divider/>
+
+            <div style={{ padding: '.5rem' }}>
+            {
+              DATE_FIELD.map(date => {
+                let label =
+                  date.replace('_', ' ')
+                      .replace(date[0], date[0].toUpperCase())
+
+                return (
+                  <div key={date}>
+                    <label>
+                      <Typography variant="subtitle1" display="block" gutterBottom>
+                        {label}
+                      </Typography>
+                    </label>
+                    <input type="date" id={date} onChange={handleDate} style={{ padding: '.5rem', fontSize: '1rem' }}/>
+                  </div>
+                )
+              })
+            }
+            </div>
           </FormControl>
         </div>
       </div>
