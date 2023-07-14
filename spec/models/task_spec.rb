@@ -70,6 +70,13 @@ RSpec.describe Task, type: :model do
         expect(user.notifications).to be_empty
       end
     end
+
+    it 'accepts start_date and end_date' do
+      task = create(:task, title: 'Date Test',  start_date: DateTime.current, end_date: Date.tomorrow.end_of_day)
+
+      expect(task.start_date).to be_present
+      expect(task.end_date).to be_present
+    end
   end
 
   describe '#update' do

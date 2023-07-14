@@ -105,7 +105,7 @@ class Api::V1::TasksController < Api::ApiController
 
   def task_params
     params.require(:task).permit(
-      :title, :description, :board_id, :position, :assignee_id, :reporter_id
+      :title, :description, :board_id, :position, :assignee_id, :reporter_id, :start_date, :end_date
     )
   end
 
