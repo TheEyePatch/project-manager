@@ -19,8 +19,8 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
   }
 
   return (
-    <Card draggable variant='outlined' onDragStart={onDragStart} onDragEnter={onDragEnter} sx={{mb: 1, backgroundColor: backgroundColor}}>
-      <CardActionArea onClick={handleClick}>
+    <div draggable onDragStart={onDragStart} onDragEnter={onDragEnter} style={{margin: '.5rem'}}>
+      <Card variant='outlined' onClick={handleClick} style={{backgroundColor: backgroundColor}}>
         <CardContent>
           <Typography gutterBottom variant="h5">
             {currentTask?.title}
@@ -30,10 +30,10 @@ function Task({ task, onDragStart, onDragEnter, backgroundColor, token }) {
             <Chip label={task.tag} variant="outlined" size='small' color='secondary'/>
           </Stack>
           </CardContent>
-      </CardActionArea>
+      </Card>
 
       { modalOpen &&  <UpdateTaskForm task={currentTask} setTask={setCurrentTask} modalOpen={modalOpen} setModalOpen={setModalOpen} />}
-    </Card>
+    </div>
   )
 }
 
