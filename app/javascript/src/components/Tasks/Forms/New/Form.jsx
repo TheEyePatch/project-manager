@@ -7,6 +7,7 @@ import RightPanel from "./RightPanel";
 import AuthContext from "../../../../store/AuthContext";
 import BoardContext from "../../../../store/BoardContext";
 import { getProjectMembers, postTask } from "../../../../api";
+import styles from './Form.module.css'
 
 function Form ({ modalOpen, setModalOpen, project_id }) {
   //  Hooks
@@ -75,33 +76,33 @@ function Form ({ modalOpen, setModalOpen, project_id }) {
   }
 
   return (
-    <Dialog maxWidth={'md'} open={modalOpen} onClose={handleClose}>
+    <Dialog className={styles['dialog-form']} maxWidth={'md'} open={modalOpen} onClose={handleClose}>
       <DialogTitle>
-      <Typography variant="h4" component="span" noWrap
-          sx={{ display: { md: 'flex' },
-            color: '#173A5E',
-            textDecoration: 'none',
-            fontWeight:'bold',
-            minWidth: '25rem',
-            mb: 2,
-            mt: 2,}}
-        >
-          Create Task
-      </Typography>
-    </DialogTitle>
-    <div style={{ maxHeight: '40rem', display: 'flex', padding: '1rem'}}>
-      <div style={{ overflowY:  'auto', minWidth: '30rem',}}>
-        <LeftPanel taskInput={taskInput} setTaskProject={setTaskProject}/>
+        <Typography variant="h4" component="span" noWrap
+            sx={{ display: { md: 'flex' },
+              color: '#173A5E',
+              textDecoration: 'none',
+              fontWeight:'bold',
+              minWidth: '25rem',
+              mb: 2,
+              mt: 2,}}
+          >
+            Create Task
+        </Typography>
+      </DialogTitle>
+      <div className={styles['create-form']}>
+        <div className={styles['left-panel-container']}>
+          <LeftPanel taskInput={taskInput} setTaskProject={setTaskProject}/>
+        </div>
+        <div className={styles['right-panel-container']}>
+          <RightPanel statuses={statuses} taskInput={taskInput} setTaskProject={setTaskProject} props={props}/>
+        </div>
       </div>
-      <div style={{ minWidth: '15rem'}}>
-        <RightPanel statuses={statuses} taskInput={taskInput} setTaskProject={setTaskProject} props={props}/>
-      </div>
-    </div>
 
-    <DialogActions style={{ marginTop: '1rem' }}>
-      <Button onClick={handleClose}>Cancel</Button>
-      <Button onClick={handleSubmit}>Submit</Button>
-    </DialogActions>
+      <DialogActions style={{ marginTop: '1rem' }}>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleSubmit}>Submit</Button>
+      </DialogActions>
     </Dialog>
   )
 

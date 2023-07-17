@@ -9,6 +9,7 @@ import {
   Divider,
   MenuItem
 } from '@mui/material'
+import styles from './Form.module.css'
 
 const AUTO_COMPLETE = ['reporter_id', 'assignee_id']
 const DATE_FIELD = ['start_date', 'end_date']
@@ -47,7 +48,7 @@ function RightPanel({ props, statuses, taskInput, setTaskProject }) {
   }
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+    <FormControl className={styles['left-panel']} sx={{ m: 1, minWidth: 160 }} size="small">
       <InputLabel id="demo-select-small">Status</InputLabel>
       <Select
         labelId="demo-select-small"
@@ -81,7 +82,7 @@ function RightPanel({ props, statuses, taskInput, setTaskProject }) {
 
       <Divider/>
 
-      <div style={{ padding: '.5rem' }}>
+      <div className={styles['date-field-container']}>
       {
         DATE_FIELD.map(date => {
           let label =
@@ -89,13 +90,13 @@ function RightPanel({ props, statuses, taskInput, setTaskProject }) {
                 .replace(date[0], date[0].toUpperCase())
 
           return (
-            <div key={date}>
+            <div className={styles[`${date}-field`]} key={date}>
               <label>
                 <Typography variant="subtitle1" display="block" gutterBottom>
                   {label}
                 </Typography>
               </label>
-              <input type="date" id={date} onChange={handleDate} style={{ padding: '.5rem', fontSize: '1rem' }}/>
+              <input type="date" id={date} onChange={handleDate}/>
             </div>
           )
         })

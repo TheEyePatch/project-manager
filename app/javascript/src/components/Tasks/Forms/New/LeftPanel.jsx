@@ -5,6 +5,7 @@ import {
   Typography, TextField, DialogContent
 
 } from '@mui/material'
+import styles from './Form.module.css'
 
 function LeftPanel({ taskInput, setTaskProject}) {
   const [inputErrors, setInputErrors] = useState({
@@ -28,7 +29,7 @@ function LeftPanel({ taskInput, setTaskProject}) {
   }
 
   return (
-    <DialogContent>
+    <DialogContent className={styles['left-panel']}>
       <TextField autoFocus id="title" margin="dense" label="Title" fullWidth variant="standard"
         error={inputErrors.title}
         helperText={inputErrors.title ? "Incorrect entry." : null}
