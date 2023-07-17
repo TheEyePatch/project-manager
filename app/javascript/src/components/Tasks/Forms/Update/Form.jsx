@@ -75,7 +75,7 @@ function Form ({ task, modalOpen, setModalOpen, setTask }) {
           <LeftPanel task={task} handleChange={handleChange} />
         </div>
         <div className={styles['right-panel-container']}>
-          <RightPanel task={task} handleChange={handleChange} />
+          <RightPanel task={task} setTask={setTask} handleChange={handleChange} />
         </div>
       </DialogContent>
     </Dialog>
