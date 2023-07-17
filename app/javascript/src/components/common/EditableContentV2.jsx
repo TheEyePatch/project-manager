@@ -32,8 +32,9 @@ function EditableContentV2 ({ innerHTML, attribute, submitEdit, cancelEdit, styl
   }
 
   const handleCancel = () => {
-    const value = element.current;
-    if( typeof(cancelEdit) == 'function') cancelEdit({value: value, attribute: attribute})
+    // const value = element.current;
+    // if( typeof(cancelEdit) == 'function') cancelEdit({value: value, attribute: attribute})
+    setValue('')
     setContentStyle(style)
     setIsEditable(false)
   }
@@ -55,12 +56,12 @@ function EditableContentV2 ({ innerHTML, attribute, submitEdit, cancelEdit, styl
         ) :
           (
             <div>
-              <div dangerouslySetInnerHTML={{ __html: element.current }} style={ contentStyle }></div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '20px' }}>
                 <IconButton onClick={handleEdit}>
                   <BorderColorTwoToneIcon fontSize='small'/>
                 </IconButton>
               </div> 
+              <div dangerouslySetInnerHTML={{ __html: element.current }} style={ contentStyle }></div>
             </div>
           )
       }

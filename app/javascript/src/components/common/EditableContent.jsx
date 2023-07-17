@@ -29,7 +29,7 @@ function EditableContent ({ children, attribute, submitEdit, cancelEdit }){
   const handleCancel = () => {
     element.current.innerText = elements[0].props.children
     const value = element.current?.value || element.current?.innerText;
-    if( typeof(cancelEdit) == 'function')cancelEdit({value: value, attribute: attribute})
+    if( typeof(cancelEdit) == 'function') cancelEdit({value: value, attribute: attribute})
     setIsEditable(false)
   }
 
