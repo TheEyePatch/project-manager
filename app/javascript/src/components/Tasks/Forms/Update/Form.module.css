@@ -1,0 +1,7 @@
+.update-form {
+  display: flex;
+}
+
+.left-panel-container {
+  overflow-y: auto;
+}

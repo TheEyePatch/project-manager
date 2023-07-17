@@ -18,9 +18,10 @@ export { default as BoardsHeader } from './Boards/BoardsHeader'
 // Tasks
 // export { default as NewTaskForm } from './Tasks/NewTaskForm'
 export { default as Task } from './Tasks/Task'
-export { default as UpdateTaskForm } from './Tasks/UpdateTaskForm'
+// export { default as UpdateTaskForm } from './Tasks/UpdateTaskForm'
 export { default as TasksTable } from './Tasks/TasksTable'
 export { default as NewTaskForm } from './Tasks/Forms/New/Form'
+export { default as UpdateTaskForm } from './Tasks/Forms/Update/Form'
 
 // Common
 export { default as EditableContent } from './common/EditableContent'
