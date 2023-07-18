@@ -16,6 +16,7 @@ import { UpdateTask } from '../../../../api'
 import AuthContext from "../../../../store/AuthContext";
 
 const DATE_FIELD = ['start_date', 'end_date']
+const USER_FIELD = ['reporter_id','assignee_id']
 
 function RightPanel({ task, setTask, handleChange }) {
   const [statuses, setStatuses] = useState([])
@@ -90,27 +91,25 @@ function RightPanel({ task, setTask, handleChange }) {
         </Select>
       </FormControl>
 
-      <Autocomplete id="reporter_id" autoComplete includeInputInList
-        {...props}
-        sx={{ m: 1, minWidth: 160 }}
-        onChange={(e, val) => handleChange({value: val.id, attribute: 'reporter_id'})}
-        value={task.reporter}
-        renderInput={(params) => (
-          <TextField {...params} label="Reporter" variant="standard" />
-        )}
-      />
-
-      <Autocomplete id="assignee_id" autoComplete includeInputInList
-        {...props} 
-        sx={{ m: 1, minWidth: 160 }}
-        onChange={(e, val) => handleChange({value: val.id, attribute: 'assignee_id'})}
-        value={task.assignee}
-        renderInput={(params) => (
-          <TextField {...params} label="Assignee" variant="standard" />
-        )}
-      />
+      {
+        USER_FIELD.map(user => {
+          let label = user.replace('_id', '').replace(user[0], user[0].toUpperCase())
+          return (
+            <Autocomplete id={user} autoComplete includeInputInList
+              {...props}
+              sx={{ m: 1, minWidth: 160 }}
+              onChange={(e, val) => handleChange({value: val.id, attribute: user})}
+              value={task.reporter}
+              renderInput={(params) => (
+                <TextField {...params} label={label} variant="standard" />
+              )}
+            />
+          )
+        })
+      }
 
       <Divider/>
+
       <div className={styles['date-field-container']}>
         {
           DATE_FIELD.map(date => {
