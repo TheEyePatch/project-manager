@@ -4,6 +4,9 @@
 
 .left-panel-container {
   overflow-y: auto;
+  min-width: 30rem;
+  max-width: 40rem;
+  padding: .5rem;
 }
 
 .date-field-container .start_date-field {

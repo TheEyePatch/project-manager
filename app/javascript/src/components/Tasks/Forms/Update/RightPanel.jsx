@@ -95,7 +95,7 @@ function RightPanel({ task, setTask, handleChange }) {
         USER_FIELD.map(user => {
           let label = user.replace('_id', '').replace(user[0], user[0].toUpperCase())
           return (
-            <Autocomplete id={user} autoComplete includeInputInList
+            <Autocomplete key={user} id={user} autoComplete includeInputInList
               {...props}
               sx={{ m: 1, minWidth: 160 }}
               onChange={(e, val) => handleChange({value: val.id, attribute: user})}
