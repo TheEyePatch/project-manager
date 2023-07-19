@@ -30,14 +30,10 @@ class Api::V1::TasksController < Api::ApiController
   end
 
   def update
-    task = Task.find(params[:task_id])
     task.attach(params.dig(:task, :images)) if params.dig(:task, :images).present?
 
-    # TODO: Optimize filter for task images
-    doc = Nokogiri::HTML(task_params[:description])
-    deleted_images =  task.images.map { |img| rails_blob_path(img) } - doc.css('.editor-image').map { |img| img.attributes.values.last.value }
+    remove_images
 
-    task.images.where(id: task.images.filter { |img| rails_blob_path(img).in?(deleted_images) } ).purge
     if task.update(task_params.merge({ current_user: current_user }))
       Rails.cache.write("#{current_user.id}_recent_project", task.project_id)
 
@@ -54,14 +50,13 @@ class Api::V1::TasksController < Api::ApiController
 
   def upload_files
     task = Task.find(params[:task_id])
-    if params[:image]
-      task.images.attach(params[:image])
-      render json: {
-        image_url: rails_blob_path(task.images.last),
-        attachment_id: task.images.last.id
-      }
-    end
+    return unless params[:image]
 
+    task.images.attach(params[:image])
+    render json: {
+      image_url: rails_blob_path(task.images.last),
+      attachment_id: task.images.last.id
+    }
   end
 
   def import_tasks
@@ -153,5 +148,18 @@ class Api::V1::TasksController < Api::ApiController
                   'projects.name as project_name,' \
                   'boards.title as status'
                   ).group('boards.title', 'projects.name', :board_id, :project_id)
+  end
+
+  def task
+    @task ||= Task.find(params[:task_id])
+  end
+
+  def remove_images
+     # TODO: Optimize filter for task images
+     doc = Nokogiri::HTML(task_params[:description])
+     deleted_images =
+      task.images.map { |img| rails_blob_path(img) } - doc.css('.editor-image').map { |img| img.attributes.values.last.value }
+
+     task.images.where(id: task.images.filter { |img| rails_blob_path(img).in?(deleted_images) } ).purge
   end
 end
