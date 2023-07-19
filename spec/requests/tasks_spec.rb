@@ -138,28 +138,65 @@ RSpec.describe "Tasks", type: :request do
     let(:task) { create(:random_task, project: project) }
     let(:reporter) { create(:random_user) }
 
-    before do
-      sign_in user
-      @token = response_body[:token]
+    context 'when user is not logged in' do
+      before do
+        patch_task({
+          params: {
+            project_id: project.id,
+            task_id: task.id,
+            task: {
+              title: 'Update Task Title',
+              description: task.description,
+              assignee_id: user.id,
+              reporter_id: reporter.id,
+            },
+          }
+        })
+      end
+ 
+      it 'returns invalid token' do
+        expect(response).to have_http_status(401)
+        expect(response_body[:errors].map(&:downcase)).to include('invalid token')
+      end
     end
 
-    it 'returns SUCCESS on title update' do
-      patch("/api/v1/tasks/#{task.id}",
-        headers: {
-          Authorization: @token,
-        },
-        params: {
-          project_id: project.id,
-          task: {
-            title: 'Update Task Title',
-            description: task.description,
-            assignee_id: user.id,
-            reporter_id: reporter.id,
-          },
-        }
-      )
+    context 'when user is logged in' do
+      before do
+        sign_in user
+        @token = response_body[:token]
+      end
+  
+      it 'returns SUCCESS on title update' do
+        patch_task({
+          params: {
+            project_id: project.id,
+            task_id: task.id,
+            task: {
+              title: 'Update Task Title',
+            },
+          }
+        })
 
-      expect(response_body.dig(:task, :title)).to eql('Update Task Title')
+        expect(response_body.dig(:task, :title)).to eql('Update Task Title')
+      end
+
+      it 'updates date fields' do
+        start_date ||= Date.current.to_time
+        end_date ||= Date.tomorrow.to_time
+        patch_task({
+          params: {
+            project_id: project.id,
+            task_id: task.id,
+            task: {
+              start_date: start_date,
+              end_date: end_date,
+            },
+          }
+        })
+        
+        expect(response_body.dig(:task, :start_date).to_time).to eql(start_date)
+        expect(response_body.dig(:task, :end_date).to_time).to eql(end_date)
+      end
     end
   end
 
@@ -171,5 +208,12 @@ RSpec.describe "Tasks", type: :request do
       headers: headers,
       params: params
     }
+  end
+
+  def patch_task(params: {}, headers: { Authorization: @token })
+    patch("/api/v1/tasks/#{params[:task_id]}",
+      headers: headers,
+      params: params,
+    )
   end
 end
