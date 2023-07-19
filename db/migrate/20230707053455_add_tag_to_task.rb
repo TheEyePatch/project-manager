@@ -6,8 +6,8 @@ class AddTagToTask < ActiveRecord::Migration[6.0]
   end
 
   def down
+    remove_index :tasks, %i[project_id tag]
     remove_column :tasks, :tag
     remove_column :projects, :tag_prefix
-    remove_index :tasks, %i[project_id tag]
   end
 end

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CardActionArea, Card, CardContent, Typography, Stack, Chip } from '@mui/material';
+import { Card, CardContent, Typography, Stack, Chip } from '@mui/material';
 import { UpdateTaskForm } from './../index'
 import { getTask } from '../../api'
 
